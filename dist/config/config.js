@@ -7,6 +7,3 @@ exports.port = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 exports.port = process.env.PORT;
-// module.exports = {
-//   port: process.env.PORT as string,
-// };
