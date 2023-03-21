@@ -1,18 +1,46 @@
 import { RequestHandler } from "express";
+import { validationResult } from "express-validator";
+import bcrypt from "bcrypt";
 import axios from "axios";
 
-const registerUser: RequestHandler = (req, res, next) => {
+import { devDb } from "../../config/config";
+
+const registerUser: RequestHandler = async (req, res, next) => {
   try {
-    // TODO: validate form data
-    // TODO: hash password
-    // TODO: generate userId
-    // TODO: put data into db
-    // TODO: generate token
-    // TODO: return user data and token
-    console.log(req.body);
-    res.json({ message: "register route pinged" });
+    //! TODO: user should not be added to database until they have verified via email
+    // Note: After registering, user will be redirected to login page
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const error = errors.array();
+      if (error[0].param === "userEmail") {
+        res.status(422);
+        return next({
+          message: "Please enter a valid email address and try again.",
+        });
+      }
+      if (error[0].param === "userPassword") {
+        res.status(422);
+        return next({
+          message: "Please enter a password at least 4 characters long and try again.",
+        });
+      }
+    }
+    const userEmail = (req.body as { userEmail: string }).userEmail;
+    const userPassword = (req.body as { userPassword: string }).userPassword;
+    //! TODO: increase # of salt rounds
+    const hashedPassword = await bcrypt.hash(userPassword, 2);
+    // TODO: add to real SQL db
+    await axios.post(`${devDb}/users`, {
+      userEmail,
+      userPassword: hashedPassword,
+    });
+    res.json({ message: "OK" });
   } catch (error) {
-    next({ message: "REGISTER USER FALLBACK ERROR" });
+    res.status(500);
+    next({
+      message:
+        "An unexpected server error occurred that prevented your account from being created. Please try again later.",
+    });
   }
 };
 

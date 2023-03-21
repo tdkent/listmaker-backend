@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth-routes";
 
 const app = express();
 
+// body parser
 app.use(json());
 
 // auth routes
@@ -18,8 +19,6 @@ app.use("/users", userRoutes);
 // list routes
 
 // errors
-//? How to upgrade error handling methods?
-// TODO: upgrade error handling methods
 app.use((req, res, next) => {
   res.status(404).json({ message: "Resource or route does not exist!" });
 });
@@ -29,6 +28,8 @@ app.use((error: { message: string }, req: Request, res: Response, next: NextFunc
   res.json({ message: error.message });
 });
 
-app.listen(port, () =>
-  console.log(`ListMaker express development server is listening on port ${port}.`)
+app.listen(process.env.PORT || port, () =>
+  console.log(
+    `ListMaker express development server is listening on port ${process.env.PORT || port}}.`
+  )
 );
