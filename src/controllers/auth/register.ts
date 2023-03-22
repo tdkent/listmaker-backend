@@ -4,8 +4,9 @@ import bcrypt from "bcrypt";
 import axios from "axios";
 
 import { devDb } from "../../config/config";
+import { NewUser } from "../../models/auth";
 
-const registerUser: RequestHandler = async (req, res, next) => {
+const register: RequestHandler = async (req, res, next) => {
   try {
     //! TODO: user should not be added to database until they have verified via email
     // Note: After registering, user will be redirected to login page
@@ -29,11 +30,9 @@ const registerUser: RequestHandler = async (req, res, next) => {
     const userPassword = (req.body as { userPassword: string }).userPassword;
     //! TODO: increase # of salt rounds
     const hashedPassword = await bcrypt.hash(userPassword, 2);
+    const newUser = new NewUser(userEmail, hashedPassword);
     // TODO: add to real SQL db
-    await axios.post(`${devDb}/users`, {
-      userEmail,
-      userPassword: hashedPassword,
-    });
+    await axios.post(`${devDb}/users`, newUser);
     res.json({ message: "OK" });
   } catch (error) {
     res.status(500);
@@ -44,4 +43,4 @@ const registerUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default registerUser;
+export default register;

@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import fetchUserProfile from "../controllers/users/fetch-user-profile";
-import registerUser from "../controllers/auth/register-user";
+import registerUser from "../controllers/auth/register";
 
 const router = Router();
 

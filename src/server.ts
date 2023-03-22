@@ -20,7 +20,7 @@ app.use("/users", userRoutes);
 
 // errors
 app.use((req, res, next) => {
-  res.status(404).json({ message: "Resource or route does not exist!" });
+  res.status(404).json({ message: "That route does not exist!" });
 });
 
 app.use((error: { message: string }, req: Request, res: Response, next: NextFunction) => {

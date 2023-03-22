@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { body } from "express-validator";
 
-import registerUser from "../controllers/auth/register-user";
+import register from "../controllers/auth/register";
+import login from "../controllers/auth/login";
 
 const router = Router();
 
@@ -10,9 +11,10 @@ router.post(
   "/register",
   body("userEmail").isEmail(),
   body("userPassword").isLength({ min: 4 }),
-  registerUser
+  register
 );
 
 // login user
+router.post("/login", body("userEmail").isEmail(), login);
 
 export default router;
