@@ -4,6 +4,7 @@ import { json } from "body-parser";
 import { port } from "./config/config";
 import userRoutes from "./routes/user-routes";
 import authRoutes from "./routes/auth-routes";
+import listRoutes from "./routes/list-routes";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 
 // list routes
+app.use("/lists", listRoutes);
 
 // errors
 app.use((req, res, next) => {
@@ -28,6 +30,7 @@ app.use((error: { message: string }, req: Request, res: Response, next: NextFunc
   res.json({ message: error.message });
 });
 
+// initialize server
 app.listen(process.env.PORT || port, () =>
   console.log(
     `ListMaker express development server is listening on port ${process.env.PORT || port}}.`
