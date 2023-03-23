@@ -30,4 +30,4 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message });
 });
 // initialize server
-app.listen(process.env.PORT || config_1.port, () => console.log(`ListMaker express development server is listening on port ${process.env.PORT || config_1.port}}.`));
+app.listen(process.env.PORT || config_1.port, () => console.log(`ListMaker express development server is listening on port ${process.env.PORT || config_1.port}.`));
