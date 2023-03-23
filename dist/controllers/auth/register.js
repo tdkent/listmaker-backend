@@ -5,9 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const axios_1 = __importDefault(require("axios"));
-const config_1 = require("../../config/config");
-const auth_1 = require("../../models/auth");
+const db_1 = __importDefault(require("../../db"));
 const register = async (req, res, next) => {
     try {
         //! TODO: user should not be added to database until they have verified via email
@@ -32,9 +30,16 @@ const register = async (req, res, next) => {
         const userPassword = req.body.userPassword;
         //! TODO: increase # of salt rounds
         const hashedPassword = await bcrypt_1.default.hash(userPassword, 2);
-        const newUser = new auth_1.NewUser(userEmail, hashedPassword);
+        console.log(userEmail, userPassword, hashedPassword);
+        // const newUser = new NewUser(userEmail, hashedPassword);
         // TODO: add to real SQL db
-        await axios_1.default.post(`${config_1.devDb}/users`, newUser);
+        // await axios.post(`${devDb}/users`, newUser);
+        const { rows } = await db_1.default.query(`
+    INSERT INTO users("userEmail", "userPassword")
+    VALUES ($1, $2)
+    RETURNING *;
+    `, [userEmail, hashedPassword]);
+        console.log("register result", rows);
         res.json({ message: "OK" });
     }
     catch (error) {

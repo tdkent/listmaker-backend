@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 import bcrypt from "bcrypt";
-import axios from "axios";
 
+import db from "../../db";
 import { devDb } from "../../config/config";
 import { NewUser } from "../../models/auth";
 
@@ -30,9 +30,19 @@ const register: RequestHandler = async (req, res, next) => {
     const userPassword = (req.body as { userPassword: string }).userPassword;
     //! TODO: increase # of salt rounds
     const hashedPassword = await bcrypt.hash(userPassword, 2);
-    const newUser = new NewUser(userEmail, hashedPassword);
+    console.log(userEmail, userPassword, hashedPassword);
+    // const newUser = new NewUser(userEmail, hashedPassword);
     // TODO: add to real SQL db
-    await axios.post(`${devDb}/users`, newUser);
+    // await axios.post(`${devDb}/users`, newUser);
+    const { rows } = await db.query(
+      `
+    INSERT INTO users("userEmail", "userPassword")
+    VALUES ($1, $2)
+    RETURNING *;
+    `,
+      [userEmail, hashedPassword]
+    );
+    console.log("register result", rows);
     res.json({ message: "OK" });
   } catch (error) {
     res.status(500);
