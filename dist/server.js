@@ -16,7 +16,7 @@ app.use((0, body_parser_1.json)());
 // auth routes
 app.use("/auth", auth_routes_1.default);
 // user routes
-app.use("/users", user_routes_1.default);
+app.use("/user", user_routes_1.default);
 // lists routes
 app.use("/lists", lists_routes_1.default);
 // list routes

@@ -16,7 +16,7 @@ app.use(json());
 app.use("/auth", authRoutes);
 
 // user routes
-app.use("/users", userRoutes);
+app.use("/user", userRoutes);
 
 // lists routes
 app.use("/lists", listsRoutes);
