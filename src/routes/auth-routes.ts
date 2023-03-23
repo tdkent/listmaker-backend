@@ -15,6 +15,11 @@ router.post(
 );
 
 // login user
-router.post("/login", body("userEmail").isEmail(), login);
+router.post(
+  "/login",
+  body("userEmail").isEmail(),
+  body("userPassword").isLength({ min: 4 }),
+  login
+);
 
 export default router;

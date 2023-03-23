@@ -11,5 +11,5 @@ const router = (0, express_1.Router)();
 // register user
 router.post("/register", (0, express_validator_1.body)("userEmail").isEmail(), (0, express_validator_1.body)("userPassword").isLength({ min: 4 }), register_1.default);
 // login user
-router.post("/login", (0, express_validator_1.body)("userEmail").isEmail(), login_1.default);
+router.post("/login", (0, express_validator_1.body)("userEmail").isEmail(), (0, express_validator_1.body)("userPassword").isLength({ min: 4 }), login_1.default);
 exports.default = router;
