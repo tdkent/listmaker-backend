@@ -1,10 +1,10 @@
 import { Router } from "express";
 
-import fetchUserLists from "../controllers/lists/fetch-lists";
+import fetchList from "../controllers/list/fetch-list";
 
 const router = Router();
 
-// fetch user's lists
-router.get("/:userId", fetchUserLists);
+// fetch single list
+router.get("/:listId", fetchList);
 
 export default router;

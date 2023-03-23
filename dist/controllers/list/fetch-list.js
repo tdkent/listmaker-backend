@@ -5,16 +5,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const config_1 = require("../../config/config");
-const fetchUserLists = async (req, res, next) => {
-    const userId = req.params.userId;
+const fetchList = async (req, res, next) => {
+    const listId = req.params.listId;
     try {
-        // TODO: this route will query an actual db
-        const { data } = await axios_1.default.get(`${config_1.devDb}/lists?userId=${userId}`);
+        const { data } = await axios_1.default.get(`${config_1.devDb}/lists/${listId}`);
         res.json(data);
     }
     catch (error) {
         res.status(500);
-        next({ message: "An error occurred while fetching lists." });
+        next({
+            message: "An error occurred while attempting to fetch list with id",
+        });
     }
 };
-exports.default = fetchUserLists;
+exports.default = fetchList;

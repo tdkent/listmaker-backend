@@ -1,13 +1,17 @@
 import { RequestHandler } from "express";
 import axios from "axios";
 
+import { devDb } from "../../config/config";
+
 const fetchUserLists: RequestHandler<{ userId: number }> = async (req, res, next) => {
+  const userId = req.params.userId;
   try {
-    const userId = req.params.userId;
-    console.log("userId: ", userId);
-    res.json({ userId });
+    // TODO: this route will query an actual db
+    const { data } = await axios.get(`${devDb}/lists?userId=${userId}`);
+    res.json(data);
   } catch (error) {
     res.status(500);
+    next({ message: "An error occurred while fetching lists." });
   }
 };
 
