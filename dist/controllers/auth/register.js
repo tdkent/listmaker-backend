@@ -9,28 +9,14 @@ const db_1 = __importDefault(require("../../db"));
 const register = async (req, res, next) => {
     try {
         //! TODO: user should not be added to database until they have verified via email
-        //! Note: After registering, user will be redirected to login page, do not generate token here
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
-            const error = errors.array();
-            if (error[0].param === "userEmail") {
-                res.status(422);
-                return next({
-                    message: "Please enter a valid email address and try again.",
-                });
-            }
-            //! TODO: Increase pw length minimum
-            if (error[0].param === "userPassword") {
-                res.status(422);
-                return next({
-                    message: "Please enter a password at least 4 characters long and try again.",
-                });
-            }
+            return res.status(422).json({ errors: errors.array() });
         }
         //! TODO: increase # of salt rounds
         const newUser = req.body;
         const hashedPassword = await bcrypt_1.default.hash(newUser.userPassword, 2);
-        const { rows } = await db_1.default.query(`
+        await db_1.default.query(`
     INSERT INTO users("userEmail", "userNickname", "userPassword")
     VALUES ($1, $2, $3)
     RETURNING *;

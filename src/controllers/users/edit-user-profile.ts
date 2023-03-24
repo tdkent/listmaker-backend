@@ -1,13 +1,13 @@
 import { RequestHandler } from "express";
 
 import db from "../../db";
-import { EditUserProfileInt, UserProfileInt } from "../../models/user";
+import { EditUserProfileInt, UserProfileInt, UserProfileDbInt } from "../../models/user";
 
 const editUserProfile: RequestHandler = async (req, res, next) => {
   try {
     // TODO: request body will eventually contain other editable fields
     const userData = <EditUserProfileInt>req.body;
-    const { rows } = await db.query(
+    const { rows }: { rows: UserProfileDbInt[] } = await db.query(
       `
     UPDATE users
     SET "userNickname" = $1

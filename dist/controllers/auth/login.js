@@ -13,24 +13,10 @@ const login = async (req, res, next) => {
     try {
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
-            const error = errors.array();
-            if (error[0].param === "userEmail") {
-                res.status(422);
-                return next({
-                    message: "Please enter a valid email address and try again.",
-                });
-            }
-            //! TODO: Increase pw length minimum
-            if (error[0].param === "userPassword") {
-                res.status(422);
-                return next({
-                    message: "Your password should be at least 4 characters long!",
-                });
-            }
+            return res.status(422).json({ errors: errors.array() });
         }
         const userLogin = req.body;
         const { rows } = await db_1.default.query(`SELECT id, "userEmail", "userPassword" FROM users WHERE "userEmail" = $1`, [userLogin.userEmail]);
-        console.log("rows: ", rows);
         if (!rows.length) {
             res.status(422);
             return next({

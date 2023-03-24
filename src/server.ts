@@ -5,10 +5,10 @@ import { port } from "./config/config";
 import userRoutes from "./routes/user-routes";
 import authRoutes from "./routes/auth-routes";
 import listsRoutes from "./routes/lists-routes";
-import listRoutes from "./routes/list-routes";
 
 const app = express();
 
+// TODO: Add cors middleware
 // body parser
 app.use(json());
 
@@ -20,9 +20,6 @@ app.use("/user", userRoutes);
 
 // lists routes
 app.use("/lists", listsRoutes);
-
-// list routes
-app.use("/list", listRoutes);
 
 // errors
 app.use((req, res, next) => {

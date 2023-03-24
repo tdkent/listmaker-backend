@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { devDb } from "../../config/config";
 
-const fetchUserLists: RequestHandler<{ userId: number }> = async (req, res, next) => {
+const fetchAllLists: RequestHandler<{ userId: number }> = async (req, res, next) => {
   const userId = req.params.userId;
   try {
     // TODO: this route will query an actual db
@@ -15,4 +15,4 @@ const fetchUserLists: RequestHandler<{ userId: number }> = async (req, res, next
   }
 };
 
-export default fetchUserLists;
+export default fetchAllLists;

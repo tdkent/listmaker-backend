@@ -16,17 +16,6 @@ declare module "express-serve-static-core" {
     };
   }
 }
-// authenticate token
-
-// this route will be placed above any authenticated routes to intercept traffic and check token
-// token located in req.headers.authentication as string 'Bearer <token>'
-// TODO: check for req.headers.authentication and string for 'Bearer'
-// TODO: return error if not present
-// TODO: check string for a token string after 'Bearer ' (use split method)
-// TODO: if not present, return error
-// TODO: use jwt.verify(token, secret) to authenticate the token
-// TODO: If token is verified, extract the userId from the token and place into req.user
-// TODO: Pass to the next function with next()
 
 const checkToken = (req: Request, res: Response, next: NextFunction) => {
   // CORS check
