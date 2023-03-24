@@ -1,30 +1,31 @@
 import { RequestHandler } from "express";
-import { validationResult } from "express-validator";
-import axios from "axios";
 
-import { devDb } from "../../config/config";
+import db from "../../db";
+import { EditUserProfileInt, UserProfileInt } from "../../models/user";
 
-const editUserProfile: RequestHandler<{ userId: number }> = async (req, res, next) => {
+const editUserProfile: RequestHandler = async (req, res, next) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      res.status(422);
-      return next({
-        message: "Please make sure you nickname is at least 1 character long and try again!",
-      });
-    }
-    // TODO: request body will contain other editable fields
-    //! TODO: Note that this is currently working correctly and does not represent how the route should actually behave
-    const userId = req.params.userId;
-    const userNickname = (req.body as { userNickname: string }).userNickname;
-    const response = await axios.put(`${devDb}/users/${userId}`, userNickname);
-    console.log("response: ", response.data);
-    res.json({ message: "OK" });
+    // TODO: request body will eventually contain other editable fields
+    const userData = <EditUserProfileInt>req.body;
+    const { rows } = await db.query(
+      `
+    UPDATE users
+    SET "userNickname" = $1
+    WHERE id = $2
+    RETURNING "userEmail", "userNickname";
+    `,
+      [userData.userNickname, req.user.userId]
+    );
+    const user: UserProfileInt = {
+      userId: req.user.userId,
+      ...rows[0],
+    };
+    res.json({ message: "OK", user });
   } catch (error) {
+    console.log(error);
     res.status(500);
     next({
-      message:
-        "An unexpected error occurred when we attempted to update your profile. Please try again later.",
+      message: `An error occurred while updating the user's profile data (user id ${req.user.userId}).`,
     });
   }
 };

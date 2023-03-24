@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { body, check } from "express-validator";
 
 import checkToken from "../controllers/auth/check-token";
 import fetchUserProfile from "../controllers/users/fetch-user-profile";
@@ -14,6 +13,6 @@ router.use(checkToken);
 router.get("/profile", fetchUserProfile);
 
 // edit user profile
-router.patch("/profile", body("userNickname").not().isEmpty().trim().escape(), editUserProfile);
+router.patch("/profile", editUserProfile);
 
 export default router;
