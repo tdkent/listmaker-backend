@@ -12,13 +12,9 @@ const editUserProfile = async (req, res, next) => {
     UPDATE users
     SET "userNickname" = $1
     WHERE id = $2
-    RETURNING "userEmail", "userNickname";
+    RETURNING id, "userEmail", "userNickname";
     `, [userData.userNickname, req.user.userId]);
-        const user = {
-            userId: req.user.userId,
-            ...rows[0],
-        };
-        res.json({ message: "OK", user });
+        res.json({ message: "OK", user: rows[0] });
     }
     catch (error) {
         console.log(error);

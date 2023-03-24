@@ -1,10 +1,7 @@
-export interface UserProfileDbInt {
+export interface UserProfileResInt {
+  id: number;
   userEmail: string;
   userNickname: string;
-}
-
-export interface UserProfileInt extends UserProfileDbInt {
-  userId: number;
 }
 
 export interface EditUserProfileInt {

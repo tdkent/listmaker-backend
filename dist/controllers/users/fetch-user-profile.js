@@ -7,15 +7,11 @@ const db_1 = __importDefault(require("../../db"));
 const fetchUserProfile = async (req, res, next) => {
     try {
         const { rows } = await db_1.default.query(`
-    SELECT "userEmail", "userNickname"
+    SELECT id, "userEmail", "userNickname"
     FROM users
     WHERE id = $1
     `, [req.user.userId]);
-        const user = {
-            userId: req.user.userId,
-            ...rows[0],
-        };
-        res.json({ message: "OK", user });
+        res.json({ message: "OK", user: rows[0] });
     }
     catch (error) {
         console.log(error);

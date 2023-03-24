@@ -14,12 +14,9 @@ const router = (0, express_1.Router)();
 // auth check
 router.use(check_token_1.default);
 // GET /lists/all
-// TODO: add auth check route
-// TODO: update route read userId from token instead of params
-router.get("/:userId", fetch_all_lists_1.default);
-//? TODO: update this post's routing. Should it use params for :listId?
+router.get("/all", fetch_all_lists_1.default);
 // GET /lists/single
-router.get("/:listId", fetch_single_list_1.default);
+router.get("/single/:listId", fetch_single_list_1.default);
 // POST /lists/new
 router.post("/new", (0, express_validator_1.body)("name", "Please enter a list name and try again.").not().isEmpty().trim().escape(), (0, express_validator_1.body)("type", "Please select a valid list type and try again.").isIn(Object.values(lists_1.ListTypesEnum)), create_new_list_1.default);
 exports.default = router;

@@ -1,14 +1,18 @@
 import { RequestHandler } from "express";
-import axios from "axios";
 
-import { devDb } from "../../config/config";
+import db from "../../db";
+import { NewListResInt } from "../../models/lists";
 
-const fetchAllLists: RequestHandler<{ userId: number }> = async (req, res, next) => {
-  const userId = req.params.userId;
+const fetchAllLists: RequestHandler = async (req, res, next) => {
   try {
-    // TODO: this route will query an actual db
-    const { data } = await axios.get(`${devDb}/lists?userId=${userId}`);
-    res.json(data);
+    const { rows }: { rows: NewListResInt[] } = await db.query(
+      `
+    SELECT * FROM lists
+    WHERE "userId" = $1
+    `,
+      [req.user.userId]
+    );
+    res.json({ message: "OK", lists: rows });
   } catch (error) {
     res.status(500);
     next({ message: "An error occurred while fetching lists." });
