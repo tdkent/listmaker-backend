@@ -24,8 +24,8 @@ router.get("/:listId", fetchList);
 // POST /lists/new
 router.post(
   "/new",
-  body("name").not().isEmpty().trim().escape(),
-  body("type").isIn(Object.values(ListTypesEnum)),
+  body("name", "Please enter a list name and try again.").not().isEmpty().trim().escape(),
+  body("type", "Please select a valid list type and try again.").isIn(Object.values(ListTypesEnum)),
   createNewList
 );
 

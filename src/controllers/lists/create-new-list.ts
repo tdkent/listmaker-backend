@@ -7,24 +7,25 @@ import { NewListReqInt, NewListResInt } from "../../models/lists";
 
 const createNewList: RequestHandler = async (req, res, next) => {
   try {
-    // TODO: prevent user from creating two lists with the same name
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const error = errors.array();
-      if (error[0].param === "name") {
-        res.status(422);
-        return next({
-          message: "Please enter a list name and try again.",
-        });
-      }
-      if (error[0].param === "type") {
-        res.status(422);
-        return next({
-          message: "Please select one of the provided list types and try again.",
-        });
-      }
+      return res.status(422).json({ errors: errors.array() });
     }
     const newList = <NewListReqInt>req.body;
+    const { rows: check } = await db.query(
+      `
+    SELECT id FROM lists
+    WHERE name = $1
+    AND "userId" = $2
+    `,
+      [newList.name, req.user.userId]
+    );
+    if (check.length) {
+      res.status(422);
+      return next({
+        message: `You already have a list named ${newList.name}. Please enter a new name and try again.`,
+      });
+    }
     const slug = slugify(newList.name.toLowerCase());
     const { rows }: { rows: NewListResInt[] } = await db.query(
       `
@@ -34,7 +35,6 @@ const createNewList: RequestHandler = async (req, res, next) => {
     `,
       [req.user.userId, newList.name, slug, newList.type]
     );
-    console.log("Rows", rows);
     res.json({ message: "OK", list: rows[0] });
   } catch (error) {
     console.log(error);
