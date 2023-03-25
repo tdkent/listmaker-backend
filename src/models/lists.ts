@@ -13,3 +13,7 @@ export interface NewListResInt extends NewListReqInt {
   userId: number;
   slug: string;
 }
+
+export interface EditListReqInt {
+  name: string;
+}

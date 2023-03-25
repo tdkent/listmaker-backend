@@ -4,7 +4,7 @@ import { json } from "body-parser";
 import { port } from "./config/config";
 import userRoutes from "./routes/user-routes";
 import authRoutes from "./routes/auth-routes";
-import listsRoutes from "./routes/lists-routes";
+import listsRoutes from "./routes/list-routes";
 
 const app = express();
 
