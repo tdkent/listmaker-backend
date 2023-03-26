@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 import slugify from "slugify";
 
 import db from "../../db";
-import { NewListReqInt, NewListResInt } from "../../models/lists";
+import { NewListReqInt, NewListResInt } from "../../models/list";
 
 const createNewList: RequestHandler = async (req, res, next) => {
   try {

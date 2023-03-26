@@ -4,6 +4,7 @@ const buildDbTables = async () => {
   try {
     console.log("Tearing down old tables...");
     await db.query(`
+    DROP TABLE IF EXISTS items_shopping;
     DROP TABLE IF EXISTS lists;
     DROP TABLE IF EXISTS users;
     `);
@@ -22,6 +23,12 @@ const buildDbTables = async () => {
       slug VARCHAR(255) NOT NULL,
       type VARCHAR(12) NOT NULL
     );
+      CREATE TABLE items_shopping (
+        id SERIAL PRIMARY KEY,
+        "listId" SMALLINT REFERENCES lists(id),
+        name VARCHAR(255) NOT NULL,
+        "isChecked" BOOLEAN NOT NULL
+      );
     `);
     console.log("Finished rebuilding tables!");
   } catch (error) {

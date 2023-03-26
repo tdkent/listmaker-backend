@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
 import db from "../../db";
-import { EditListReqInt } from "../../models/lists";
+import { EditListReqInt } from "../../models/list";
 
 const editList: RequestHandler<{ listId: number }> = async (req, res, next) => {
   try {

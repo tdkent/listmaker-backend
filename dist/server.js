@@ -9,6 +9,7 @@ const config_1 = require("./config/config");
 const user_routes_1 = __importDefault(require("./routes/user-routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth-routes"));
 const list_routes_1 = __importDefault(require("./routes/list-routes"));
+const item_routes_1 = __importDefault(require("./routes/item-routes"));
 const app = (0, express_1.default)();
 // TODO: Add cors middleware
 // body parser
@@ -17,8 +18,10 @@ app.use((0, body_parser_1.json)());
 app.use("/auth", auth_routes_1.default);
 // user routes
 app.use("/user", user_routes_1.default);
-// lists routes
-app.use("/lists", list_routes_1.default);
+// list routes
+app.use("/list", list_routes_1.default);
+// item routes
+app.use("/item", item_routes_1.default);
 // errors
 app.use((req, res, next) => {
     res.status(404).json({ message: "That route does not exist!" });

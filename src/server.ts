@@ -4,7 +4,8 @@ import { json } from "body-parser";
 import { port } from "./config/config";
 import userRoutes from "./routes/user-routes";
 import authRoutes from "./routes/auth-routes";
-import listsRoutes from "./routes/list-routes";
+import listRoutes from "./routes/list-routes";
+import itemRoutes from "./routes/item-routes";
 
 const app = express();
 
@@ -18,8 +19,11 @@ app.use("/auth", authRoutes);
 // user routes
 app.use("/user", userRoutes);
 
-// lists routes
-app.use("/lists", listsRoutes);
+// list routes
+app.use("/list", listRoutes);
+
+// item routes
+app.use("/item", itemRoutes);
 
 // errors
 app.use((req, res, next) => {

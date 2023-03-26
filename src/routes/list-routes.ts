@@ -7,17 +7,17 @@ import fetchList from "../controllers/lists/fetch-single-list";
 import createNewList from "../controllers/lists/create-new-list";
 import editList from "../controllers/lists/edit-list";
 import deleteList from "../controllers/lists/delete-list";
-import { ListTypesEnum } from "../models/lists";
+import { ListTypesEnum } from "../models/list";
 
 const router = Router();
 
 // auth check
 router.use(checkToken);
 
-// GET /lists/all
+// GET /lists/fetch
 router.get("/fetch", fetchAllLists);
 
-// GET /lists/single/:listId
+// GET /lists/fetch/:listId
 router.get("/fetch/:listId", fetchList);
 
 // POST /lists/new

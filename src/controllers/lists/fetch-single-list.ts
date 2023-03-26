@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
 import db from "../../db";
-import { NewListResInt } from "../../models/lists";
+import { NewListResInt } from "../../models/list";
 
 const fetchList: RequestHandler<{ listId: number }> = async (req, res, next) => {
   try {

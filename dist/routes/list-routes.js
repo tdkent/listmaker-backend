@@ -11,16 +11,16 @@ const fetch_single_list_1 = __importDefault(require("../controllers/lists/fetch-
 const create_new_list_1 = __importDefault(require("../controllers/lists/create-new-list"));
 const edit_list_1 = __importDefault(require("../controllers/lists/edit-list"));
 const delete_list_1 = __importDefault(require("../controllers/lists/delete-list"));
-const lists_1 = require("../models/lists");
+const list_1 = require("../models/list");
 const router = (0, express_1.Router)();
 // auth check
 router.use(check_token_1.default);
-// GET /lists/all
+// GET /lists/fetch
 router.get("/fetch", fetch_all_lists_1.default);
-// GET /lists/single/:listId
+// GET /lists/fetch/:listId
 router.get("/fetch/:listId", fetch_single_list_1.default);
 // POST /lists/new
-router.post("/new", (0, express_validator_1.body)("name", "Please enter a list name and try again.").not().isEmpty().trim().escape(), (0, express_validator_1.body)("type", "Please select a valid list type and try again.").isIn(Object.values(lists_1.ListTypesEnum)), create_new_list_1.default);
+router.post("/new", (0, express_validator_1.body)("name", "Please enter a list name and try again.").not().isEmpty().trim().escape(), (0, express_validator_1.body)("type", "Please select a valid list type and try again.").isIn(Object.values(list_1.ListTypesEnum)), create_new_list_1.default);
 // PATCH /lists/edit/:listId
 router.patch("/edit/:listId", (0, express_validator_1.body)("name", "Please enter a list name and try again.").not().isEmpty().trim().escape(), edit_list_1.default);
 // DELETE /lists/delete/:listId
