@@ -42,7 +42,7 @@ const editItem: RequestHandler<{ listId: string; listType: string; itemId: strin
       if (!result.length) {
         res.status(401);
         return next({
-          message: `Unable to add item to list (id ${req.params.listId}). The list may no longer exist, or you may not be authorized.`,
+          message: `Unable to edit item (id ${req.params.itemId}). The list may no longer exist, or you may not be authorized.`,
         });
       }
       res.json({ message: "OK" });

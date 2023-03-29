@@ -17,3 +17,8 @@ export interface NewListResInt extends NewListReqInt {
 export interface EditListReqInt {
   name: string;
 }
+
+export enum CheckTypesEnum {
+  shop = "shop",
+  todo = "todo",
+}
