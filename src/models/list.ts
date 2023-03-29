@@ -1,5 +1,5 @@
 export enum ListTypesEnum {
-  shop = "shopping",
+  shop = "shop",
   todo = "todo",
 }
 

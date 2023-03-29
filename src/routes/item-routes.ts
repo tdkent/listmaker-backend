@@ -2,7 +2,8 @@ import { Router } from "express";
 import { body } from "express-validator";
 
 import checkToken from "../controllers/auth/check-token";
-import addNewItem from "../controllers/lists/add-new-item";
+import addNewItem from "../controllers/items/add-new-item";
+import editItem from "../controllers/items/edit-item";
 
 const router = Router();
 
@@ -10,15 +11,26 @@ const router = Router();
 router.use(checkToken);
 
 // POST /item/new/:listId
-// TODO: validation: item must have a name. trim and escape the name.
 router.post(
   "/new/:listId",
+  // NOTE: assumes all item types will have a required name field
   body("name", "Name field cannot be blank.").not().isEmpty().trim().escape(),
   addNewItem
 );
 
-// this route will update the entire resource. Can be used for any instance of an item being updated (ie, user checks the item, or edits the item's name.)
-// PUT /item/:listId/:itemId
+// PUT /item/edit/:itemId
+// router.patch(
+//   "/edit/:listId/:itemId",
+//   body("name", "Name field cannot be blank.").not().isEmpty().trim().escape(),
+//   editItem
+// );
+
+router.patch(
+  "/:listId/:listType/:itemId",
+  // NOTE: assumes all item types will have a required name field
+  body("name", "Name field cannot be blank.").not().isEmpty().trim().escape(),
+  editItem
+);
 
 // DELETE /item/:listId/:itemId
 

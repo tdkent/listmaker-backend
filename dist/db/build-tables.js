@@ -30,8 +30,9 @@ const buildDbTables = async () => {
       CREATE TABLE items_shopping (
         id SERIAL PRIMARY KEY,
         "listId" SMALLINT REFERENCES lists(id),
+        "userId" SMALLINT REFERENCES users(id),
         name VARCHAR(255) NOT NULL,
-        "isChecked" BOOLEAN NOT NULL
+        "isChecked" BOOLEAN NOT NULL DEFAULT false
       );
     `);
         console.log("Finished rebuilding tables!");
