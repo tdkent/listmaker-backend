@@ -13,7 +13,15 @@ router.post("/register", (0, express_validator_1.body)("userEmail", "Please ente
     .isEmail()
     .trim()
     .escape()
-    .normalizeEmail(), (0, express_validator_1.body)("userPassword")
+    .normalizeEmail(), (0, express_validator_1.body)("userNickname")
+    .isString()
+    .withMessage("Your nickname is improperly formatted. Please try again.")
+    .isLength({ max: 24 })
+    .withMessage("Please make sure your nickname length is 24 characters or less.")
+    .trim()
+    .escape(), (0, express_validator_1.body)("userPassword")
+    .isString()
+    .withMessage("Improperly formatted password. Please try again.")
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters")
     .matches("[A-Z]")
@@ -25,5 +33,9 @@ router.post("/login", (0, express_validator_1.body)("userEmail", "Please enter a
     .isEmail()
     .trim()
     .escape()
-    .normalizeEmail(), (0, express_validator_1.body)("userPassword", "The password field cannot be blank, please try again.").not().isEmpty(), login_1.default);
+    .normalizeEmail(), (0, express_validator_1.body)("userPassword")
+    .isString()
+    .withMessage("Improperly formatted password. Please try again.")
+    .isLength({ min: 8 })
+    .withMessage("All passwords are at least 8 characters long. Please try again."), login_1.default);
 exports.default = router;

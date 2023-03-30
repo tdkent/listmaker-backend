@@ -8,6 +8,7 @@ const db_1 = __importDefault(require("../../db"));
 const editList = async (req, res, next) => {
     try {
         //! Note: Currently the list name is the only editable field. May add others later.
+        // validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({ errors: errors.array() });

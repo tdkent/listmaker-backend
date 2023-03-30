@@ -7,6 +7,7 @@ import { EditListReqInt } from "../../models/list";
 const editList: RequestHandler<{ listId: number }> = async (req, res, next) => {
   try {
     //! Note: Currently the list name is the only editable field. May add others later.
+    // validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });

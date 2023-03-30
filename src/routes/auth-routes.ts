@@ -14,7 +14,16 @@ router.post(
     .trim()
     .escape()
     .normalizeEmail(),
+  body("userNickname")
+    .isString()
+    .withMessage("Your nickname is improperly formatted. Please try again.")
+    .isLength({ max: 24 })
+    .withMessage("Please make sure your nickname length is 24 characters or less.")
+    .trim()
+    .escape(),
   body("userPassword")
+    .isString()
+    .withMessage("Improperly formatted password. Please try again.")
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters")
     .matches("[A-Z]")
@@ -32,7 +41,11 @@ router.post(
     .trim()
     .escape()
     .normalizeEmail(),
-  body("userPassword", "The password field cannot be blank, please try again.").not().isEmpty(),
+  body("userPassword")
+    .isString()
+    .withMessage("Improperly formatted password. Please try again.")
+    .isLength({ min: 8 })
+    .withMessage("All passwords are at least 8 characters long. Please try again."),
   login
 );
 
