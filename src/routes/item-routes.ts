@@ -32,6 +32,8 @@ router.patch(
 // PATCH /item/check/:listId/:listType/:itemId/
 router.patch(
   "/check/:listId/:listType/:itemId",
+  param("listId", "Malformed route parameters").matches(/[0-9]/),
+  param("itemId", "Malformed router parameters").matches(/[0-9]/),
   param("listType", "Malformed router parameters").isIn(Object.keys(CheckTypesEnum)),
   checkItem
 );

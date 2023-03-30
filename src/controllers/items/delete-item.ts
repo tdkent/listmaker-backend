@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
-import db from "../../db";
 import { ListTypesEnum } from "../../models/list";
 import deleteShoppingItem from "./shopping/delete-shopping-item";
 
@@ -13,16 +12,18 @@ const deleteItem: RequestHandler<{ listId: string; listType: string; itemId: str
   const { listId, listType, itemId } = req.params;
   const { userId } = req.user;
   try {
+    // validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(401).json({ errors: errors.array() });
     }
 
-    // filter list type
     let success = false;
+
+    // filter list type
     if (listType === ListTypesEnum.shop) {
-      const deleteItem = (await deleteShoppingItem(itemId, listId, userId)) as { id: number }[];
-      if (deleteItem.length) success = true;
+      const result = await deleteShoppingItem(itemId, listId, userId);
+      if (result.length) success = true;
     }
 
     // null result error
