@@ -1,29 +1,44 @@
 import { RequestHandler } from "express";
+import { validationResult } from "express-validator";
 
 import db from "../../db";
 import { NewListResInt } from "../../models/list";
+import { ErrorMsgEnum } from "../../models/error";
 
 const fetchList: RequestHandler<{ listId: number }> = async (req, res, next) => {
+  const { userId } = req.user;
+  const { listId } = req.params;
   try {
+    // validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400);
+      return next({ message: ErrorMsgEnum.badRequest });
+    }
+
+    // db query
     const { rows }: { rows: NewListResInt[] } = await db.query(
       `
     SELECT * FROM lists
     WHERE id = $1
     AND "userId" = $2;
     `,
-      [req.params.listId, req.user.userId]
+      [listId, userId]
     );
+
+    // null result error
     if (!rows.length) {
-      res.status(401);
+      res.status(403);
       return next({
-        message: `Unable to retrieve list (id ${req.params.listId}). The list may no longer exist, or you may no longer be authorized to view it.`,
+        message: ErrorMsgEnum.nullResult,
       });
     }
     res.json({ message: "OK", list: rows[0] });
   } catch (error) {
+    console.log(error);
     res.status(500);
     next({
-      message: "An error occurred while attempting to fetch list with id",
+      message: ErrorMsgEnum.internalServer,
     });
   }
 };

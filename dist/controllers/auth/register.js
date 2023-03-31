@@ -7,6 +7,8 @@ const express_validator_1 = require("express-validator");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const db_1 = __importDefault(require("../../db"));
 const auth_1 = require("../../models/auth");
+const check_req_body_1 = __importDefault(require("../../utils/check-req-body"));
+const error_1 = require("../../models/error");
 const register = async (req, res, next) => {
     try {
         // validation errors
@@ -16,11 +18,9 @@ const register = async (req, res, next) => {
         }
         // check request body
         const newUser = req.body;
-        if (Object.keys(newUser).length !== Object.keys(auth_1.UserRegisterReqEnum).length) {
+        if (!(0, check_req_body_1.default)(newUser, auth_1.UserRegisterReqEnum)) {
             res.status(400);
-            return next({
-                message: "Malformed request body",
-            });
+            return next({ message: error_1.ErrorMsgEnum.badRequest });
         }
         // check userEmail
         const { rows } = await db_1.default.query(`
@@ -30,7 +30,7 @@ const register = async (req, res, next) => {
         if (rows.length) {
             res.status(422);
             return next({
-                message: "An account with that email address already exists!",
+                message: error_1.ErrorMsgEnum.duplicateEmail,
             });
         }
         // db query
@@ -43,9 +43,10 @@ const register = async (req, res, next) => {
         res.json({ message: "OK" });
     }
     catch (error) {
+        console.log(error);
         res.status(500);
         next({
-            message: "An unexpected server error occurred that prevented your account from being created. Please try again later.",
+            message: error_1.ErrorMsgEnum.internalServer,
         });
     }
 };

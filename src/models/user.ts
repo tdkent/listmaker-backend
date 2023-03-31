@@ -7,3 +7,7 @@ export interface UserProfileResInt {
 export interface EditUserProfileInt {
   userNickname: string;
 }
+
+export enum EditUserProfileEnum {
+  name = "userNickname",
+}

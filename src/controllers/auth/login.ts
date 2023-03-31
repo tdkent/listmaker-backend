@@ -6,6 +6,8 @@ import jwt from "jsonwebtoken";
 import db from "../../db";
 import { jwtKey } from "../../config/config";
 import { UserLoginInt, UserDataInt, UserData, UserLoginReqEnum } from "../../models/auth";
+import checkRequestBody from "../../utils/check-req-body";
+import { ErrorMsgEnum } from "../../models/error";
 
 const login: RequestHandler = async (req, res, next) => {
   try {
@@ -17,11 +19,9 @@ const login: RequestHandler = async (req, res, next) => {
 
     // check request body
     const userLogin = <UserLoginInt>req.body;
-    if (Object.keys(userLogin).length !== Object.keys(UserLoginReqEnum).length) {
+    if (!checkRequestBody(userLogin, UserLoginReqEnum)) {
       res.status(400);
-      return next({
-        message: "Malformed request body",
-      });
+      return next({ message: ErrorMsgEnum.badRequest });
     }
 
     // db query
@@ -35,7 +35,7 @@ const login: RequestHandler = async (req, res, next) => {
     if (!rows.length) {
       res.status(422);
       return next({
-        message: `Could not find an account with email ${userLogin.userEmail}. Please try again, or create a new account.`,
+        message: ErrorMsgEnum.incorrectEmail,
       });
     }
 
@@ -44,11 +44,12 @@ const login: RequestHandler = async (req, res, next) => {
     if (!comparePw) {
       res.status(401);
       return next({
-        message: "The password you submitted does not match our records. Please try again.",
+        message: ErrorMsgEnum.incorrectPassword,
       });
     }
 
     // generate new token
+    //? TODO: how to make use of the token expiration
     const token = jwt.sign({ userId: rows[0].id, userEmail: userLogin.userEmail }, jwtKey, {
       expiresIn: "30d",
     });
@@ -60,7 +61,7 @@ const login: RequestHandler = async (req, res, next) => {
     console.log(error);
     res.status(500);
     next({
-      message: "There was an unexpected error which prevented login. Please try again later.",
+      message: ErrorMsgEnum.internalServer,
     });
   }
 };

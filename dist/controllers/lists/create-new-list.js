@@ -7,11 +7,14 @@ const express_validator_1 = require("express-validator");
 const slugify_1 = __importDefault(require("slugify"));
 const db_1 = __importDefault(require("../../db"));
 const createNewList = async (req, res, next) => {
+    const { userId } = req.user;
     try {
+        // validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({ errors: errors.array() });
         }
+        // db query
         const newList = req.body;
         const { rows: check } = await db_1.default.query(`
     SELECT id FROM lists

@@ -1,27 +1,42 @@
 import { RequestHandler } from "express";
+import { validationResult } from "express-validator";
 
 import db from "../../db";
-import { EditUserProfileInt, UserProfileResInt } from "../../models/user";
+import { EditUserProfileInt, EditUserProfileEnum, UserProfileResInt } from "../../models/user";
+import { ErrorMsgEnum } from "../../models/error";
+import checkRequestBody from "../../utils/check-req-body";
 
 const editUserProfile: RequestHandler = async (req, res, next) => {
+  const { userId } = req.user;
   try {
-    // TODO: request body will eventually contain other editable fields
+    // validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    // check request body
     const userData = <EditUserProfileInt>req.body;
-    const { rows }: { rows: UserProfileResInt[] } = await db.query(
+    if (!checkRequestBody(userData, EditUserProfileEnum)) {
+      res.status(400);
+      return next({ message: ErrorMsgEnum.badRequest });
+    }
+
+    // db query
+    await db.query(
       `
     UPDATE users
     SET "userNickname" = $1
-    WHERE id = $2
-    RETURNING id, "userEmail", "userNickname";
+    WHERE id = $2;
     `,
-      [userData.userNickname, req.user.userId]
+      [userData.userNickname, userId]
     );
-    res.json({ message: "OK", user: rows[0] });
+    res.json({ message: "OK" });
   } catch (error) {
     console.log(error);
     res.status(500);
     next({
-      message: `An error occurred while updating the user's profile data (user id ${req.user.userId}).`,
+      message: ErrorMsgEnum.internalServer,
     });
   }
 };

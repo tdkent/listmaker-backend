@@ -4,13 +4,18 @@ import slugify from "slugify";
 
 import db from "../../db";
 import { NewListReqInt, NewListResInt } from "../../models/list";
+import checkRequestBody from "../../utils/check-req-body";
 
 const createNewList: RequestHandler = async (req, res, next) => {
+  const { userId } = req.user;
   try {
+    // validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
+
+    // db query
     const newList = <NewListReqInt>req.body;
     const { rows: check } = await db.query(
       `

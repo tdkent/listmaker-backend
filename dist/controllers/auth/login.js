@@ -9,6 +9,8 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = __importDefault(require("../../db"));
 const config_1 = require("../../config/config");
 const auth_1 = require("../../models/auth");
+const check_req_body_1 = __importDefault(require("../../utils/check-req-body"));
+const error_1 = require("../../models/error");
 const login = async (req, res, next) => {
     try {
         // validation errors
@@ -18,11 +20,9 @@ const login = async (req, res, next) => {
         }
         // check request body
         const userLogin = req.body;
-        if (Object.keys(userLogin).length !== Object.keys(auth_1.UserLoginReqEnum).length) {
+        if (!(0, check_req_body_1.default)(userLogin, auth_1.UserLoginReqEnum)) {
             res.status(400);
-            return next({
-                message: "Malformed request body",
-            });
+            return next({ message: error_1.ErrorMsgEnum.badRequest });
         }
         // db query
         const { rows } = await db_1.default.query(`SELECT id, "userEmail", "userPassword" FROM users
@@ -31,7 +31,7 @@ const login = async (req, res, next) => {
         if (!rows.length) {
             res.status(422);
             return next({
-                message: `Could not find an account with email ${userLogin.userEmail}. Please try again, or create a new account.`,
+                message: error_1.ErrorMsgEnum.incorrectEmail,
             });
         }
         // check password
@@ -39,10 +39,11 @@ const login = async (req, res, next) => {
         if (!comparePw) {
             res.status(401);
             return next({
-                message: "The password you submitted does not match our records. Please try again.",
+                message: error_1.ErrorMsgEnum.incorrectPassword,
             });
         }
         // generate new token
+        //? TODO: how to make use of the token expiration
         const token = jsonwebtoken_1.default.sign({ userId: rows[0].id, userEmail: userLogin.userEmail }, config_1.jwtKey, {
             expiresIn: "30d",
         });
@@ -54,7 +55,7 @@ const login = async (req, res, next) => {
         console.log(error);
         res.status(500);
         next({
-            message: "There was an unexpected error which prevented login. Please try again later.",
+            message: error_1.ErrorMsgEnum.internalServer,
         });
     }
 };

@@ -4,6 +4,8 @@ import bcrypt from "bcrypt";
 
 import db from "../../db";
 import { UserRegisterReqInt, UserRegisterReqEnum } from "../../models/auth";
+import checkRequestBody from "../../utils/check-req-body";
+import { ErrorMsgEnum } from "../../models/error";
 
 const register: RequestHandler = async (req, res, next) => {
   try {
@@ -15,11 +17,9 @@ const register: RequestHandler = async (req, res, next) => {
 
     // check request body
     const newUser = <UserRegisterReqInt>req.body;
-    if (Object.keys(newUser).length !== Object.keys(UserRegisterReqEnum).length) {
+    if (!checkRequestBody(newUser, UserRegisterReqEnum)) {
       res.status(400);
-      return next({
-        message: "Malformed request body",
-      });
+      return next({ message: ErrorMsgEnum.badRequest });
     }
 
     // check userEmail
@@ -33,7 +33,7 @@ const register: RequestHandler = async (req, res, next) => {
     if (rows.length) {
       res.status(422);
       return next({
-        message: "An account with that email address already exists!",
+        message: ErrorMsgEnum.duplicateEmail,
       });
     }
 
@@ -50,10 +50,10 @@ const register: RequestHandler = async (req, res, next) => {
 
     res.json({ message: "OK" });
   } catch (error) {
+    console.log(error);
     res.status(500);
     next({
-      message:
-        "An unexpected server error occurred that prevented your account from being created. Please try again later.",
+      message: ErrorMsgEnum.internalServer,
     });
   }
 };

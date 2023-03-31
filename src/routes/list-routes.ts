@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 
 import checkToken from "../controllers/auth/check-token";
 import fetchAllLists from "../controllers/lists/fetch-all-lists";
@@ -8,6 +8,7 @@ import createNewList from "../controllers/lists/create-new-list";
 import editList from "../controllers/lists/edit-list";
 import deleteList from "../controllers/lists/delete-list";
 import { ListTypesEnum } from "../models/list";
+import { ValidatorMsgEnum } from "../models/error";
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.use(checkToken);
 router.get("/fetch", fetchAllLists);
 
 // GET /lists/fetch/:listId
-router.get("/fetch/:listId", fetchList);
+router.get("/fetch/:listId", param("listId", ValidatorMsgEnum.badRequest).isNumeric(), fetchList);
 
 // POST /lists/new
 router.post(

@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { body } from "express-validator";
 
 import checkToken from "../controllers/auth/check-token";
 import fetchUserProfile from "../controllers/users/fetch-user-profile";
@@ -13,6 +14,17 @@ router.use(checkToken);
 router.get("/profile", fetchUserProfile);
 
 // edit user profile
-router.patch("/profile", editUserProfile);
+router.patch(
+  "/profile",
+  //! Note: Request body will eventually contain additional fields
+  body("userNickname")
+    .isString()
+    .withMessage("Your nickname is improperly formatted. Please try again.")
+    .isLength({ max: 24 })
+    .withMessage("Please make sure your nickname length is 24 characters or less.")
+    .trim()
+    .escape(),
+  editUserProfile
+);
 
 export default router;

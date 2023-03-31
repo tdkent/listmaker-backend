@@ -12,13 +12,14 @@ const create_new_list_1 = __importDefault(require("../controllers/lists/create-n
 const edit_list_1 = __importDefault(require("../controllers/lists/edit-list"));
 const delete_list_1 = __importDefault(require("../controllers/lists/delete-list"));
 const list_1 = require("../models/list");
+const error_1 = require("../models/error");
 const router = (0, express_1.Router)();
 // auth check
 router.use(check_token_1.default);
 // GET /lists/fetch
 router.get("/fetch", fetch_all_lists_1.default);
 // GET /lists/fetch/:listId
-router.get("/fetch/:listId", fetch_single_list_1.default);
+router.get("/fetch/:listId", (0, express_validator_1.param)("listId", error_1.ValidatorMsgEnum.badRequest).isNumeric(), fetch_single_list_1.default);
 // POST /lists/new
 router.post("/new", (0, express_validator_1.body)("name", "Please enter a list name and try again.").not().isEmpty().trim().escape(), (0, express_validator_1.body)("type", "Please select a valid list type and try again.").isIn(Object.values(list_1.ListTypesEnum)), create_new_list_1.default);
 // PATCH /lists/edit/:listId

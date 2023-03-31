@@ -3,26 +3,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const express_validator_1 = require("express-validator");
 const db_1 = __importDefault(require("../../db"));
+const error_1 = require("../../models/error");
 const fetchList = async (req, res, next) => {
+    const { userId } = req.user;
+    const { listId } = req.params;
     try {
+        // validation errors
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            res.status(400);
+            return next({ message: error_1.ErrorMsgEnum.badRequest });
+        }
+        // db query
         const { rows } = await db_1.default.query(`
     SELECT * FROM lists
     WHERE id = $1
     AND "userId" = $2;
-    `, [req.params.listId, req.user.userId]);
+    `, [listId, userId]);
+        // null result error
         if (!rows.length) {
-            res.status(401);
+            res.status(403);
             return next({
-                message: `Unable to retrieve list (id ${req.params.listId}). The list may no longer exist, or you may no longer be authorized to view it.`,
+                message: error_1.ErrorMsgEnum.nullResult,
             });
         }
         res.json({ message: "OK", list: rows[0] });
     }
     catch (error) {
+        console.log(error);
         res.status(500);
         next({
-            message: "An error occurred while attempting to fetch list with id",
+            message: error_1.ErrorMsgEnum.internalServer,
         });
     }
 };

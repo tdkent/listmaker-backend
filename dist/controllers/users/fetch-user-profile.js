@@ -4,20 +4,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = __importDefault(require("../../db"));
+const error_1 = require("../../models/error");
 const fetchUserProfile = async (req, res, next) => {
+    const { userId } = req.user;
     try {
+        // db query
         const { rows } = await db_1.default.query(`
     SELECT id, "userEmail", "userNickname"
     FROM users
     WHERE id = $1
-    `, [req.user.userId]);
+    `, [userId]);
         res.json({ message: "OK", user: rows[0] });
     }
     catch (error) {
         console.log(error);
         res.status(500);
         return next({
-            message: `An error occurred while fetching the user's profile data (user id ${req.user.userId}).`,
+            message: error_1.ErrorMsgEnum.internalServer,
         });
     }
 };
