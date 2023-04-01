@@ -3,11 +3,12 @@ import { validationResult } from "express-validator";
 
 import db from "../../db";
 import { EditUserProfileInt, EditUserProfileEnum, UserProfileResInt } from "../../models/user";
-import { ErrorMsgEnum } from "../../models/error";
+import { RequestErrors } from "../../models/error";
 import checkRequestBody from "../../utils/check-req-body";
 
 const editUserProfile: RequestHandler = async (req, res, next) => {
   const { userId } = req.user;
+  const reqError = new RequestErrors();
   try {
     // validation errors
     const errors = validationResult(req);
@@ -19,7 +20,7 @@ const editUserProfile: RequestHandler = async (req, res, next) => {
     const userData = <EditUserProfileInt>req.body;
     if (!checkRequestBody(userData, EditUserProfileEnum)) {
       res.status(400);
-      return next({ message: ErrorMsgEnum.badRequest });
+      return next({ message: reqError.badRequest() });
     }
 
     // db query
@@ -36,7 +37,7 @@ const editUserProfile: RequestHandler = async (req, res, next) => {
     console.log(error);
     res.status(500);
     next({
-      message: ErrorMsgEnum.internalServer,
+      message: reqError.internalServer(),
     });
   }
 };

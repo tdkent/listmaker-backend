@@ -5,8 +5,13 @@ import db from "../../db";
 import { ListTypesEnum } from "../../models/list";
 import { ShoppingItemNewReqEnum, ShoppingItemNewReqInt } from "../../models/item";
 import createShoppingItem from "./shopping/create-shopping-item";
+import { RequestErrors } from "../../models/error";
+import checkRequestBody from "../../utils/check-req-body";
 
 const addNewItem: RequestHandler<{ listId: string }> = async (req, res, next) => {
+  const { userId } = req.user;
+  const { listId } = req.params;
+  const reqError = new RequestErrors();
   try {
     // validation errors
     const errors = validationResult(req);
@@ -14,42 +19,39 @@ const addNewItem: RequestHandler<{ listId: string }> = async (req, res, next) =>
       return res.status(422).json({ errors: errors.array() });
     }
 
-    // check that token holder owns the list and determine the list type
+    // check auth & list type
     const { rows }: { rows: { type: string }[] } = await db.query(
       `
     SELECT type FROM lists
     WHERE id = $1
     AND "userId" = $2;
     `,
-      [req.params.listId, req.user.userId]
+      [Number(listId), userId]
     );
 
-    // error on null result
+    // null result error
     if (!rows.length) {
       res.status(401);
-      return next({
-        message: `Unable to add item to list (id ${req.params.listId}). The list may no longer exist, or you may not be authorized.`,
-      });
+      return next({ message: reqError.nullResult() });
     }
 
-    // list type filtering
-    // shopping
+    // type: shop
     if (rows[0].type === ListTypesEnum.shop) {
       const newItem = <ShoppingItemNewReqInt>req.body;
-      // check request body for unwanted fields
-      if (Object.keys(newItem).length !== Object.keys(ShoppingItemNewReqEnum).length) {
-        return res.status(400).json({
-          message: "Malformed request body",
-        });
+
+      // check request body
+      if (!checkRequestBody(newItem, ShoppingItemNewReqEnum)) {
+        res.status(400);
+        return next({ message: reqError.badRequest() });
       }
-      await createShoppingItem(Number(req.params.listId), Number(req.user.userId), newItem);
+      await createShoppingItem(listId, userId, newItem);
     }
     res.json({ message: "OK" });
   } catch (error) {
     console.log(error);
     res.status(500);
     next({
-      message: "An error occurred while creating the new item.",
+      message: reqError.internalServer(),
     });
   }
 };

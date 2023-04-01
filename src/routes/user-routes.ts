@@ -4,8 +4,10 @@ import { body } from "express-validator";
 import checkToken from "../controllers/auth/check-token";
 import fetchUserProfile from "../controllers/users/fetch-user-profile";
 import editUserProfile from "../controllers/users/edit-user-profile";
+import { ValidatorErrors } from "../models/error";
 
 const router = Router();
+const errors = new ValidatorErrors();
 
 // auth check
 router.use(checkToken);
@@ -19,9 +21,9 @@ router.patch(
   //! Note: Request body will eventually contain additional fields
   body("userNickname")
     .isString()
-    .withMessage("Your nickname is improperly formatted. Please try again.")
+    .withMessage(errors.invalidField())
     .isLength({ max: 24 })
-    .withMessage("Please make sure your nickname length is 24 characters or less.")
+    .withMessage(errors.maxLength("nickname", 24))
     .trim()
     .escape(),
   editUserProfile

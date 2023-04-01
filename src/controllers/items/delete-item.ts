@@ -3,6 +3,7 @@ import { validationResult } from "express-validator";
 
 import { ListTypesEnum } from "../../models/list";
 import deleteShoppingItem from "./shopping/delete-shopping-item";
+import { RequestErrors } from "../../models/error";
 
 const deleteItem: RequestHandler<{ listId: string; listType: string; itemId: string }> = async (
   req,
@@ -11,6 +12,7 @@ const deleteItem: RequestHandler<{ listId: string; listType: string; itemId: str
 ) => {
   const { listId, listType, itemId } = req.params;
   const { userId } = req.user;
+  const reqError = new RequestErrors();
   try {
     // validation errors
     const errors = validationResult(req);
@@ -18,29 +20,23 @@ const deleteItem: RequestHandler<{ listId: string; listType: string; itemId: str
       return res.status(401).json({ errors: errors.array() });
     }
 
-    let success = false;
-
-    // filter list type
+    // type: shop
     if (listType === ListTypesEnum.shop) {
-      const result = await deleteShoppingItem(itemId, listId, userId);
-      if (result.length) success = true;
-    }
+      // db query
+      const result: { id: number }[] = await deleteShoppingItem(itemId, listId, userId);
 
-    // null result error
-    if (!success) {
-      res.status(401);
-      return next({
-        message: `Unable to delete item (id ${itemId}). The item or list may no longer exist, or you may not be authorized.`,
-      });
+      // null result error
+      if (!result.length) {
+        res.status(401);
+        return next({ message: reqError.nullResult() });
+      }
     }
 
     res.json({ message: "OK" });
   } catch (error) {
     console.log(error);
     res.status(500);
-    next({
-      message: `An error occurred while attempting to delete item (id ${itemId})`,
-    });
+    next({ message: reqError.internalServer() });
   }
 };
 

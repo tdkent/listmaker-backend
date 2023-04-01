@@ -10,6 +10,7 @@ const error_1 = require("../../models/error");
 const check_req_body_1 = __importDefault(require("../../utils/check-req-body"));
 const editUserProfile = async (req, res, next) => {
     const { userId } = req.user;
+    const reqError = new error_1.RequestErrors();
     try {
         // validation errors
         const errors = (0, express_validator_1.validationResult)(req);
@@ -20,7 +21,7 @@ const editUserProfile = async (req, res, next) => {
         const userData = req.body;
         if (!(0, check_req_body_1.default)(userData, user_1.EditUserProfileEnum)) {
             res.status(400);
-            return next({ message: error_1.ErrorMsgEnum.badRequest });
+            return next({ message: reqError.badRequest() });
         }
         // db query
         await db_1.default.query(`
@@ -34,7 +35,7 @@ const editUserProfile = async (req, res, next) => {
         console.log(error);
         res.status(500);
         next({
-            message: error_1.ErrorMsgEnum.internalServer,
+            message: reqError.internalServer(),
         });
     }
 };

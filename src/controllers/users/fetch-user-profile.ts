@@ -2,10 +2,11 @@ import { RequestHandler } from "express";
 
 import db from "../../db";
 import { UserProfileResInt } from "../../models/user";
-import { ErrorMsgEnum } from "../../models/error";
+import { RequestErrors } from "../../models/error";
 
 const fetchUserProfile: RequestHandler = async (req, res, next) => {
   const { userId } = req.user;
+  const reqError = new RequestErrors();
   try {
     // db query
     const { rows }: { rows: UserProfileResInt[] } = await db.query(
@@ -21,7 +22,7 @@ const fetchUserProfile: RequestHandler = async (req, res, next) => {
     console.log(error);
     res.status(500);
     return next({
-      message: ErrorMsgEnum.internalServer,
+      message: reqError.internalServer(),
     });
   }
 };

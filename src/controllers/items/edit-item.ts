@@ -8,12 +8,17 @@ import {
 } from "../../models/item";
 import { ListTypesEnum } from "../../models/list";
 import editShoppingItem from "./shopping/edit-shopping-item";
+import checkRequestBody from "../../utils/check-req-body";
+import { RequestErrors } from "../../models/error";
 
 const editItem: RequestHandler<{ listId: string; listType: string; itemId: string }> = async (
   req,
   res,
   next
 ) => {
+  const { userId } = req.user;
+  const { listId, listType, itemId } = req.params;
+  const reqError = new RequestErrors();
   try {
     // validation errors
     const errors = validationResult(req);
@@ -21,40 +26,30 @@ const editItem: RequestHandler<{ listId: string; listType: string; itemId: strin
       return res.status(422).json({ errors: errors.array() });
     }
 
-    // filter by list type params
-    const listType = req.params.listType;
+    // type: shop
     if (listType === ListTypesEnum.shop) {
       const updateItem = <ShoppingItemEditReqInt>req.body;
+
       // check request body
-      if (Object.keys(updateItem).length !== Object.keys(ShoppingItemEditReqEnum).length) {
-        return res.status(400).json({
-          message: "Malformed request body",
-        });
+      if (!checkRequestBody(updateItem, ShoppingItemEditReqEnum)) {
+        res.status(400);
+        return next({ message: reqError.badRequest() });
       }
+
       // db request
-      const result: ShoppingItemInt[] = await editShoppingItem(
-        Number(req.params.itemId),
-        Number(req.params.listId),
-        Number(req.user.userId),
-        updateItem
-      );
+      const result: { id: number }[] = await editShoppingItem(itemId, listId, userId, updateItem);
+
       // null result error
       if (!result.length) {
         res.status(401);
-        return next({
-          message: `Unable to edit item (id ${req.params.itemId}). The list may no longer exist, or you may not be authorized.`,
-        });
+        return next({ message: reqError.nullResult() });
       }
-      res.json({ message: "OK" });
-    } else {
-      return res.status(404).json({ message: "Malformed route parameters" });
     }
+    res.json({ message: "OK" });
   } catch (error) {
     console.log(error);
     res.status(500);
-    next({
-      message: `An error occurred while attempting to edit the item (list id ${req.params.listId} )`,
-    });
+    next({ message: reqError.internalServer() });
   }
 };
 

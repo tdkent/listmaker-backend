@@ -2,8 +2,8 @@ import db from "../../../db";
 import { ShoppingItemEditReqInt } from "../../../models/item";
 
 const editShoppingItem = async (
-  itemId: number,
-  listId: number,
+  itemId: string,
+  listId: string,
   userId: number,
   item: ShoppingItemEditReqInt
 ) => {
@@ -14,9 +14,9 @@ const editShoppingItem = async (
   WHERE id = $2
   AND "listId" = $3
   AND "userId" = $4
-  RETURNING *
+  RETURNING id
   `,
-    [item.name, itemId, listId, userId]
+    [item.name, Number(itemId), Number(listId), userId]
   );
   return rows;
 };
