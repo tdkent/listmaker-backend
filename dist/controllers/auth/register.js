@@ -10,6 +10,7 @@ const auth_1 = require("../../models/auth");
 const check_req_body_1 = __importDefault(require("../../utils/check-req-body"));
 const error_1 = require("../../models/error");
 const register = async (req, res, next) => {
+    const reqError = new error_1.RequestErrors();
     try {
         // validation errors
         const errors = (0, express_validator_1.validationResult)(req);
@@ -20,7 +21,7 @@ const register = async (req, res, next) => {
         const newUser = req.body;
         if (!(0, check_req_body_1.default)(newUser, auth_1.UserRegisterReqEnum)) {
             res.status(400);
-            return next({ message: error_1.ErrorMsgEnum.badRequest });
+            return next({ message: reqError.badRequest() });
         }
         // check userEmail
         const { rows } = await db_1.default.query(`
@@ -30,7 +31,7 @@ const register = async (req, res, next) => {
         if (rows.length) {
             res.status(422);
             return next({
-                message: error_1.ErrorMsgEnum.duplicateEmail,
+                message: reqError.duplicateEmail(newUser.userEmail),
             });
         }
         // db query
@@ -46,7 +47,7 @@ const register = async (req, res, next) => {
         console.log(error);
         res.status(500);
         next({
-            message: error_1.ErrorMsgEnum.internalServer,
+            message: reqError.internalServer(),
         });
     }
 };

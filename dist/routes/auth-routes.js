@@ -7,35 +7,29 @@ const express_1 = require("express");
 const express_validator_1 = require("express-validator");
 const register_1 = __importDefault(require("../controllers/auth/register"));
 const login_1 = __importDefault(require("../controllers/auth/login"));
+const error_1 = require("../models/error");
 const router = (0, express_1.Router)();
+const error = new error_1.ValidatorErrors();
 // register user
-router.post("/register", (0, express_validator_1.body)("userEmail", "Please enter a valid email address and try again")
-    .isEmail()
-    .trim()
-    .escape()
-    .normalizeEmail(), (0, express_validator_1.body)("userNickname")
+router.post("/register", (0, express_validator_1.body)("userEmail", error.invalidField()).isEmail().trim().escape().normalizeEmail(), (0, express_validator_1.body)("userNickname")
     .isString()
-    .withMessage("Your nickname is improperly formatted. Please try again.")
+    .withMessage(error.invalidField())
     .isLength({ max: 24 })
-    .withMessage("Please make sure your nickname length is 24 characters or less.")
+    .withMessage(error.maxLength("nickname", 24))
     .trim()
     .escape(), (0, express_validator_1.body)("userPassword")
     .isString()
-    .withMessage("Improperly formatted password. Please try again.")
+    .withMessage(error.invalidField())
     .isLength({ min: 8 })
-    .withMessage("Password must be at least 8 characters")
+    .withMessage(error.invalidPassword(8, "characters"))
     .matches("[A-Z]")
-    .withMessage("Password must contain at least 1 uppercase letter")
+    .withMessage(error.invalidPassword(1, "uppercase letter"))
     .matches("[0-9]")
-    .withMessage("Password must contain at least 1 number"), register_1.default);
+    .withMessage(error.invalidPassword(1, "number")), register_1.default);
 // login user
-router.post("/login", (0, express_validator_1.body)("userEmail", "Please enter a valid email address and try again.")
-    .isEmail()
-    .trim()
-    .escape()
-    .normalizeEmail(), (0, express_validator_1.body)("userPassword")
+router.post("/login", (0, express_validator_1.body)("userEmail", error.invalidField()).isEmail().trim().escape().normalizeEmail(), (0, express_validator_1.body)("userPassword")
     .isString()
-    .withMessage("Improperly formatted password. Please try again.")
+    .withMessage(error.invalidField())
     .isLength({ min: 8 })
-    .withMessage("All passwords are at least 8 characters long. Please try again."), login_1.default);
+    .withMessage(error.invalidPassword(8, "characters")), login_1.default);
 exports.default = router;

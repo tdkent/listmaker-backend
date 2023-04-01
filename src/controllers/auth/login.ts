@@ -7,9 +7,10 @@ import db from "../../db";
 import { jwtKey } from "../../config/config";
 import { UserLoginInt, UserDataInt, UserData, UserLoginReqEnum } from "../../models/auth";
 import checkRequestBody from "../../utils/check-req-body";
-import { ErrorMsgEnum } from "../../models/error";
+import { RequestErrors } from "../../models/error";
 
 const login: RequestHandler = async (req, res, next) => {
+  const reqError = new RequestErrors();
   try {
     // validation errors
     const errors = validationResult(req);
@@ -21,7 +22,7 @@ const login: RequestHandler = async (req, res, next) => {
     const userLogin = <UserLoginInt>req.body;
     if (!checkRequestBody(userLogin, UserLoginReqEnum)) {
       res.status(400);
-      return next({ message: ErrorMsgEnum.badRequest });
+      return next({ message: reqError.badRequest() });
     }
 
     // db query
@@ -35,7 +36,7 @@ const login: RequestHandler = async (req, res, next) => {
     if (!rows.length) {
       res.status(422);
       return next({
-        message: ErrorMsgEnum.incorrectEmail,
+        message: reqError.incorrectEmail(userLogin.userEmail),
       });
     }
 
@@ -44,7 +45,7 @@ const login: RequestHandler = async (req, res, next) => {
     if (!comparePw) {
       res.status(401);
       return next({
-        message: ErrorMsgEnum.incorrectPassword,
+        message: reqError.incorrectPassword(),
       });
     }
 
@@ -61,7 +62,7 @@ const login: RequestHandler = async (req, res, next) => {
     console.log(error);
     res.status(500);
     next({
-      message: ErrorMsgEnum.internalServer,
+      message: reqError.internalServer(),
     });
   }
 };

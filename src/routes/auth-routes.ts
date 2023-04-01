@@ -3,49 +3,43 @@ import { body } from "express-validator";
 
 import register from "../controllers/auth/register";
 import login from "../controllers/auth/login";
+import { ValidatorErrors } from "../models/error";
 
 const router = Router();
+const error = new ValidatorErrors();
 
 // register user
 router.post(
   "/register",
-  body("userEmail", "Please enter a valid email address and try again")
-    .isEmail()
-    .trim()
-    .escape()
-    .normalizeEmail(),
+  body("userEmail", error.invalidField()).isEmail().trim().escape().normalizeEmail(),
   body("userNickname")
     .isString()
-    .withMessage("Your nickname is improperly formatted. Please try again.")
+    .withMessage(error.invalidField())
     .isLength({ max: 24 })
-    .withMessage("Please make sure your nickname length is 24 characters or less.")
+    .withMessage(error.maxLength("nickname", 24))
     .trim()
     .escape(),
   body("userPassword")
     .isString()
-    .withMessage("Improperly formatted password. Please try again.")
+    .withMessage(error.invalidField())
     .isLength({ min: 8 })
-    .withMessage("Password must be at least 8 characters")
+    .withMessage(error.invalidPassword(8, "characters"))
     .matches("[A-Z]")
-    .withMessage("Password must contain at least 1 uppercase letter")
+    .withMessage(error.invalidPassword(1, "uppercase letter"))
     .matches("[0-9]")
-    .withMessage("Password must contain at least 1 number"),
+    .withMessage(error.invalidPassword(1, "number")),
   register
 );
 
 // login user
 router.post(
   "/login",
-  body("userEmail", "Please enter a valid email address and try again.")
-    .isEmail()
-    .trim()
-    .escape()
-    .normalizeEmail(),
+  body("userEmail", error.invalidField()).isEmail().trim().escape().normalizeEmail(),
   body("userPassword")
     .isString()
-    .withMessage("Improperly formatted password. Please try again.")
+    .withMessage(error.invalidField())
     .isLength({ min: 8 })
-    .withMessage("All passwords are at least 8 characters long. Please try again."),
+    .withMessage(error.invalidPassword(8, "characters")),
   login
 );
 

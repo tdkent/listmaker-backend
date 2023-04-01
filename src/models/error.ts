@@ -32,7 +32,7 @@ export class RequestErrors {
     return `An account with email address ${email} already exists. Do you want to log in?`;
   }
 
-  incorrestPassword() {
+  incorrectPassword() {
     return "The password you entered does not match our records. Please try again.";
   }
 
@@ -60,5 +60,9 @@ export class ValidatorErrors {
 
   maxLength(fieldName: string, maxChar: number) {
     return `${fieldName} exceeds max character limit (${maxChar})`;
+  }
+
+  invalidPassword(count: number, property: string) {
+    return `Password must contain at least ${count} ${property}`;
   }
 }

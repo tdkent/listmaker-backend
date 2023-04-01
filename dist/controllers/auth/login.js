@@ -12,6 +12,7 @@ const auth_1 = require("../../models/auth");
 const check_req_body_1 = __importDefault(require("../../utils/check-req-body"));
 const error_1 = require("../../models/error");
 const login = async (req, res, next) => {
+    const reqError = new error_1.RequestErrors();
     try {
         // validation errors
         const errors = (0, express_validator_1.validationResult)(req);
@@ -22,7 +23,7 @@ const login = async (req, res, next) => {
         const userLogin = req.body;
         if (!(0, check_req_body_1.default)(userLogin, auth_1.UserLoginReqEnum)) {
             res.status(400);
-            return next({ message: error_1.ErrorMsgEnum.badRequest });
+            return next({ message: reqError.badRequest() });
         }
         // db query
         const { rows } = await db_1.default.query(`SELECT id, "userEmail", "userPassword" FROM users
@@ -31,7 +32,7 @@ const login = async (req, res, next) => {
         if (!rows.length) {
             res.status(422);
             return next({
-                message: error_1.ErrorMsgEnum.incorrectEmail,
+                message: reqError.incorrectEmail(userLogin.userEmail),
             });
         }
         // check password
@@ -39,7 +40,7 @@ const login = async (req, res, next) => {
         if (!comparePw) {
             res.status(401);
             return next({
-                message: error_1.ErrorMsgEnum.incorrectPassword,
+                message: reqError.incorrectPassword(),
             });
         }
         // generate new token
@@ -55,7 +56,7 @@ const login = async (req, res, next) => {
         console.log(error);
         res.status(500);
         next({
-            message: error_1.ErrorMsgEnum.internalServer,
+            message: reqError.internalServer(),
         });
     }
 };
