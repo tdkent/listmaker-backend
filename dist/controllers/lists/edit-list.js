@@ -5,26 +5,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const db_1 = __importDefault(require("../../db"));
+const list_1 = require("../../models/list");
+const error_1 = require("../../models/error");
+const check_req_body_1 = __importDefault(require("../../utils/check-req-body"));
 const editList = async (req, res, next) => {
+    const { userId } = req.user;
+    const { listId } = req.params;
+    const reqError = new error_1.RequestErrors();
     try {
-        //! Note: Currently the list name is the only editable field. May add others later.
         // validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({ errors: errors.array() });
         }
+        // check request body
         const updateList = req.body;
+        if (!(0, check_req_body_1.default)(updateList, list_1.EditListReqFieldsEnum)) {
+            res.status(400);
+            return next({ message: reqError.badRequest() });
+        }
+        //db query
         const { rows } = await db_1.default.query(`
     UPDATE lists
     SET name = $1
     WHERE id = $2
     AND "userId" = $3
     RETURNING id;
-    `, [updateList.name, req.params.listId, req.user.userId]);
+    `, [updateList.name, listId, userId]);
+        // null result error
         if (!rows.length) {
             res.status(401);
             return next({
-                message: `Unable to access list (id ${req.params.listId}). The list may not exist, or you may not be authorized.`,
+                message: reqError.nullResult(),
             });
         }
         res.json({ message: "OK" });
@@ -33,7 +45,7 @@ const editList = async (req, res, next) => {
         console.log(error);
         res.status(500);
         next({
-            message: `An error occurred while editing list id `,
+            message: reqError.internalServer(),
         });
     }
 };

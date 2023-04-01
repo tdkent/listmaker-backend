@@ -6,40 +6,49 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const slugify_1 = __importDefault(require("slugify"));
 const db_1 = __importDefault(require("../../db"));
+const list_1 = require("../../models/list");
+const error_1 = require("../../models/error");
+const check_req_body_1 = __importDefault(require("../../utils/check-req-body"));
 const createNewList = async (req, res, next) => {
     const { userId } = req.user;
+    const reqError = new error_1.RequestErrors();
     try {
         // validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({ errors: errors.array() });
         }
-        // db query
         const newList = req.body;
+        // check request body
+        if (!(0, check_req_body_1.default)(newList, list_1.NewListReqFieldsEnum)) {
+            res.status(400);
+            return next({ message: reqError.badRequest() });
+        }
+        // same name check
         const { rows: check } = await db_1.default.query(`
     SELECT id FROM lists
     WHERE name = $1
     AND "userId" = $2
-    `, [newList.name, req.user.userId]);
+    `, [newList.name, userId]);
         if (check.length) {
             res.status(422);
             return next({
-                message: `You already have a list named ${newList.name}. Please enter a new name and try again.`,
+                message: reqError.duplicateList(newList.name),
             });
         }
+        // db query
         const slug = (0, slugify_1.default)(newList.name.toLowerCase());
         const { rows } = await db_1.default.query(`
     INSERT INTO lists("userId", name, slug, type)
-    VALUES ($1, $2, $3, $4)
-    RETURNING *;
-    `, [req.user.userId, newList.name, slug, newList.type]);
-        res.json({ message: "OK", list: rows[0] });
+    VALUES ($1, $2, $3, $4);
+    `, [userId, newList.name, slug, newList.type]);
+        res.json({ message: "OK" });
     }
     catch (error) {
         console.log(error);
         res.status(500);
         next({
-            message: "An error occurred while creating the new list. Please try again later.",
+            message: reqError.internalServer(),
         });
     }
 };

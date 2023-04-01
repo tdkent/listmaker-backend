@@ -3,17 +3,17 @@ import { validationResult } from "express-validator";
 
 import db from "../../db";
 import { NewListResInt } from "../../models/list";
-import { ErrorMsgEnum } from "../../models/error";
+import { RequestErrors } from "../../models/error";
 
 const fetchList: RequestHandler<{ listId: number }> = async (req, res, next) => {
   const { userId } = req.user;
   const { listId } = req.params;
+  const reqError = new RequestErrors();
   try {
     // validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(400);
-      return next({ message: ErrorMsgEnum.badRequest });
+      return res.status(400).json({ errors: errors.array() });
     }
 
     // db query
@@ -28,9 +28,9 @@ const fetchList: RequestHandler<{ listId: number }> = async (req, res, next) => 
 
     // null result error
     if (!rows.length) {
-      res.status(403);
+      res.status(401);
       return next({
-        message: ErrorMsgEnum.nullResult,
+        message: reqError.nullResult(),
       });
     }
     res.json({ message: "OK", list: rows[0] });
@@ -38,7 +38,7 @@ const fetchList: RequestHandler<{ listId: number }> = async (req, res, next) => 
     console.log(error);
     res.status(500);
     next({
-      message: ErrorMsgEnum.internalServer,
+      message: reqError.internalServer(),
     });
   }
 };

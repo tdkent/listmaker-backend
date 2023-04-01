@@ -7,6 +7,7 @@ const db_1 = __importDefault(require("../../db"));
 const error_1 = require("../../models/error");
 const fetchAllLists = async (req, res, next) => {
     const { userId } = req.user;
+    const reqError = new error_1.RequestErrors();
     try {
         // db query
         const { rows } = await db_1.default.query(`
@@ -17,7 +18,7 @@ const fetchAllLists = async (req, res, next) => {
     }
     catch (error) {
         res.status(500);
-        next({ message: error_1.ErrorMsgEnum.internalServer });
+        next({ message: reqError.internalServer() });
     }
 };
 exports.default = fetchAllLists;

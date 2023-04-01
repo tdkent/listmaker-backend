@@ -9,12 +9,12 @@ const error_1 = require("../../models/error");
 const fetchList = async (req, res, next) => {
     const { userId } = req.user;
     const { listId } = req.params;
+    const reqError = new error_1.RequestErrors();
     try {
         // validation errors
         const errors = (0, express_validator_1.validationResult)(req);
         if (!errors.isEmpty()) {
-            res.status(400);
-            return next({ message: error_1.ErrorMsgEnum.badRequest });
+            return res.status(400).json({ errors: errors.array() });
         }
         // db query
         const { rows } = await db_1.default.query(`
@@ -24,9 +24,9 @@ const fetchList = async (req, res, next) => {
     `, [listId, userId]);
         // null result error
         if (!rows.length) {
-            res.status(403);
+            res.status(401);
             return next({
-                message: error_1.ErrorMsgEnum.nullResult,
+                message: reqError.nullResult(),
             });
         }
         res.json({ message: "OK", list: rows[0] });
@@ -35,7 +35,7 @@ const fetchList = async (req, res, next) => {
         console.log(error);
         res.status(500);
         next({
-            message: error_1.ErrorMsgEnum.internalServer,
+            message: reqError.internalServer(),
         });
     }
 };

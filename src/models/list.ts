@@ -8,14 +8,23 @@ export interface NewListReqInt {
   type: ListTypesEnum.shop | ListTypesEnum.todo;
 }
 
+export enum NewListReqFieldsEnum {
+  name = "name",
+  type = "type",
+}
+
 export interface NewListResInt extends NewListReqInt {
   id: number;
   userId: number;
   slug: string;
 }
 
-export interface EditListReqInt {
+export interface EditListReqFieldsInt {
   name: string;
+}
+
+export enum EditListReqFieldsEnum {
+  name = "name",
 }
 
 export enum CheckTypesEnum {

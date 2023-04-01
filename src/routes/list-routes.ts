@@ -8,9 +8,10 @@ import createNewList from "../controllers/lists/create-new-list";
 import editList from "../controllers/lists/edit-list";
 import deleteList from "../controllers/lists/delete-list";
 import { ListTypesEnum } from "../models/list";
-import { ValidatorMsgEnum } from "../models/error";
+import { ValidatorErrors } from "../models/error";
 
 const router = Router();
+const errors = new ValidatorErrors();
 
 // auth check
 router.use(checkToken);
@@ -19,24 +20,44 @@ router.use(checkToken);
 router.get("/fetch", fetchAllLists);
 
 // GET /lists/fetch/:listId
-router.get("/fetch/:listId", param("listId", ValidatorMsgEnum.badRequest).isNumeric(), fetchList);
+router.get("/fetch/:listId", param("listId", errors.badRequest()).isNumeric(), fetchList);
 
 // POST /lists/new
 router.post(
   "/new",
-  body("name", "Please enter a list name and try again.").not().isEmpty().trim().escape(),
-  body("type", "Please select a valid list type and try again.").isIn(Object.values(ListTypesEnum)),
+  body("name")
+    .isString()
+    .withMessage(errors.invalidField())
+    .not()
+    .isEmpty()
+    .withMessage(errors.nullField("name"))
+    .isLength({ max: 24 })
+    .withMessage(errors.maxLength("name", 24))
+    .trim()
+    .escape(),
+  body("type", errors.invalidField()).isIn(Object.values(ListTypesEnum)),
   createNewList
 );
 
 // PATCH /lists/edit/:listId
 router.patch(
   "/edit/:listId",
-  body("name", "Please enter a list name and try again.").not().isEmpty().trim().escape(),
+  param("listId", errors.badRequest()).isNumeric(),
+  // NOTE: request body will eventually have additional fields
+  body("name")
+    .isString()
+    .withMessage(errors.invalidField())
+    .isLength({ max: 24 })
+    .withMessage(errors.maxLength("name", 24))
+    .not()
+    .isEmpty()
+    .withMessage(errors.nullField("name"))
+    .trim()
+    .escape(),
   editList
 );
 
 // DELETE /lists/delete/:listId
-router.delete("/delete/:listId", deleteList);
+router.delete("/delete/:listId", param("listId", errors.badRequest()).isNumeric(), deleteList);
 
 export default router;

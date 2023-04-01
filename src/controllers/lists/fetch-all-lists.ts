@@ -2,10 +2,11 @@ import { RequestHandler } from "express";
 
 import db from "../../db";
 import { NewListResInt } from "../../models/list";
-import { ErrorMsgEnum } from "../../models/error";
+import { RequestErrors } from "../../models/error";
 
 const fetchAllLists: RequestHandler = async (req, res, next) => {
   const { userId } = req.user;
+  const reqError = new RequestErrors();
   try {
     // db query
     const { rows }: { rows: NewListResInt[] } = await db.query(
@@ -18,7 +19,7 @@ const fetchAllLists: RequestHandler = async (req, res, next) => {
     res.json({ message: "OK", lists: rows });
   } catch (error) {
     res.status(500);
-    next({ message: ErrorMsgEnum.internalServer });
+    next({ message: reqError.internalServer() });
   }
 };
 
