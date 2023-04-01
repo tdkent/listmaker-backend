@@ -16,13 +16,13 @@ const errors = new ValidatorErrors();
 // auth check
 router.use(checkToken);
 
-// GET /lists/fetch
+// GET /list/fetch
 router.get("/fetch", fetchAllLists);
 
-// GET /lists/fetch/:listId
+// GET /list/fetch/:listId
 router.get("/fetch/:listId", param("listId", errors.badRequest()).isNumeric(), fetchList);
 
-// POST /lists/new
+// POST /list/new
 router.post(
   "/new",
   body("name")
@@ -39,7 +39,7 @@ router.post(
   createNewList
 );
 
-// PATCH /lists/edit/:listId
+// PATCH /list/edit/:listId
 router.patch(
   "/edit/:listId",
   param("listId", errors.badRequest()).isNumeric(),
@@ -57,7 +57,7 @@ router.patch(
   editList
 );
 
-// DELETE /lists/delete/:listId
+// DELETE /list/delete/:listId
 router.delete("/delete/:listId", param("listId", errors.badRequest()).isNumeric(), deleteList);
 
 export default router;

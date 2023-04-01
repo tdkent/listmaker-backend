@@ -17,11 +17,11 @@ const router = (0, express_1.Router)();
 const errors = new error_1.ValidatorErrors();
 // auth check
 router.use(check_token_1.default);
-// GET /lists/fetch
+// GET /list/fetch
 router.get("/fetch", fetch_all_lists_1.default);
-// GET /lists/fetch/:listId
+// GET /list/fetch/:listId
 router.get("/fetch/:listId", (0, express_validator_1.param)("listId", errors.badRequest()).isNumeric(), fetch_single_list_1.default);
-// POST /lists/new
+// POST /list/new
 router.post("/new", (0, express_validator_1.body)("name")
     .isString()
     .withMessage(errors.invalidField())
@@ -32,7 +32,7 @@ router.post("/new", (0, express_validator_1.body)("name")
     .withMessage(errors.maxLength("name", 24))
     .trim()
     .escape(), (0, express_validator_1.body)("type", errors.invalidField()).isIn(Object.values(list_1.ListTypesEnum)), create_new_list_1.default);
-// PATCH /lists/edit/:listId
+// PATCH /list/edit/:listId
 router.patch("/edit/:listId", (0, express_validator_1.param)("listId", errors.badRequest()).isNumeric(), 
 // NOTE: request body will eventually have additional fields
 (0, express_validator_1.body)("name")
@@ -45,6 +45,6 @@ router.patch("/edit/:listId", (0, express_validator_1.param)("listId", errors.ba
     .withMessage(errors.nullField("name"))
     .trim()
     .escape(), edit_list_1.default);
-// DELETE /lists/delete/:listId
+// DELETE /list/delete/:listId
 router.delete("/delete/:listId", (0, express_validator_1.param)("listId", errors.badRequest()).isNumeric(), delete_list_1.default);
 exports.default = router;
