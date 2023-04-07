@@ -15,7 +15,7 @@ const fetchUserProfile = async (req, res, next) => {
     FROM users
     WHERE id = $1
     `, [userId]);
-        res.json({ message: "OK", user: rows[0] });
+        res.json({ user: rows[0] });
     }
     catch (error) {
         console.log(error);

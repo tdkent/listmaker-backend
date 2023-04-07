@@ -17,7 +17,7 @@ const fetchUserProfile: RequestHandler = async (req, res, next) => {
     `,
       [userId]
     );
-    res.json({ message: "OK", user: rows[0] });
+    res.json({ user: rows[0] });
   } catch (error) {
     console.log(error);
     res.status(500);

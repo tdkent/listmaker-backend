@@ -16,7 +16,7 @@ const fetchAllLists: RequestHandler = async (req, res, next) => {
     `,
       [userId]
     );
-    res.json({ message: "OK", lists: rows });
+    res.json({ lists: rows });
   } catch (error) {
     res.status(500);
     next({ message: reqError.internalServer() });

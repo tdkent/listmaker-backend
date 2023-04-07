@@ -21,7 +21,7 @@ const fetchList = async (req, res, next) => {
     SELECT * FROM lists
     WHERE id = $1
     AND "userId" = $2;
-    `, [listId, userId]);
+    `, [Number(listId), userId]);
         // null result error
         if (!rows.length) {
             res.status(401);

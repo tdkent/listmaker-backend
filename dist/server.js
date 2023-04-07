@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = require("body-parser");
 const config_1 = require("./config/config");
 const user_routes_1 = __importDefault(require("./routes/user-routes"));
@@ -11,7 +12,8 @@ const auth_routes_1 = __importDefault(require("./routes/auth-routes"));
 const list_routes_1 = __importDefault(require("./routes/list-routes"));
 const item_routes_1 = __importDefault(require("./routes/item-routes"));
 const app = (0, express_1.default)();
-// TODO: Add cors middleware
+//cors
+app.use((0, cors_1.default)());
 // body parser
 app.use((0, body_parser_1.json)());
 // auth routes

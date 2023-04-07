@@ -25,7 +25,10 @@ const checkToken = (req, res, next) => {
             });
         }
         // Note: jwt will throw its own error to the catch block if verification is unsuccessful
+        // jwt.verify is a function supplied by the jsonwebtoken package
         const verify = jsonwebtoken_1.default.verify(token, config_1.jwtKey);
+        // if token verification is successful we extract the userId
+        // and attempt to add to custom object req.user
         req.user = { userId: verify.userId };
         next();
     }

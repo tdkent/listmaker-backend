@@ -48,7 +48,6 @@ const register: RequestHandler = async (req, res, next) => {
     `,
       [newUser.userEmail, newUser.userNickname, hashedPassword]
     );
-
     res.json({ message: "OK" });
   } catch (error) {
     console.log(error);

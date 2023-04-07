@@ -14,7 +14,7 @@ const fetchAllLists = async (req, res, next) => {
     SELECT * FROM lists
     WHERE "userId" = $1
     `, [userId]);
-        res.json({ message: "OK", lists: rows });
+        res.json({ lists: rows });
     }
     catch (error) {
         res.status(500);

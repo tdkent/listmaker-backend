@@ -5,7 +5,7 @@ import db from "../../db";
 import { NewListResInt } from "../../models/list";
 import { RequestErrors } from "../../models/error";
 
-const fetchList: RequestHandler<{ listId: number }> = async (req, res, next) => {
+const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => {
   const { userId } = req.user;
   const { listId } = req.params;
   const reqError = new RequestErrors();
@@ -23,7 +23,7 @@ const fetchList: RequestHandler<{ listId: number }> = async (req, res, next) => 
     WHERE id = $1
     AND "userId" = $2;
     `,
-      [listId, userId]
+      [Number(listId), userId]
     );
 
     // null result error
