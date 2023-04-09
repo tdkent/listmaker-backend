@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
 import db from "../../db";
-import { ListTypesEnum } from "../../models/list";
+import { AllListTypesEnum } from "../../models/list";
 import { ShoppingItemNewReqEnum, ShoppingItemNewReqInt } from "../../models/item";
 import createShoppingItem from "./shopping/create-shopping-item";
 import { RequestErrors } from "../../models/error";
@@ -36,7 +36,7 @@ const addNewItem: RequestHandler<{ listId: string }> = async (req, res, next) =>
     }
 
     // type: shop
-    if (rows[0].type === ListTypesEnum.shop) {
+    if (rows[0].type === AllListTypesEnum.shop) {
       const newItem = <ShoppingItemNewReqInt>req.body;
 
       // check request body

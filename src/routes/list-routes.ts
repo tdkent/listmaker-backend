@@ -7,7 +7,7 @@ import fetchList from "../controllers/lists/fetch-single-list";
 import createNewList from "../controllers/lists/create-new-list";
 import editList from "../controllers/lists/edit-list";
 import deleteList from "../controllers/lists/delete-list";
-import { ListTypesEnum } from "../models/list";
+import { AllListTypesEnum } from "../models/list";
 import { ValidatorErrors } from "../models/error";
 
 const router = Router();
@@ -35,7 +35,7 @@ router.post(
     .withMessage(errors.maxLength("name", 24))
     .trim()
     .escape(),
-  body("type", errors.invalidField()).isIn(Object.values(ListTypesEnum)),
+  body("type", errors.invalidField()).isIn(Object.values(AllListTypesEnum)),
   createNewList
 );
 

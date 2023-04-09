@@ -40,9 +40,10 @@ const createNewList = async (req, res, next) => {
         const slug = (0, slugify_1.default)(newList.name.toLowerCase());
         const { rows } = await db_1.default.query(`
     INSERT INTO lists("userId", name, slug, type)
-    VALUES ($1, $2, $3, $4);
+    VALUES ($1, $2, $3, $4)
+    RETURNING id, slug;
     `, [userId, newList.name, slug, newList.type]);
-        res.json({ message: "OK" });
+        res.json({ list: rows[0] });
     }
     catch (error) {
         console.log(error);

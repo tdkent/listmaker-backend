@@ -47,11 +47,12 @@ const createNewList: RequestHandler = async (req, res, next) => {
     const { rows }: { rows: NewListResInt[] } = await db.query(
       `
     INSERT INTO lists("userId", name, slug, type)
-    VALUES ($1, $2, $3, $4);
+    VALUES ($1, $2, $3, $4)
+    RETURNING id, slug;
     `,
       [userId, newList.name, slug, newList.type]
     );
-    res.json({ message: "OK" });
+    res.json({ list: rows[0] });
   } catch (error) {
     console.log(error);
     res.status(500);

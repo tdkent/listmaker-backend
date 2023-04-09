@@ -6,7 +6,7 @@ import {
   ShoppingItemEditReqEnum,
   ShoppingItemInt,
 } from "../../models/item";
-import { ListTypesEnum } from "../../models/list";
+import { AllListTypesEnum } from "../../models/list";
 import editShoppingItem from "./shopping/edit-shopping-item";
 import checkRequestBody from "../../utils/check-req-body";
 import { RequestErrors } from "../../models/error";
@@ -27,7 +27,7 @@ const editItem: RequestHandler<{ listId: string; listType: string; itemId: strin
     }
 
     // type: shop
-    if (listType === ListTypesEnum.shop) {
+    if (listType === AllListTypesEnum.shop) {
       const updateItem = <ShoppingItemEditReqInt>req.body;
 
       // check request body

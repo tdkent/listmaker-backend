@@ -1,11 +1,16 @@
-export enum ListTypesEnum {
-  shop = "shop",
+export enum AllListTypesEnum {
+  shop = "shopping",
   todo = "todo",
+}
+
+export enum CheckableListTypesEnum {
+  shop = AllListTypesEnum.shop,
+  todo = AllListTypesEnum.todo,
 }
 
 export interface NewListReqInt {
   name: string;
-  type: ListTypesEnum.shop | ListTypesEnum.todo;
+  type: AllListTypesEnum.shop | AllListTypesEnum.todo;
 }
 
 export enum NewListReqFieldsEnum {
@@ -25,9 +30,4 @@ export interface EditListReqFieldsInt {
 
 export enum EditListReqFieldsEnum {
   name = "name",
-}
-
-export enum CheckTypesEnum {
-  shop = "shop",
-  todo = "todo",
 }

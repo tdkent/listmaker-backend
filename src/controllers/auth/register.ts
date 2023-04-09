@@ -18,6 +18,7 @@ const register: RequestHandler = async (req, res, next) => {
 
     // check request body
     const newUser = <UserRegisterReqInt>req.body;
+    console.log("newUser: ", newUser);
     if (!checkRequestBody(newUser, UserRegisterReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });

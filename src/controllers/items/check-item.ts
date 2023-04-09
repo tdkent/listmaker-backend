@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
-import { CheckTypesEnum } from "../../models/list";
+import { CheckableListTypesEnum } from "../../models/list";
 import checkShoppingItem from "./shopping/check-shopping-item";
 import { RequestErrors } from "../../models/error";
 
@@ -21,7 +21,8 @@ const checkItem: RequestHandler<{ listId: string; listType: string; itemId: stri
     }
 
     // type: shop
-    if (listType === CheckTypesEnum.shop) {
+    // TODO: update this to enum check
+    if (listType === "shopping") {
       // db query
       const result: { id: number }[] = await checkShoppingItem(itemId, listId, userId);
 

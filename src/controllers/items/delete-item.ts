@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
-import { ListTypesEnum } from "../../models/list";
+import { AllListTypesEnum } from "../../models/list";
 import deleteShoppingItem from "./shopping/delete-shopping-item";
 import { RequestErrors } from "../../models/error";
 
@@ -21,7 +21,7 @@ const deleteItem: RequestHandler<{ listId: string; listType: string; itemId: str
     }
 
     // type: shop
-    if (listType === ListTypesEnum.shop) {
+    if (listType === AllListTypesEnum.shop) {
       // db query
       const result: { id: number }[] = await deleteShoppingItem(itemId, listId, userId);
 

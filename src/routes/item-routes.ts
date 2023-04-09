@@ -6,7 +6,7 @@ import addNewItem from "../controllers/items/add-new-item";
 import editItem from "../controllers/items/edit-item";
 import checkItem from "../controllers/items/check-item";
 import deleteItem from "../controllers/items/delete-item";
-import { ListTypesEnum, CheckTypesEnum } from "../models/list";
+import { AllListTypesEnum, CheckableListTypesEnum } from "../models/list";
 import { ValidatorErrors } from "../models/error";
 
 const router = Router();
@@ -36,7 +36,7 @@ router.post(
 router.patch(
   "/:listId/:listType/:itemId",
   param("listId", errors.badRequest()).isNumeric(),
-  param("listType", errors.invalidField()).isIn(Object.keys(ListTypesEnum)),
+  param("listType", errors.invalidField()).isIn(Object.keys(AllListTypesEnum)),
   param("itemId", errors.badRequest()).isNumeric(),
   body("name")
     .isString()
@@ -53,7 +53,7 @@ router.patch(
 router.patch(
   "/check/:listId/:listType/:itemId",
   param("listId", errors.badRequest()).isNumeric(),
-  param("listType", errors.invalidField()).isIn(Object.keys(CheckTypesEnum)),
+  param("listType", errors.invalidField()).isIn(Object.keys(CheckableListTypesEnum)),
   param("itemId", errors.badRequest()).isNumeric(),
   checkItem
 );
@@ -62,7 +62,7 @@ router.patch(
 router.delete(
   "/:listId/:listType/:itemId",
   param("listId", errors.badRequest()).isNumeric(),
-  param("listType", errors.invalidField()).isIn(Object.keys(ListTypesEnum)),
+  param("listType", errors.invalidField()).isIn(Object.keys(AllListTypesEnum)),
   param("itemId", errors.badRequest()).isNumeric(),
   deleteItem
 );

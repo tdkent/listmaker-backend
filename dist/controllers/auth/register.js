@@ -19,6 +19,7 @@ const register = async (req, res, next) => {
         }
         // check request body
         const newUser = req.body;
+        console.log("newUser: ", newUser);
         if (!(0, check_req_body_1.default)(newUser, auth_1.UserRegisterReqEnum)) {
             res.status(400);
             return next({ message: reqError.badRequest() });
