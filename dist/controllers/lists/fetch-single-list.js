@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const db_1 = __importDefault(require("../../db"));
+const list_1 = require("../../models/list");
 const error_1 = require("../../models/error");
 const fetchList = async (req, res, next) => {
     const { userId } = req.user;
@@ -29,7 +30,17 @@ const fetchList = async (req, res, next) => {
                 message: reqError.nullResult(),
             });
         }
-        res.json({ message: "OK", list: rows[0] });
+        // add items based on list type
+        // TODO: type of items variable based on type of item
+        let items = [];
+        if (rows[0].type === list_1.AllListTypesEnum.shop) {
+            const { rows } = await db_1.default.query(`
+      SELECT * FROM items_shopping
+      WHERE "listId" = $1;
+      `, [listId]);
+            items = rows;
+        }
+        res.json({ ...rows[0], items });
     }
     catch (error) {
         console.log(error);

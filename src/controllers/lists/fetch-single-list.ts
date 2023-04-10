@@ -2,7 +2,8 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
 import db from "../../db";
-import { NewListResInt } from "../../models/list";
+import { NewListResInt, AllListTypesEnum } from "../../models/list";
+import { SingleListItemTypes } from "../../models/item";
 import { RequestErrors } from "../../models/error";
 
 const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => {
@@ -33,7 +34,21 @@ const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => 
         message: reqError.nullResult(),
       });
     }
-    res.json({ message: "OK", list: rows[0] });
+
+    // add items based on list type
+    // TODO: type of items variable based on type of item
+    let items: SingleListItemTypes = [];
+    if (rows[0].type === AllListTypesEnum.shop) {
+      const { rows } = await db.query(
+        `
+      SELECT * FROM items_shopping
+      WHERE "listId" = $1;
+      `,
+        [listId]
+      );
+      items = rows;
+    }
+    res.json({ ...rows[0], items });
   } catch (error) {
     console.log(error);
     res.status(500);

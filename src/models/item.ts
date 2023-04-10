@@ -21,3 +21,6 @@ export interface ShoppingItemInt {
   name: string;
   isChecked: boolean;
 }
+
+// TODO: add other item types to this type
+export type SingleListItemTypes = ShoppingItemInt[];
