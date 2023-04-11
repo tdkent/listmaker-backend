@@ -10,7 +10,7 @@ const checkItem: RequestHandler<{ listId: string; listType: string; itemId: stri
   res,
   next
 ) => {
-  const { listId, listType, itemId } = req.params;
+  const { listId, itemId } = req.params;
   const { userId } = req.user;
   const reqError = new RequestErrors();
   try {
@@ -19,7 +19,8 @@ const checkItem: RequestHandler<{ listId: string; listType: string; itemId: stri
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
+    const { listType } = req.body;
+    console.log("listType: ", listType);
     // type: shop
     // TODO: update this to enum check
     if (listType === "shopping") {

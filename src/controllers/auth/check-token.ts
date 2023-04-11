@@ -20,6 +20,7 @@ declare module "express-serve-static-core" {
 const checkToken = (req: Request, res: Response, next: NextFunction) => {
   // CORS check
   //? TODO: Upgrade this method?
+  console.log(req.headers);
   if (req.method === "OPTIONS") return next();
   try {
     if (!req.headers.authorization || req.headers.authorization.split(" ")[0] !== "Bearer") {
@@ -36,14 +37,8 @@ const checkToken = (req: Request, res: Response, next: NextFunction) => {
       });
     }
     // Note: jwt will throw its own error to the catch block if verification is unsuccessful
-
-    // jwt.verify is a function supplied by the jsonwebtoken package
     const verify = jwt.verify(token, jwtKey) as UserDataJwtPayload;
-
-    // if token verification is successful we extract the userId
-    // and attempt to add to custom object req.user
     req.user = { userId: verify.userId };
-
     next();
   } catch (error) {
     console.log(error);

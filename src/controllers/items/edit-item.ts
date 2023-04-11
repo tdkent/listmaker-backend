@@ -17,7 +17,7 @@ const editItem: RequestHandler<{ listId: string; listType: string; itemId: strin
   next
 ) => {
   const { userId } = req.user;
-  const { listId, listType, itemId } = req.params;
+  const { listId, itemId } = req.params;
   const reqError = new RequestErrors();
   try {
     // validation errors
@@ -25,7 +25,7 @@ const editItem: RequestHandler<{ listId: string; listType: string; itemId: strin
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
-
+    const { listType } = req.body;
     // type: shop
     if (listType === AllListTypesEnum.shop) {
       const updateItem = <ShoppingItemEditReqInt>req.body;
