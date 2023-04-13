@@ -30,8 +30,10 @@ router.post("/new", (0, express_validator_1.body)("name")
     .withMessage(errors.nullField("name"))
     .isLength({ max: 24 })
     .withMessage(errors.maxLength("name", 24))
-    .trim()
-    .escape(), (0, express_validator_1.body)("type", errors.invalidField()).isIn(Object.values(list_1.AllListTypesEnum)), create_new_list_1.default);
+    .trim(), 
+// TODO: how to filter user input?
+// .escape(),
+(0, express_validator_1.body)("type", errors.invalidField()).isIn(Object.values(list_1.AllListTypesEnum)), create_new_list_1.default);
 // PATCH /list/edit/:listId
 router.patch("/edit/:listId", (0, express_validator_1.param)("listId", errors.badRequest()).isNumeric(), 
 // NOTE: request body will eventually have additional fields

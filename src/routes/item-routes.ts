@@ -32,22 +32,23 @@ router.post(
   addNewItem
 );
 
-// PATCH /item/check/:listId/:itemId/
+// PATCH /item/:listId/:itemId/check
 router.patch(
-  "/check/:listId/:itemId",
+  "/:listId/:itemId/check",
   param("listId", errors.badRequest()).isNumeric(),
   param("itemId", errors.badRequest()).isNumeric(),
   // TODO: this should be based on an enum
-  body("listType", errors.invalidField()).isIn(["shopping"]),
+  body("listType", errors.invalidField()).isIn(Object.values(CheckableListTypesEnum)),
   checkItem
 );
 
-// PATCH /item/:listId/:itemId
+// PATCH /item/:listId/:itemId/:listType
 router.patch(
-  "/:listId/:itemId",
+  "/:listId/:itemId/:listType",
   param("listId", errors.badRequest()).isNumeric(),
   param("itemId", errors.badRequest()).isNumeric(),
-  body("listType").isIn(["shopping"]),
+  // TODO: this should be based on an enum
+  param("listType", errors.invalidField()).isIn(Object.values(AllListTypesEnum)),
   body("name")
     .isString()
     .withMessage(errors.invalidField())
@@ -63,7 +64,7 @@ router.patch(
 router.delete(
   "/:listId/:listType/:itemId",
   param("listId", errors.badRequest()).isNumeric(),
-  param("listType", errors.invalidField()).isIn(Object.keys(AllListTypesEnum)),
+  param("listType", errors.invalidField()).isIn(Object.values(AllListTypesEnum)),
   param("itemId", errors.badRequest()).isNumeric(),
   deleteItem
 );

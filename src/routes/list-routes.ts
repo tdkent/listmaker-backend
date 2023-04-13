@@ -33,8 +33,9 @@ router.post(
     .withMessage(errors.nullField("name"))
     .isLength({ max: 24 })
     .withMessage(errors.maxLength("name", 24))
-    .trim()
-    .escape(),
+    .trim(),
+  // TODO: how to filter user input?
+  // .escape(),
   body("type", errors.invalidField()).isIn(Object.values(AllListTypesEnum)),
   createNewList
 );

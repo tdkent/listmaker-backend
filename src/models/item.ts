@@ -11,7 +11,6 @@ export interface ShoppingItemEditReqInt {
 }
 
 export enum ShoppingItemEditReqEnum {
-  listType = "listType",
   name = "name",
 }
 
