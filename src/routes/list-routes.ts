@@ -34,7 +34,7 @@ router.post(
     .isLength({ max: 24 })
     .withMessage(errors.maxLength("name", 24))
     .trim(),
-  // TODO: how to filter user input?
+  // TODO: what is the correct way to filter user input?
   // .escape(),
   body("type", errors.invalidField()).isIn(Object.values(AllListTypesEnum)),
   createNewList
@@ -53,8 +53,9 @@ router.patch(
     .not()
     .isEmpty()
     .withMessage(errors.nullField("name"))
-    .trim()
-    .escape(),
+    .trim(),
+  // TODO: what is the correct way to filter user input?
+  // .escape(),
   editList
 );
 

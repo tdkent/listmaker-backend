@@ -31,7 +31,7 @@ router.post("/new", (0, express_validator_1.body)("name")
     .isLength({ max: 24 })
     .withMessage(errors.maxLength("name", 24))
     .trim(), 
-// TODO: how to filter user input?
+// TODO: what is the correct way to filter user input?
 // .escape(),
 (0, express_validator_1.body)("type", errors.invalidField()).isIn(Object.values(list_1.AllListTypesEnum)), create_new_list_1.default);
 // PATCH /list/edit/:listId
@@ -45,8 +45,10 @@ router.patch("/edit/:listId", (0, express_validator_1.param)("listId", errors.ba
     .not()
     .isEmpty()
     .withMessage(errors.nullField("name"))
-    .trim()
-    .escape(), edit_list_1.default);
+    .trim(), 
+// TODO: what is the correct way to filter user input?
+// .escape(),
+edit_list_1.default);
 // DELETE /list/delete/:listId
 router.delete("/delete/:listId", (0, express_validator_1.param)("listId", errors.badRequest()).isNumeric(), delete_list_1.default);
 exports.default = router;

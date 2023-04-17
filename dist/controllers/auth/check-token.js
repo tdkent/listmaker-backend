@@ -8,7 +8,6 @@ const config_1 = require("../../config/config");
 const checkToken = (req, res, next) => {
     // CORS check
     //? TODO: Upgrade this method?
-    console.log(req.headers.authorization);
     if (req.method === "OPTIONS")
         return next();
     try {

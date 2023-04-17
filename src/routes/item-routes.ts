@@ -37,7 +37,6 @@ router.patch(
   "/:listId/:itemId/check",
   param("listId", errors.badRequest()).isNumeric(),
   param("itemId", errors.badRequest()).isNumeric(),
-  // TODO: this should be based on an enum
   body("listType", errors.invalidField()).isIn(Object.values(CheckableListTypesEnum)),
   checkItem
 );
@@ -47,7 +46,6 @@ router.patch(
   "/:listId/:itemId/:listType",
   param("listId", errors.badRequest()).isNumeric(),
   param("itemId", errors.badRequest()).isNumeric(),
-  // TODO: this should be based on an enum
   param("listType", errors.invalidField()).isIn(Object.values(AllListTypesEnum)),
   body("name")
     .isString()
@@ -55,8 +53,9 @@ router.patch(
     .not()
     .isEmpty()
     .withMessage(errors.nullField("name"))
-    .trim()
-    .escape(),
+    .trim(),
+  // TODO: what is the correct way to filter user input?
+  // .escape(),
   editItem
 );
 
