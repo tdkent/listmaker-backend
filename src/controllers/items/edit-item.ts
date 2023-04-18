@@ -28,16 +28,22 @@ const editItem: RequestHandler<{ listId: string; listType: string; itemId: strin
 
     // type: shop
     if (listType === AllListTypesEnum.shop) {
-      const updateItem = <ShoppingItemEditReqInt>req.body;
-
       // check request body
-      if (!checkRequestBody(updateItem, ShoppingItemEditReqEnum)) {
+      if (!checkRequestBody(req.body, ShoppingItemEditReqEnum)) {
         res.status(400);
         return next({ message: reqError.badRequest() });
       }
 
       // db request
-      const result: { id: number }[] = await editShoppingItem(itemId, listId, userId, updateItem);
+      const { name, category, isChecked } = <ShoppingItemEditReqInt>req.body;
+      const result: { id: number }[] = await editShoppingItem(
+        itemId,
+        listId,
+        userId,
+        name,
+        category,
+        isChecked
+      );
 
       // null result error
       if (!result.length) {

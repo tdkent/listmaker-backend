@@ -32,7 +32,10 @@ const buildDbTables = async () => {
         "listId" SMALLINT REFERENCES lists(id),
         "userId" SMALLINT REFERENCES users(id),
         name VARCHAR(255) NOT NULL,
-        "isChecked" BOOLEAN NOT NULL DEFAULT false
+        perm_category VARCHAR(255) DEFAULT 'Uncategorized',
+        temp_category VARCHAR(255) DEFAULT 'Uncategorized',
+        "isChecked" BOOLEAN NOT NULL DEFAULT false,
+        "isActive" BOOLEAN NOT NULL DEFAULT true
       );
     `);
         console.log("Finished rebuilding tables!");

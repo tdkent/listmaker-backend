@@ -36,7 +36,7 @@ const fetchList = async (req, res, next) => {
         if (rows[0].type === list_1.AllListTypesEnum.shop) {
             const { rows } = await db_1.default.query(`
       SELECT * FROM items_shopping
-      WHERE "listId" = $1;
+      WHERE "listId" = $1 AND "isActive" = true;
       `, [listId]);
             items = rows;
         }

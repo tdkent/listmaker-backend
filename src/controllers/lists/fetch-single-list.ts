@@ -42,7 +42,7 @@ const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => 
       const { rows } = await db.query(
         `
       SELECT * FROM items_shopping
-      WHERE "listId" = $1;
+      WHERE "listId" = $1 AND "isActive" = true;
       `,
         [listId]
       );

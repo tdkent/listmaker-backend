@@ -8,10 +8,18 @@ export enum ShoppingItemNewReqEnum {
 
 export interface ShoppingItemEditReqInt {
   name: string;
+  category: string;
+  isChecked: boolean;
 }
 
 export enum ShoppingItemEditReqEnum {
   name = "name",
+  category = "category",
+  isChecked = "isChecked",
+}
+
+export enum ShoppingItemDeactReqEnum {
+  listType = "listType",
 }
 
 export interface ShoppingItemInt {

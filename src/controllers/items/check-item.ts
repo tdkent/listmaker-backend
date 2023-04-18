@@ -19,13 +19,14 @@ const checkItem: RequestHandler<{ listId: string; listType: string; itemId: stri
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { listType } = req.body;
-    console.log("listType: ", listType);
-    // type: shop
+
+    // filter by list type
+    // TODO: type request body object
+    const { listType, isChecked }: { listType: string; isChecked: boolean } = req.body;
     // TODO: update this to enum check
     if (listType === "shopping") {
       // db query
-      const result: { id: number }[] = await checkShoppingItem(itemId, listId, userId);
+      const result: { id: number }[] = await checkShoppingItem(itemId, isChecked, listId, userId);
 
       // null result error
       if (!result.length) {
