@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
 import db from "../../db";
-import { EditListReqFieldsInt, EditListReqFieldsEnum } from "../../models/list";
+import { EditListReqInt, EditListReqEnum } from "../../models/list";
 import { RequestErrors } from "../../models/error";
 import checkRequestBody from "../../utils/check-req-body";
 
@@ -18,8 +18,8 @@ const editList: RequestHandler<{ listId: number }> = async (req, res, next) => {
     }
 
     // check request body
-    const updateList = <EditListReqFieldsInt>req.body;
-    if (!checkRequestBody(updateList, EditListReqFieldsEnum)) {
+    const updateList = <EditListReqInt>req.body;
+    if (!checkRequestBody(updateList, EditListReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }

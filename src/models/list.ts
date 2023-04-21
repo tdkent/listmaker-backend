@@ -1,19 +1,21 @@
+// List Types
 export enum AllListTypesEnum {
-  shop = "shopping",
-  todo = "todo",
+  shop = "Shopping",
+  todo = "To-Do",
 }
 
 export enum CheckableListTypesEnum {
-  shop = AllListTypesEnum.shop,
-  todo = AllListTypesEnum.todo,
+  shop = "Shopping",
+  todo = "To-Do",
 }
 
+// New List
 export interface NewListReqInt {
   name: string;
   type: AllListTypesEnum.shop | AllListTypesEnum.todo;
 }
 
-export enum NewListReqFieldsEnum {
+export enum NewListReqEnum {
   name = "name",
   type = "type",
 }
@@ -24,10 +26,11 @@ export interface NewListResInt extends NewListReqInt {
   slug: string;
 }
 
-export interface EditListReqFieldsInt {
+// Edit List
+export interface EditListReqInt {
   name: string;
 }
 
-export enum EditListReqFieldsEnum {
+export enum EditListReqEnum {
   name = "name",
 }

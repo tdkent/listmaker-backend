@@ -20,7 +20,7 @@ const editList = async (req, res, next) => {
         }
         // check request body
         const updateList = req.body;
-        if (!(0, check_req_body_1.default)(updateList, list_1.EditListReqFieldsEnum)) {
+        if (!(0, check_req_body_1.default)(updateList, list_1.EditListReqEnum)) {
             res.status(400);
             return next({ message: reqError.badRequest() });
         }

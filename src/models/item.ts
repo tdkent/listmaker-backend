@@ -1,24 +1,26 @@
-export interface ShoppingItemNewReqInt {
+// Shopping
+
+export interface NewShopItemReqInt {
   name: string;
 }
 
-export enum ShoppingItemNewReqEnum {
+export enum NewShopItemReqEnum {
   name = "name",
 }
 
-export interface ShoppingItemEditReqInt {
+export interface EditShopItemReqInt {
   name: string;
   category: string;
   isChecked: boolean;
 }
 
-export enum ShoppingItemEditReqEnum {
+export enum EditShopItemReqEnum {
   name = "name",
   category = "category",
   isChecked = "isChecked",
 }
 
-export enum ShoppingItemDeactReqEnum {
+export enum DltShopItemReqEnum {
   listType = "listType",
 }
 

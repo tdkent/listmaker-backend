@@ -5,7 +5,7 @@ import { AllListTypesEnum } from "../../models/list";
 import deactivateShoppingItem from "./shopping/deactivate-shopping-item";
 import { RequestErrors } from "../../models/error";
 import checkRequestBody from "../../utils/check-req-body";
-import { ShoppingItemDeactReqEnum } from "../../models/item";
+import { DltShopItemReqEnum } from "../../models/item";
 
 const deactivateItem: RequestHandler<{ listId: string; itemId: string }> = async (
   req,
@@ -23,7 +23,7 @@ const deactivateItem: RequestHandler<{ listId: string; itemId: string }> = async
     }
 
     // check request body
-    if (!checkRequestBody(req.body, ShoppingItemDeactReqEnum)) {
+    if (!checkRequestBody(req.body, DltShopItemReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }

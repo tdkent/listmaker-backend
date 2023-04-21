@@ -6,8 +6,6 @@ const checkShoppingItem = async (
   listId: string,
   userId: number
 ) => {
-  // if isChecked, change to false
-  // change temp_category to match perm_category
   if (isChecked) {
     const { rows }: { rows: { id: number }[] } = await db.query(
       `
@@ -22,12 +20,10 @@ const checkShoppingItem = async (
     );
     return rows;
   } else {
-    // if !isChecked, change to true
-    // change temp_category to "Checked"
     const { rows }: { rows: { id: number }[] } = await db.query(
       `
   UPDATE items_shopping
-  SET "isChecked" = true, temp_category = 'Checked'
+  SET "isChecked" = true, temp_category = '__checked'
   WHERE id = $1
   AND "listId" = $2
   AND "userId" = $3

@@ -1,7 +1,7 @@
 import db from "../../../db";
-import { ShoppingItemNewReqInt } from "../../../models/item";
+import { NewShopItemReqInt } from "../../../models/item";
 
-const createShoppingItem = async (listId: string, userId: number, item: ShoppingItemNewReqInt) => {
+const createShoppingItem = async (listId: string, userId: number, item: NewShopItemReqInt) => {
   // check to see if the item exists and isActive value
   const { rows }: { rows: { name: string; isActive: boolean }[] } = await db.query(
     `

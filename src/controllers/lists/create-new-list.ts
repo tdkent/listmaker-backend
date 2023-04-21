@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 import slugify from "slugify";
 
 import db from "../../db";
-import { NewListReqInt, NewListResInt, NewListReqFieldsEnum } from "../../models/list";
+import { NewListReqInt, NewListResInt, NewListReqEnum } from "../../models/list";
 import { RequestErrors } from "../../models/error";
 import checkRequestBody from "../../utils/check-req-body";
 
@@ -20,7 +20,7 @@ const createNewList: RequestHandler = async (req, res, next) => {
     const newList = <NewListReqInt>req.body;
 
     // check request body
-    if (!checkRequestBody(newList, NewListReqFieldsEnum)) {
+    if (!checkRequestBody(newList, NewListReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }

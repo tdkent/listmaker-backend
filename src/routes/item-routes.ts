@@ -28,8 +28,8 @@ router.post(
     .not()
     .isEmpty()
     .withMessage(errors.nullField("name"))
-    .trim()
-    .escape(),
+    .trim(),
+  // .escape(),
   addNewItem
 );
 

@@ -23,8 +23,8 @@ const checkItem: RequestHandler<{ listId: string; listType: string; itemId: stri
     // filter by list type
     // TODO: type request body object
     const { listType, isChecked }: { listType: string; isChecked: boolean } = req.body;
-    // TODO: update this to enum check
-    if (listType === "shopping") {
+
+    if (listType === CheckableListTypesEnum.shop) {
       // db query
       const result: { id: number }[] = await checkShoppingItem(itemId, isChecked, listId, userId);
 

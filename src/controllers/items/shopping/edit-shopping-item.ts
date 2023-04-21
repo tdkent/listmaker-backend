@@ -1,5 +1,4 @@
 import db from "../../../db";
-import { ShoppingItemEditReqInt } from "../../../models/item";
 
 const editShoppingItem = async (
   itemId: string,

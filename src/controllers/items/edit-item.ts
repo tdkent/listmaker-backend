@@ -1,11 +1,7 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
-import {
-  ShoppingItemEditReqInt,
-  ShoppingItemEditReqEnum,
-  ShoppingItemInt,
-} from "../../models/item";
+import { EditShopItemReqInt, EditShopItemReqEnum } from "../../models/item";
 import { AllListTypesEnum } from "../../models/list";
 import editShoppingItem from "./shopping/edit-shopping-item";
 import checkRequestBody from "../../utils/check-req-body";
@@ -29,13 +25,13 @@ const editItem: RequestHandler<{ listId: string; listType: string; itemId: strin
     // type: shop
     if (listType === AllListTypesEnum.shop) {
       // check request body
-      if (!checkRequestBody(req.body, ShoppingItemEditReqEnum)) {
+      if (!checkRequestBody(req.body, EditShopItemReqEnum)) {
         res.status(400);
         return next({ message: reqError.badRequest() });
       }
 
       // db request
-      const { name, category, isChecked } = <ShoppingItemEditReqInt>req.body;
+      const { name, category, isChecked } = <EditShopItemReqInt>req.body;
       const result: { id: number }[] = await editShoppingItem(
         itemId,
         listId,

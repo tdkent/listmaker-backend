@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 
 import db from "../../db";
 import { AllListTypesEnum } from "../../models/list";
-import { ShoppingItemNewReqEnum, ShoppingItemNewReqInt } from "../../models/item";
+import { NewShopItemReqEnum, NewShopItemReqInt } from "../../models/item";
 import createShoppingItem from "./shopping/create-shopping-item";
 import { RequestErrors } from "../../models/error";
 import checkRequestBody from "../../utils/check-req-body";
@@ -37,10 +37,10 @@ const addNewItem: RequestHandler<{ listId: string }> = async (req, res, next) =>
 
     // type: shop
     if (rows[0].type === AllListTypesEnum.shop) {
-      const newItem = <ShoppingItemNewReqInt>req.body;
+      const newItem = <NewShopItemReqInt>req.body;
 
       // check request body
-      if (!checkRequestBody(newItem, ShoppingItemNewReqEnum)) {
+      if (!checkRequestBody(newItem, NewShopItemReqEnum)) {
         res.status(400);
         return next({ message: reqError.badRequest() });
       }

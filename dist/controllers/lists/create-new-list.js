@@ -20,7 +20,7 @@ const createNewList = async (req, res, next) => {
         }
         const newList = req.body;
         // check request body
-        if (!(0, check_req_body_1.default)(newList, list_1.NewListReqFieldsEnum)) {
+        if (!(0, check_req_body_1.default)(newList, list_1.NewListReqEnum)) {
             res.status(400);
             return next({ message: reqError.badRequest() });
         }
