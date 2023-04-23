@@ -1,12 +1,14 @@
-// Shopping
+// New Item
 
-export interface NewShopItemReqInt {
+export interface NewItemReqInt {
   name: string;
 }
 
-export enum NewShopItemReqEnum {
+export enum NewItemReqEnum {
   name = "name",
 }
+
+// Shopping
 
 export interface EditShopItemReqInt {
   name: string;

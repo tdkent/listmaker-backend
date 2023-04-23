@@ -1,14 +1,13 @@
 import db from "../../../db";
-import { NewShopItemReqInt } from "../../../models/item";
 
-const createShoppingItem = async (listId: string, userId: number, item: NewShopItemReqInt) => {
+const createShoppingItem = async (listId: string, userId: number, name: string) => {
   // check to see if the item exists and isActive value
   const { rows }: { rows: { name: string; isActive: boolean }[] } = await db.query(
     `
   SELECT name, "isActive" FROM items_shopping
   WHERE name = $1 AND "listId" = $2 AND "userId" = $3
   `,
-    [item.name, listId, userId]
+    [name, listId, userId]
   );
   if (!rows.length) {
     return await db.query(
@@ -17,7 +16,7 @@ const createShoppingItem = async (listId: string, userId: number, item: NewShopI
       VALUES ($1, $2, $3)
       RETURNING id;
       `,
-      [Number(listId), userId, item.name]
+      [Number(listId), userId, name]
     );
   }
   if (!rows[0].isActive) {
@@ -27,7 +26,7 @@ const createShoppingItem = async (listId: string, userId: number, item: NewShopI
     SET "isActive" = true
     WHERE name = $1 AND "listId" = $2 AND "userId" = $3
     `,
-      [rows[0].name, listId, userId]
+      [name, listId, userId]
     );
   }
   return;

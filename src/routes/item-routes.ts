@@ -29,7 +29,6 @@ router.post(
     .isEmpty()
     .withMessage(errors.nullField("name"))
     .trim(),
-  // .escape(),
   addNewItem
 );
 

@@ -3,8 +3,9 @@ import { validationResult } from "express-validator";
 
 import db from "../../db";
 import { AllListTypesEnum } from "../../models/list";
-import { NewShopItemReqEnum, NewShopItemReqInt } from "../../models/item";
+import { NewItemReqEnum, NewItemReqInt } from "../../models/item";
 import createShoppingItem from "./shopping/create-shopping-item";
+import createTodoItem from "./to-do/create-todo-item";
 import { RequestErrors } from "../../models/error";
 import checkRequestBody from "../../utils/check-req-body";
 
@@ -17,6 +18,13 @@ const addNewItem: RequestHandler<{ listId: string }> = async (req, res, next) =>
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
+    }
+
+    // check request body
+    const newItem = <NewItemReqInt>req.body;
+    if (!checkRequestBody(newItem, NewItemReqEnum)) {
+      res.status(400);
+      return next({ message: reqError.badRequest() });
     }
 
     // check auth & list type
@@ -35,16 +43,12 @@ const addNewItem: RequestHandler<{ listId: string }> = async (req, res, next) =>
       return next({ message: reqError.nullResult() });
     }
 
-    // type: shop
+    // filter by list type
     if (rows[0].type === AllListTypesEnum.shop) {
-      const newItem = <NewShopItemReqInt>req.body;
-
-      // check request body
-      if (!checkRequestBody(newItem, NewShopItemReqEnum)) {
-        res.status(400);
-        return next({ message: reqError.badRequest() });
-      }
-      await createShoppingItem(listId, userId, newItem);
+      await createShoppingItem(listId, userId, newItem.name);
+    }
+    if (rows[0].type === AllListTypesEnum.todo) {
+      await createTodoItem(listId, userId, newItem.name);
     }
     res.json({ message: "OK" });
   } catch (error) {
