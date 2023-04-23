@@ -3,6 +3,7 @@ import { validationResult } from "express-validator";
 
 import db from "../../db";
 import { RequestErrors } from "../../models/error";
+import { AllListTypesEnum } from "../../models/list";
 
 const deleteList: RequestHandler<{ listId: number }> = async (req, res, next) => {
   const { userId } = req.user;
@@ -15,13 +16,12 @@ const deleteList: RequestHandler<{ listId: number }> = async (req, res, next) =>
       return res.status(401).json({ errors: errors.array() });
     }
 
-    // db query
-    const { rows }: { rows: { id: number }[] } = await db.query(
+    // detemine list type
+    const { rows }: { rows: { type: string }[] } = await db.query(
       `
-    DELETE FROM lists
-    WHERE id = $1
-    AND "userId" = $2
-    RETURNING id;
+    SELECT type FROM lists
+    WHERE id = $1 
+    AND "userId" = $2 
     `,
       [listId, userId]
     );
@@ -33,6 +33,29 @@ const deleteList: RequestHandler<{ listId: number }> = async (req, res, next) =>
         message: reqError.nullResult(),
       });
     }
+
+    // filter by list type
+    //? put each filter type into a separate file?
+    if (rows[0].type === AllListTypesEnum.shop) {
+      // delete items
+      await db.query(
+        `
+      DELETE FROM items_shopping
+      WHERE "listId" = $1
+      `,
+        [listId]
+      );
+
+      // delete list
+      await db.query(
+        `
+      DELETE FROM lists
+      WHERE id = $1;
+      `,
+        [listId]
+      );
+    }
+
     res.json({ message: "OK" });
   } catch (error) {
     console.log(error);

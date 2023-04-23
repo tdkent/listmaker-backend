@@ -4,6 +4,7 @@ const buildDbTables = async () => {
   try {
     console.log("Tearing down old tables...");
     await db.query(`
+    DROP TABLE IF EXISTS items_todo;
     DROP TABLE IF EXISTS items_shopping;
     DROP TABLE IF EXISTS lists;
     DROP TABLE IF EXISTS users;
@@ -33,6 +34,13 @@ const buildDbTables = async () => {
         "isChecked" BOOLEAN NOT NULL DEFAULT false,
         "isActive" BOOLEAN NOT NULL DEFAULT true
       );
+      CREATE TABLE items_todo (
+        id SERIAL PRIMARY KEY,
+        "listId" SMALLINT REFERENCES lists(id),
+        "userId" SMALLINT REFERENCES users(id),
+        name VARCHAR(255) NOT NULL,
+        "isChecked" BOOLEAN NOT NULL DEFAULT false
+      )
     `);
     console.log("Finished rebuilding tables!");
   } catch (error) {

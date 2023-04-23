@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const db_1 = __importDefault(require("../../db"));
 const error_1 = require("../../models/error");
+const list_1 = require("../../models/list");
 const deleteList = async (req, res, next) => {
     const { userId } = req.user;
     const { listId } = req.params;
@@ -16,12 +17,11 @@ const deleteList = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return res.status(401).json({ errors: errors.array() });
         }
-        // db query
+        // detemine list type
         const { rows } = await db_1.default.query(`
-    DELETE FROM lists
-    WHERE id = $1
-    AND "userId" = $2
-    RETURNING id;
+    SELECT type FROM lists
+    WHERE id = $1 
+    AND "userId" = $2 
     `, [listId, userId]);
         // null result error
         if (!rows.length) {
@@ -29,6 +29,20 @@ const deleteList = async (req, res, next) => {
             return next({
                 message: reqError.nullResult(),
             });
+        }
+        // filter by list type
+        //? put each filter type into a separate file?
+        if (rows[0].type === list_1.AllListTypesEnum.shop) {
+            // delete items
+            await db_1.default.query(`
+      DELETE FROM items_shopping
+      WHERE "listId" = $1
+      `, [listId]);
+            // delete list
+            await db_1.default.query(`
+      DELETE FROM lists
+      WHERE id = $1;
+      `, [listId]);
         }
         res.json({ message: "OK" });
     }
