@@ -30,13 +30,19 @@ const fetchList = async (req, res, next) => {
                 message: reqError.nullResult(),
             });
         }
-        // add items based on list type
-        // TODO: type of items variable based on type of item
+        // filter by list type
         let items = [];
         if (rows[0].type === list_1.AllListTypesEnum.shop) {
             const { rows } = await db_1.default.query(`
       SELECT * FROM items_shopping
       WHERE "listId" = $1 AND "isActive" = true;
+      `, [listId]);
+            items = rows;
+        }
+        if (rows[0].type === list_1.AllListTypesEnum.todo) {
+            const { rows } = await db_1.default.query(`
+      SELECT * FROM items_todo, AGE("dueDate")
+      WHERE "listId" = $1;
       `, [listId]);
             items = rows;
         }

@@ -2,7 +2,7 @@ import db from "../../../db";
 
 // behaviors:
 // a new row is added for the item regardless if user has created the same previously
-// basic fields: name, category, date added, due date
+// basic fields: name, category, due date (same day), isChecked
 // due date default: same day
 // advanced fields: notes (text), location (address / map (?))
 // categories: Home, Work, Family, Leisure, Errand

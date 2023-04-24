@@ -31,8 +31,21 @@ export interface ShoppingItemInt {
   listId: number;
   userId: number;
   name: string;
+  perm_category: string;
+  temp_category: string;
+  isChecked: boolean;
+  isActive: boolean;
+}
+
+export interface TodoItemInt {
+  id: number;
+  listId: number;
+  userId: number;
+  name: string;
+  category: string;
+  dueDate: Date;
   isChecked: boolean;
 }
 
 // TODO: add other item types to this type
-export type SingleListItemTypes = ShoppingItemInt[];
+export type SingleListItemTypes = (ShoppingItemInt | TodoItemInt)[];

@@ -3,6 +3,7 @@ import { validationResult } from "express-validator";
 
 import { CheckableListTypesEnum } from "../../models/list";
 import checkShoppingItem from "./shopping/check-shopping-item";
+import checkTodoItem from "./to-do/check-todo-item";
 import { RequestErrors } from "../../models/error";
 
 const checkItem: RequestHandler<{ listId: string; listType: string; itemId: string }> = async (
@@ -27,6 +28,17 @@ const checkItem: RequestHandler<{ listId: string; listType: string; itemId: stri
     if (listType === CheckableListTypesEnum.shop) {
       // db query
       const result: { id: number }[] = await checkShoppingItem(itemId, isChecked, listId, userId);
+
+      // null result error
+      if (!result.length) {
+        res.status(401);
+        return next({ message: reqError.nullResult() });
+      }
+    }
+
+    if (listType === CheckableListTypesEnum.todo) {
+      // db query
+      const result: { id: number }[] = await checkTodoItem(itemId, isChecked, listId, userId);
 
       // null result error
       if (!result.length) {
