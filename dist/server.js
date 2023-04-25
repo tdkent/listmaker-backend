@@ -10,7 +10,8 @@ const config_1 = require("./config/config");
 const user_routes_1 = __importDefault(require("./routes/user-routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth-routes"));
 const list_routes_1 = __importDefault(require("./routes/list-routes"));
-const item_routes_1 = __importDefault(require("./routes/item-routes"));
+// import itemRoutes from "./routes/item-routes";
+const shopping_routes_1 = __importDefault(require("./routes/shopping-routes"));
 const app = (0, express_1.default)();
 //cors
 app.use((0, cors_1.default)());
@@ -23,7 +24,11 @@ app.use("/user", user_routes_1.default);
 // list routes
 app.use("/list", list_routes_1.default);
 // item routes
-app.use("/item", item_routes_1.default);
+// app.use("/item", itemRoutes);
+// shopping routes
+app.use("/shopping", shopping_routes_1.default);
+// to-do routes
+// app.use("/todo");
 // errors
 app.use((req, res, next) => {
     res.status(404).json({ message: "That route does not exist!" });

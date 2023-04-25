@@ -10,21 +10,51 @@ export enum NewItemReqEnum {
 
 // Shopping
 
+export interface NewShoppingItemReqInt {
+  name: string;
+}
+
+export enum NewShoppingItemReqEnum {
+  name = "name",
+}
+
+export interface CheckShoppingItemReqInt {
+  listId: number;
+  itemId: number;
+}
+
+export enum CheckShoppingItemReqEnum {
+  listId = "listId",
+  itemId = "itemId",
+}
+
 export interface EditShopItemReqInt {
+  listId: number;
+  itemId: number;
   name: string;
   category: string;
-  isChecked: boolean;
 }
 
 export enum EditShopItemReqEnum {
+  listId = "listId",
+  itemId = "itemId",
   name = "name",
   category = "category",
-  isChecked = "isChecked",
 }
 
-export enum DltShopItemReqEnum {
-  listType = "listType",
+export interface RemoveShopItemReqInt {
+  listId: number;
+  itemId: number;
 }
+
+export enum RemoveShopItemReqEnum {
+  listId = "listId",
+  itemId = "itemId",
+}
+
+// export enum DltShopItemReqEnum {
+//   listType = "listType",
+// }
 
 export interface ShoppingItemInt {
   id: number;
