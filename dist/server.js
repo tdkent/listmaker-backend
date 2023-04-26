@@ -12,6 +12,7 @@ const auth_routes_1 = __importDefault(require("./routes/auth-routes"));
 const list_routes_1 = __importDefault(require("./routes/list-routes"));
 // import itemRoutes from "./routes/item-routes";
 const shopping_routes_1 = __importDefault(require("./routes/shopping-routes"));
+const todo_routes_1 = __importDefault(require("./routes/todo-routes"));
 const app = (0, express_1.default)();
 //cors
 app.use((0, cors_1.default)());
@@ -28,7 +29,7 @@ app.use("/list", list_routes_1.default);
 // shopping routes
 app.use("/shopping", shopping_routes_1.default);
 // to-do routes
-// app.use("/todo");
+app.use("/todo", todo_routes_1.default);
 // errors
 app.use((req, res, next) => {
     res.status(404).json({ message: "That route does not exist!" });

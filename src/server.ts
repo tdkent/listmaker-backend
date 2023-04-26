@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth-routes";
 import listRoutes from "./routes/list-routes";
 // import itemRoutes from "./routes/item-routes";
 import shoppingRoutes from "./routes/shopping-routes";
+import todoRoutes from "./routes/todo-routes";
 
 const app = express();
 
@@ -33,7 +34,7 @@ app.use("/list", listRoutes);
 app.use("/shopping", shoppingRoutes);
 
 // to-do routes
-// app.use("/todo");
+app.use("/todo", todoRoutes);
 
 // errors
 app.use((req, res, next) => {

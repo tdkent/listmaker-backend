@@ -7,7 +7,7 @@ import { NewListReqInt, NewListResInt, NewListReqEnum } from "../../models/list"
 import { RequestErrors } from "../../models/error";
 import checkRequestBody from "../../utils/check-req-body";
 
-const createNewList: RequestHandler = async (req, res, next) => {
+const newList: RequestHandler = async (req, res, next) => {
   const { userId } = req.user;
   const reqError = new RequestErrors();
   try {
@@ -62,4 +62,4 @@ const createNewList: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default createNewList;
+export default newList;
