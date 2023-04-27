@@ -18,17 +18,17 @@ const editUserProfile = async (req, res, next) => {
             return res.status(422).json({ errors: errors.array() });
         }
         // check request body
-        const userData = req.body;
-        if (!(0, check_req_body_1.default)(userData, user_1.EditUserProfileEnum)) {
+        if (!(0, check_req_body_1.default)(req.body, user_1.EditUserProfileEnum)) {
             res.status(400);
             return next({ message: reqError.badRequest() });
         }
+        const { userNickname } = req.body;
         // db query
         await db_1.default.query(`
     UPDATE users
-    SET "userNickname" = $1
-    WHERE id = $2;
-    `, [userData.userNickname, userId]);
+    SET user_nickname = $1
+    WHERE user_id = $2;
+    `, [userNickname, userId]);
         res.json({ message: "OK" });
     }
     catch (error) {

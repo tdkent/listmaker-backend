@@ -11,9 +11,11 @@ const fetchUserProfile = async (req, res, next) => {
     try {
         // db query
         const { rows } = await db_1.default.query(`
-    SELECT id, "userEmail", "userNickname"
-    FROM users
-    WHERE id = $1
+    SELECT
+      user_id AS "userId",
+      user_email AS "userEmail",
+      user_nickname AS "userNickname"
+    FROM users WHERE user_id = $1;
     `, [userId]);
         res.json({ user: rows[0] });
     }

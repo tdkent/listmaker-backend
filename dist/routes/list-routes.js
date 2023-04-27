@@ -22,7 +22,7 @@ router.get("/fetch", fetch_all_lists_1.default);
 // FETCH SINGLE LIST /list/fetch/:listId
 router.get("/fetch/:listId", (0, express_validator_1.param)("listId", errors.badRequest()).isNumeric(), fetch_single_list_1.default);
 // NEW LIST /list/new
-router.post("/new", (0, express_validator_1.body)("name")
+router.post("/new", (0, express_validator_1.body)("listName")
     .isString()
     .withMessage(errors.invalidField())
     .not()
@@ -30,9 +30,9 @@ router.post("/new", (0, express_validator_1.body)("name")
     .withMessage(errors.nullField("name"))
     .isLength({ max: 24 })
     .withMessage(errors.maxLength("name", 24))
-    .trim(), (0, express_validator_1.body)("type", errors.invalidField()).isIn(Object.values(list_1.AllListTypesEnum)), new_list_1.default);
+    .trim(), (0, express_validator_1.body)("listType", errors.invalidField()).isIn(Object.values(list_1.AllListTypesEnum)), new_list_1.default);
 // EDIT LIST /list/edit/:listId
-router.patch("/edit/:listId", (0, express_validator_1.param)("listId", errors.badRequest()).isNumeric(), (0, express_validator_1.body)("name")
+router.patch("/edit/:listId", (0, express_validator_1.param)("listId", errors.badRequest()).isNumeric(), (0, express_validator_1.body)("listName")
     .isString()
     .withMessage(errors.invalidField())
     .isLength({ max: 24 })

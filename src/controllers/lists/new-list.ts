@@ -17,22 +17,22 @@ const newList: RequestHandler = async (req, res, next) => {
       return res.status(422).json({ errors: errors.array() });
     }
 
-    const newList = <NewListReqInt>req.body;
-
     // check request body
-    if (!checkRequestBody(newList, NewListReqEnum)) {
+    if (!checkRequestBody(req.body, NewListReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }
 
+    const { listName, listType } = <NewListReqInt>req.body;
+
     // same name check
     const { rows: check }: { rows: { id: number }[] } = await db.query(
       `
-    SELECT id FROM lists
-    WHERE name = $1
-    AND "userId" = $2
+    SELECT list_id FROM lists
+    WHERE list_name = $1
+    AND user_id = $2
     `,
-      [newList.name, userId]
+      [listName, userId]
     );
 
     if (check.length) {
@@ -43,14 +43,14 @@ const newList: RequestHandler = async (req, res, next) => {
     }
 
     // db query
-    const slug = slugify(newList.name.toLowerCase());
+    const slug = slugify(listName.toLowerCase());
     const { rows }: { rows: NewListResInt[] } = await db.query(
       `
-    INSERT INTO lists("userId", name, slug, type)
+    INSERT INTO lists(user_id, list_name, list_slug, list_type)
     VALUES ($1, $2, $3, $4)
-    RETURNING id, slug;
+    RETURNING list_id AS "listId", list_slug AS "listSlug";
     `,
-      [userId, newList.name, slug, newList.type]
+      [userId, listName, slug, listType]
     );
     res.json({ list: rows[0] });
   } catch (error) {

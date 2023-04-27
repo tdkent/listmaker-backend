@@ -3,7 +3,8 @@ import { validationResult } from "express-validator";
 
 import db from "../../../db";
 import { AllListTypesEnum } from "../../../models/list";
-import { NewItemReqEnum, NewItemReqInt } from "../../../models/item";
+import { NewItemReqEnum, NewItemReqInt, NewShoppingItemReqEnum } from "../../../models/item";
+import { NewShopItemReqInt, NewShopItemReqEnum } from "../../../models/shopping";
 import { RequestErrors } from "../../../models/error";
 import checkRequestBody from "../../../utils/check-req-body";
 
@@ -19,23 +20,26 @@ const newShoppingItem: RequestHandler<{ listId: string }> = async (req, res, nex
     }
 
     // check request body
-    const reqBody = <NewItemReqInt>req.body;
-    if (!checkRequestBody(reqBody, NewItemReqEnum)) {
+    if (!checkRequestBody(req.body, NewShoppingItemReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }
 
+    const { itemName } = <NewShopItemReqInt>req.body;
+
     // check auth & list type
-    const { rows: checkAuth }: { rows: { type: string }[] } = await db.query(
+    const { rows: checkAuth }: { rows: { listType: string }[] } = await db.query(
       `
-    SELECT type FROM lists
-    WHERE id = $1 AND "userId" = $2;
+    SELECT
+      list_type AS "listType"
+    FROM lists
+    WHERE list_id = $1 AND user_id = $2;
     `,
       [Number(listId), userId]
     );
 
     // error handling
-    if (!checkAuth.length || checkAuth[0].type !== AllListTypesEnum.shop) {
+    if (!checkAuth.length || checkAuth[0].listType !== AllListTypesEnum.shop) {
       res.status(401);
       return next({ message: reqError.nullResult() });
     }
@@ -43,44 +47,49 @@ const newShoppingItem: RequestHandler<{ listId: string }> = async (req, res, nex
     // check to see if the item exists & isChecked, isActive values
     const { rows }: { rows: { isChecked: boolean; isActive: boolean }[] } = await db.query(
       `
-      SELECT "isChecked", "isActive" FROM items_shopping
-      WHERE name = $1 AND "listId" = $2 AND "userId" = $3;
+      SELECT
+        is_checked AS "isChecked",
+        is_active AS "isActive"
+      FROM items_shopping
+      WHERE item_name = $1
+      AND list_id = $2
+      AND user_id = $3;
     `,
-      [reqBody.name, Number(listId), userId]
+      [itemName, Number(listId), userId]
     );
 
     // new item: create new row
     if (!rows.length) {
       await db.query(
         `
-        INSERT INTO items_shopping ("listId", "userId", name)
+        INSERT INTO items_shopping (list_id, user_id, item_name)
         VALUES ($1, $2, $3);
         `,
-        [Number(listId), userId, reqBody.name]
+        [Number(listId), userId, itemName]
       );
     }
 
     // current item & checked: uncheck
-    if (rows[0].isChecked) {
+    else if (rows[0].isChecked) {
       await db.query(
         `
         UPDATE items_shopping
-        SET "isChecked" = false, temp_category = perm_category
-        WHERE name = $1 AND "listId" = $2 AND "userId" = $3
+        SET is_checked = false, temp_category = perm_category
+        WHERE item_name = $1 AND list_id = $2 AND user_id = $3
         `,
-        [reqBody.name, Number(listId), userId]
+        [itemName, Number(listId), userId]
       );
     }
 
     // previous item & inactive: reactivate item
-    if (!rows[0].isActive) {
+    else if (!rows[0].isActive) {
       await db.query(
         `
       UPDATE items_shopping
-      SET "isActive" = true
-      WHERE name = $1 AND "listId" = $2 AND "userId" = $3
+      SET is_active = true
+      WHERE item_name = $1 AND list_id = $2 AND user_id = $3
       `,
-        [reqBody.name, Number(listId), userId]
+        [itemName, Number(listId), userId]
       );
     }
 

@@ -25,8 +25,8 @@ const register = async (req, res, next) => {
         }
         // check userEmail
         const { rows } = await db_1.default.query(`
-    SELECT id FROM users
-    WHERE "userEmail" = $1
+    SELECT user_id FROM users
+    WHERE user_email = $1
     `, [newUser.userEmail]);
         if (rows.length) {
             res.status(422);
@@ -38,7 +38,7 @@ const register = async (req, res, next) => {
         //! TODO: increase # of salt rounds
         const hashedPassword = await bcrypt_1.default.hash(newUser.userPassword, 2);
         await db_1.default.query(`
-    INSERT INTO users("userEmail", "userNickname", "userPassword")
+    INSERT INTO users(user_email, user_nickname, user_password)
     VALUES ($1, $2, $3);
     `, [newUser.userEmail, newUser.userNickname, hashedPassword]);
         res.json({ message: "OK" });

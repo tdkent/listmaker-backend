@@ -19,19 +19,19 @@ const editList = async (req, res, next) => {
             return res.status(422).json({ errors: errors.array() });
         }
         // check request body
-        const updateList = req.body;
-        if (!(0, check_req_body_1.default)(updateList, list_1.EditListReqEnum)) {
+        if (!(0, check_req_body_1.default)(req.body, list_1.EditListReqEnum)) {
             res.status(400);
             return next({ message: reqError.badRequest() });
         }
+        const { listName } = req.body;
         //db query
         const { rows } = await db_1.default.query(`
     UPDATE lists
-    SET name = $1
-    WHERE id = $2
-    AND "userId" = $3
-    RETURNING id;
-    `, [updateList.name, listId, userId]);
+    SET list_name = $1
+    WHERE list_id = $2
+    AND user_id = $3
+    RETURNING list_id AS "listId";
+    `, [listName, Number(listId), userId]);
         // null result error
         if (!rows.length) {
             res.status(401);

@@ -6,7 +6,7 @@ import { EditListReqInt, EditListReqEnum } from "../../models/list";
 import { RequestErrors } from "../../models/error";
 import checkRequestBody from "../../utils/check-req-body";
 
-const editList: RequestHandler<{ listId: number }> = async (req, res, next) => {
+const editList: RequestHandler<{ listId: string }> = async (req, res, next) => {
   const { userId } = req.user;
   const { listId } = req.params;
   const reqError = new RequestErrors();
@@ -18,22 +18,23 @@ const editList: RequestHandler<{ listId: number }> = async (req, res, next) => {
     }
 
     // check request body
-    const updateList = <EditListReqInt>req.body;
-    if (!checkRequestBody(updateList, EditListReqEnum)) {
+    if (!checkRequestBody(req.body, EditListReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }
+
+    const { listName } = <EditListReqInt>req.body;
 
     //db query
     const { rows }: { rows: { id: number }[] } = await db.query(
       `
     UPDATE lists
-    SET name = $1
-    WHERE id = $2
-    AND "userId" = $3
-    RETURNING id;
+    SET list_name = $1
+    WHERE list_id = $2
+    AND user_id = $3
+    RETURNING list_id AS "listId";
     `,
-      [updateList.name, listId, userId]
+      [listName, Number(listId), userId]
     );
 
     // null result error

@@ -20,7 +20,7 @@ router.use(checkToken);
 router.post(
   "/:listId",
   param("listId", errors.badRequest()).isNumeric(),
-  body("name")
+  body("itemName")
     .isString()
     .withMessage(errors.invalidField())
     .not()

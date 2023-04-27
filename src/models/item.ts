@@ -31,15 +31,15 @@ export enum CheckShoppingItemReqEnum {
 export interface EditShopItemReqInt {
   listId: number;
   itemId: number;
-  name: string;
-  category: string;
+  itemName: string;
+  itemCategory: string;
 }
 
 export enum EditShopItemReqEnum {
   listId = "listId",
   itemId = "itemId",
-  name = "name",
-  category = "category",
+  name = "itemName",
+  category = "itemCategory",
 }
 
 export interface RemoveShopItemReqInt {

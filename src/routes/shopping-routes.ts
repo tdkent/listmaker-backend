@@ -18,7 +18,7 @@ router.use(checkToken);
 router.post(
   "/:listId",
   param("listId", errors.badRequest()).isNumeric(),
-  body("name")
+  body("itemName")
     .isString()
     .withMessage(errors.invalidField())
     .not()
@@ -41,14 +41,14 @@ router.patch(
   "/edit",
   body("listId", errors.badRequest()).isNumeric(),
   body("itemId", errors.badRequest()).isNumeric(),
-  body("name")
+  body("itemName")
     .isString()
     .withMessage(errors.invalidField())
     .not()
     .isEmpty()
     .withMessage(errors.nullField("name"))
     .trim(),
-  body("category", errors.invalidField()).isString().trim(),
+  body("itemCategory", errors.invalidField()).isString().trim(),
   editShoppingItem
 );
 

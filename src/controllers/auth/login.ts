@@ -27,8 +27,8 @@ const login: RequestHandler = async (req, res, next) => {
 
     // db query
     const { rows }: { rows: UserDataInt[] } = await db.query(
-      `SELECT id, "userEmail", "userPassword" FROM users
-      WHERE "userEmail" = $1`,
+      `SELECT user_id AS "userId", user_email AS "userEmail", user_password AS "userPassword"
+      FROM users WHERE user_email = $1`,
       [userLogin.userEmail]
     );
 
@@ -49,15 +49,16 @@ const login: RequestHandler = async (req, res, next) => {
       });
     }
 
-    // generate new token
+    const { userId, userEmail } = rows[0];
+
+    // token
     //? TODO: how to make use of the token expiration
-    const token = jwt.sign({ userId: rows[0].id, userEmail: userLogin.userEmail }, jwtKey, {
+    const token = jwt.sign({ userId, userEmail }, jwtKey, {
       expiresIn: "30d",
     });
 
-    // generate response object
-    const userData = new UserData(rows[0].id, userLogin.userEmail, token);
-    res.json({ message: "OK", userData });
+    // response
+    res.json({ userId, userEmail, token });
   } catch (error) {
     console.log(error);
     res.status(500);

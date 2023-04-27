@@ -16,40 +16,39 @@ const buildDbTables = async () => {
         console.log("Creating new tables...");
         await _1.default.query(`
     CREATE TABLE users (
-      id SERIAL PRIMARY KEY,
-      "userEmail" VARCHAR(255) UNIQUE NOT NULL,
-      "userNickname" VARCHAR(255),
-      "userPassword" VARCHAR(255) NOT NULL
+      user_id SERIAL PRIMARY KEY,
+      user_email VARCHAR(255) UNIQUE NOT NULL,
+      user_nickname VARCHAR(255),
+      user_password VARCHAR(255) NOT NULL
     );
     CREATE TABLE lists (
-      id SERIAL PRIMARY KEY,
-      "userId" SMALLINT REFERENCES users(id),
-      name VARCHAR(255) NOT NULL,
-      slug VARCHAR(255) NOT NULL,
-      type VARCHAR(12) NOT NULL
+      list_id SERIAL PRIMARY KEY,
+      user_id SMALLINT REFERENCES users(user_id),
+      list_name VARCHAR(255) NOT NULL,
+      list_slug VARCHAR(255) NOT NULL,
+      list_type VARCHAR(12) NOT NULL
     );
-      CREATE TABLE items_shopping (
-        id SERIAL PRIMARY KEY,
-        "listId" SMALLINT REFERENCES lists(id),
-        "userId" SMALLINT REFERENCES users(id),
-        name VARCHAR(255) NOT NULL,
-        perm_category VARCHAR(255) NOT NULL DEFAULT 'Uncategorized',
-        temp_category VARCHAR(255) NOT NULL DEFAULT 'Uncategorized',
-        "isChecked" BOOLEAN NOT NULL DEFAULT false,
-        "isActive" BOOLEAN NOT NULL DEFAULT true
-      );
-      CREATE TABLE items_todo (
-        id SERIAL PRIMARY KEY,
-        "listId" SMALLINT REFERENCES lists(id),
-        "userId" SMALLINT REFERENCES users(id),
-        name VARCHAR(255) NOT NULL,
-        category VARCHAR(12) NOT NULL DEFAULT 'Home',
-        notes VARCHAR(255),
-        "dateCreated" DATE NOT NULL DEFAULT CURRENT_DATE,
-        "dateDue" DATE NOT NULL DEFAULT CURRENT_DATE,
-        "dateCompleted" DATE,
-        "isChecked" BOOLEAN NOT NULL DEFAULT false
-      )
+    CREATE TABLE items_shopping (
+      shop_item_id SERIAL PRIMARY KEY,
+      list_id SMALLINT REFERENCES lists(list_id),
+      user_id SMALLINT REFERENCES users(user_id),
+      item_name VARCHAR(255) NOT NULL,
+      perm_category VARCHAR(255) NOT NULL DEFAULT 'Uncategorized',
+      temp_category VARCHAR(255) NOT NULL DEFAULT 'Uncategorized',
+      is_checked BOOLEAN NOT NULL DEFAULT false,
+      is_active BOOLEAN NOT NULL DEFAULT true
+    );
+    CREATE TABLE items_todo (
+      todo_item_id SERIAL PRIMARY KEY,
+      list_id SMALLINT REFERENCES lists(list_id),
+      user_id SMALLINT REFERENCES users(user_id),
+      item_name VARCHAR(255) NOT NULL,
+      item_category VARCHAR(12) NOT NULL DEFAULT 'Home',
+      date_created DATE NOT NULL DEFAULT CURRENT_DATE,
+      date_due DATE NOT NULL DEFAULT CURRENT_DATE,
+      date_completed DATE,
+      is_checked BOOLEAN NOT NULL DEFAULT false
+    )
     `);
         console.log("Finished rebuilding tables!");
     }

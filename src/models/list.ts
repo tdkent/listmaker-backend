@@ -11,26 +11,26 @@ export enum CheckableListTypesEnum {
 
 // New List
 export interface NewListReqInt {
-  name: string;
-  type: AllListTypesEnum.shop | AllListTypesEnum.todo;
+  listName: string;
+  listType: AllListTypesEnum.shop | AllListTypesEnum.todo;
 }
 
 export enum NewListReqEnum {
-  name = "name",
-  type = "type",
+  name = "listName",
+  type = "listType",
 }
 
 export interface NewListResInt extends NewListReqInt {
-  id: number;
+  listId: number;
   userId: number;
-  slug: string;
+  listSlug: string;
 }
 
 // Edit List
 export interface EditListReqInt {
-  name: string;
+  listName: string;
 }
 
 export enum EditListReqEnum {
-  name = "name",
+  name = "listName",
 }

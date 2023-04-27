@@ -21,7 +21,7 @@ export enum UserLoginReqEnum {
 }
 
 export interface UserDataInt extends UserLoginInt {
-  id: number;
+  userId: number;
 }
 
 export class UserData {

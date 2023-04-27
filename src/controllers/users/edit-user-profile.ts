@@ -17,20 +17,21 @@ const editUserProfile: RequestHandler = async (req, res, next) => {
     }
 
     // check request body
-    const userData = <EditUserProfileInt>req.body;
-    if (!checkRequestBody(userData, EditUserProfileEnum)) {
+    if (!checkRequestBody(req.body, EditUserProfileEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }
+
+    const { userNickname } = <EditUserProfileInt>req.body;
 
     // db query
     await db.query(
       `
     UPDATE users
-    SET "userNickname" = $1
-    WHERE id = $2;
+    SET user_nickname = $1
+    WHERE user_id = $2;
     `,
-      [userData.userNickname, userId]
+      [userNickname, userId]
     );
     res.json({ message: "OK" });
   } catch (error) {

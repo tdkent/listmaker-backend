@@ -26,8 +26,8 @@ const login = async (req, res, next) => {
             return next({ message: reqError.badRequest() });
         }
         // db query
-        const { rows } = await db_1.default.query(`SELECT id, "userEmail", "userPassword" FROM users
-      WHERE "userEmail" = $1`, [userLogin.userEmail]);
+        const { rows } = await db_1.default.query(`SELECT user_id AS "userId", user_email AS "userEmail", user_password AS "userPassword"
+      FROM users WHERE user_email = $1`, [userLogin.userEmail]);
         // null result error
         if (!rows.length) {
             res.status(422);
@@ -43,14 +43,14 @@ const login = async (req, res, next) => {
                 message: reqError.incorrectPassword(),
             });
         }
-        // generate new token
+        const { userId, userEmail } = rows[0];
+        // token
         //? TODO: how to make use of the token expiration
-        const token = jsonwebtoken_1.default.sign({ userId: rows[0].id, userEmail: userLogin.userEmail }, config_1.jwtKey, {
+        const token = jsonwebtoken_1.default.sign({ userId, userEmail }, config_1.jwtKey, {
             expiresIn: "30d",
         });
-        // generate response object
-        const userData = new auth_1.UserData(rows[0].id, userLogin.userEmail, token);
-        res.json({ message: "OK", userData });
+        // response
+        res.json({ userId, userEmail, token });
     }
     catch (error) {
         console.log(error);

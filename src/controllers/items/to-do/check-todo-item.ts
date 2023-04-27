@@ -8,7 +8,6 @@ import db from "../../../db";
 
 const checkTodoItem: RequestHandler = async (req, res, next) => {
   const { userId } = req.user;
-  const reqBody = <CheckTodoReqInt>req.body;
   const reqError = new RequestErrors();
   try {
     // validation errors
@@ -18,24 +17,36 @@ const checkTodoItem: RequestHandler = async (req, res, next) => {
     }
 
     // check request body
-    if (!checkRequestBody(reqBody, CheckTodoReqEnum)) {
+    if (!checkRequestBody(req.body, CheckTodoReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }
+
+    const { itemId, listId } = <CheckTodoReqInt>req.body;
 
     // TODO: using CASE check if "isChecked" = false
     // TODO: if false, set "isChecked" = NOT "isChecked" (true)
     // TODO: if true, set "isChecked" = NOT "isChecked" (false), set "dueDate" to CURRENT_DATE
 
-    const { rows }: { rows: { id: number }[] } = await db.query(
+    const { rows }: { rows: { itemId: number }[] } = await db.query(
       `
       UPDATE items_todo
-      SET "isChecked" = CASE WHEN ("isChecked" = false) THEN true ELSE false END
-      WHERE id = $1 AND "listId" = $2 AND "userId" = $3
-      RETURNING id, "isChecked";
+      SET is_checked = CASE WHEN (is_checked = false) THEN true ELSE false END
+      WHERE todo_item_id = $1
+      AND list_id = $2
+      AND user_id = $3
+      RETURNING todo_item_id AS "itemId";
     `,
-      [reqBody.itemId, reqBody.listId, userId]
+      [itemId, listId, userId]
     );
+
+    // null result error
+    if (!rows.length) {
+      res.status(401);
+      return next({
+        message: reqError.nullResult(),
+      });
+    }
 
     // response
     res.json({ message: "OK" });
@@ -43,7 +54,7 @@ const checkTodoItem: RequestHandler = async (req, res, next) => {
     console.log(error);
     res.status(500);
     return next({
-      message: `An error occurred while attempting to edit item (id ${reqBody.itemId})`,
+      message: reqError.internalServer(),
     });
   }
 };

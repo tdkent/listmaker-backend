@@ -11,9 +11,11 @@ const fetchUserProfile: RequestHandler = async (req, res, next) => {
     // db query
     const { rows }: { rows: UserProfileResInt[] } = await db.query(
       `
-    SELECT id, "userEmail", "userNickname"
-    FROM users
-    WHERE id = $1
+    SELECT
+      user_id AS "userId",
+      user_email AS "userEmail",
+      user_nickname AS "userNickname"
+    FROM users WHERE user_id = $1;
     `,
       [userId]
     );

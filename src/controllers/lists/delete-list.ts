@@ -5,7 +5,7 @@ import db from "../../db";
 import { RequestErrors } from "../../models/error";
 import { AllListTypesEnum } from "../../models/list";
 
-const deleteList: RequestHandler<{ listId: number }> = async (req, res, next) => {
+const deleteList: RequestHandler<{ listId: string }> = async (req, res, next) => {
   const { userId } = req.user;
   const { listId } = req.params;
   const reqError = new RequestErrors();
@@ -17,11 +17,11 @@ const deleteList: RequestHandler<{ listId: number }> = async (req, res, next) =>
     }
 
     // detemine list type
-    const { rows }: { rows: { type: string }[] } = await db.query(
+    const { rows }: { rows: { listType: string }[] } = await db.query(
       `
-    SELECT type FROM lists
-    WHERE id = $1 
-    AND "userId" = $2 
+    SELECT list_type AS "listType" FROM lists
+    WHERE list_id = $1 
+    AND user_id = $2 
     `,
       [listId, userId]
     );
@@ -36,12 +36,12 @@ const deleteList: RequestHandler<{ listId: number }> = async (req, res, next) =>
 
     // filter by list type
     //? put each filter type into a separate file?
-    if (rows[0].type === AllListTypesEnum.shop) {
+    if (rows[0].listType === AllListTypesEnum.shop) {
       // delete items
       await db.query(
         `
       DELETE FROM items_shopping
-      WHERE "listId" = $1
+      WHERE list_id = $1;
       `,
         [listId]
       );
@@ -50,7 +50,7 @@ const deleteList: RequestHandler<{ listId: number }> = async (req, res, next) =>
       await db.query(
         `
       DELETE FROM lists
-      WHERE id = $1;
+      WHERE list_id = $1;
       `,
         [listId]
       );

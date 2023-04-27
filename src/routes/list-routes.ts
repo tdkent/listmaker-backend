@@ -25,7 +25,7 @@ router.get("/fetch/:listId", param("listId", errors.badRequest()).isNumeric(), f
 // NEW LIST /list/new
 router.post(
   "/new",
-  body("name")
+  body("listName")
     .isString()
     .withMessage(errors.invalidField())
     .not()
@@ -34,7 +34,7 @@ router.post(
     .isLength({ max: 24 })
     .withMessage(errors.maxLength("name", 24))
     .trim(),
-  body("type", errors.invalidField()).isIn(Object.values(AllListTypesEnum)),
+  body("listType", errors.invalidField()).isIn(Object.values(AllListTypesEnum)),
   newList
 );
 
@@ -42,7 +42,7 @@ router.post(
 router.patch(
   "/edit/:listId",
   param("listId", errors.badRequest()).isNumeric(),
-  body("name")
+  body("listName")
     .isString()
     .withMessage(errors.invalidField())
     .isLength({ max: 24 })

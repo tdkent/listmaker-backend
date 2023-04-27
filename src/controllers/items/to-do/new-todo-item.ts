@@ -20,58 +20,59 @@ const newTodoItem: RequestHandler<{ listId: string }> = async (req, res, next) =
     }
 
     // check request body
-    const reqBody = <NewTodoReqInt>req.body;
-    console.log("reqBody: ", reqBody);
-    if (!checkRequestBody(reqBody, NewItemReqEnum)) {
+    if (!checkRequestBody(req.body, NewItemReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }
 
+    const { itemName } = <NewTodoReqInt>req.body;
+
     // check auth & list type
-    const { rows: checkAuth }: { rows: { type: string }[] } = await db.query(
+    const { rows: checkAuth }: { rows: { listType: string }[] } = await db.query(
       `
-    SELECT type FROM lists
-    WHERE id = $1 AND "userId" = $2;
+    SELECT list_type AS "listType" FROM lists
+    WHERE list_id = $1 AND user_id = $2;
     `,
       [Number(listId), userId]
     );
 
     // error handling
-    if (!checkAuth.length || checkAuth[0].type !== AllListTypesEnum.todo) {
+    if (!checkAuth.length || checkAuth[0].listType !== AllListTypesEnum.todo) {
       res.status(401);
       return next({ message: reqError.nullResult() });
     }
 
     // has user previously created this item
-    const { rows }: { rows: { id: number; category: string }[] } = await db.query(
+    const { rows }: { rows: { itemId: number; itemCategory: string }[] } = await db.query(
       `
-      SELECT id, category FROM items_todo
-      WHERE name = $1 AND "userId" = $2;
+      SELECT item_category AS "itemCategory"
+      FROM items_todo
+      WHERE item_name = $1
+      AND user_id = $2;
     `,
-      [reqBody.name, userId]
+      [itemName, userId]
     );
 
     // new item: create new row
     if (!rows.length) {
       await db.query(
         `
-        INSERT INTO items_todo ("listId", "userId", name)
+        INSERT INTO items_todo (list_id, user_id, item_name)
         VALUES ($1, $2, $3);
         `,
-        [Number(listId), userId, reqBody.name]
+        [Number(listId), userId, itemName]
       );
     }
 
     // duplicate item: create new row, copy fields from old item
     // TODO: if multiple duplicates exist, fields should be copied from the most recently created
-    // TODO: add a dateCreated field to items_todo table
     else {
       await db.query(
         `
-        INSERT INTO items_todo ("listId", "userId", name, category)
+        INSERT INTO items_todo (list_id, user_id, item_name, item_category)
         VALUES ($1, $2, $3, $4)
         `,
-        [Number(listId), userId, reqBody.name, rows[0].category]
+        [Number(listId), userId, itemName, rows[0].itemCategory]
       );
     }
 

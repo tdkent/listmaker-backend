@@ -1,11 +1,11 @@
 // New Todo
 
 export interface NewTodoReqInt {
-  name: string;
+  itemName: string;
 }
 
 export enum NewTodoReqEnum {
-  name = "name",
+  name = "itemName",
 }
 
 // Check Todo

@@ -26,8 +26,8 @@ const register: RequestHandler = async (req, res, next) => {
     // check userEmail
     const { rows }: { rows: { id: number }[] } = await db.query(
       `
-    SELECT id FROM users
-    WHERE "userEmail" = $1
+    SELECT user_id FROM users
+    WHERE user_email = $1
     `,
       [newUser.userEmail]
     );
@@ -43,7 +43,7 @@ const register: RequestHandler = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(newUser.userPassword, 2);
     await db.query(
       `
-    INSERT INTO users("userEmail", "userNickname", "userPassword")
+    INSERT INTO users(user_email, user_nickname, user_password)
     VALUES ($1, $2, $3);
     `,
       [newUser.userEmail, newUser.userNickname, hashedPassword]

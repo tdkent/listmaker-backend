@@ -8,7 +8,7 @@ import db from "../../../db";
 
 const editShoppingItem: RequestHandler = async (req, res, next) => {
   const { userId } = req.user;
-  const reqBody = <EditShopItemReqInt>req.body;
+  const { listId, itemId, itemName, itemCategory } = <EditShopItemReqInt>req.body;
   const reqError = new RequestErrors();
   try {
     // validation errors
@@ -26,10 +26,13 @@ const editShoppingItem: RequestHandler = async (req, res, next) => {
     // check auth & isChecked
     const { rows: isChecked }: { rows: { isChecked: boolean }[] } = await db.query(
       `
-    SELECT "isChecked" FROM items_shopping
-    WHERE id = $1 AND "listId" = $2 AND "userId" = $3;
+    SELECT is_checked
+    FROM items_shopping
+    WHERE shop_item_id = $1
+    AND list_id = $2
+    AND user_id = $3;
     `,
-      [reqBody.itemId, reqBody.listId, userId]
+      [itemId, listId, userId]
     );
 
     // null result error
@@ -43,19 +46,28 @@ const editShoppingItem: RequestHandler = async (req, res, next) => {
       await db.query(
         `
       UPDATE items_shopping
-      SET name = $1, perm_category = $2, temp_category = $2
-      WHERE id = $3 AND "listId" = $4 AND "userId" = $5;
+      SET
+        item_name = $1,
+        perm_category = $2,
+        temp_category = $2
+      WHERE shop_item_id = $3
+      AND list_id = $4
+      AND user_id = $5;
       `,
-        [reqBody.name, reqBody.category, reqBody.itemId, reqBody.listId, userId]
+        [itemName, itemCategory, itemId, listId, userId]
       );
     } else {
       await db.query(
         `
       UPDATE items_shopping
-      SET name = $1, perm_category = $2
-      WHERE id = $3 AND "listId" = $4 AND "userId" = $5;
+      SET
+        item_name = $1,
+        perm_category = $2
+      WHERE shop_item_id = $3
+      AND list_id = $4
+      AND user_id = $5;
       `,
-        [reqBody.name, reqBody.category, reqBody.itemId, reqBody.listId, userId]
+        [itemName, itemCategory, itemId, listId, userId]
       );
     }
 

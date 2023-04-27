@@ -20,9 +20,15 @@ const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => 
     // db query
     const { rows }: { rows: NewListResInt[] } = await db.query(
       `
-    SELECT * FROM lists
-    WHERE id = $1
-    AND "userId" = $2;
+    SELECT 
+      list_id AS "listId",
+      user_id AS "userId",
+      list_name AS "listName",
+      list_slug AS "listSlug",
+      list_type AS "listType"
+    FROM lists
+    WHERE list_id = $1
+    AND user_id = $2;
     `,
       [Number(listId), userId]
     );
@@ -37,27 +43,49 @@ const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => 
 
     // filter by list type
     let items: SingleListItemTypes = [];
-    if (rows[0].type === AllListTypesEnum.shop) {
+    if (rows[0].listType === AllListTypesEnum.shop) {
       const { rows } = await db.query(
         `
-      SELECT * FROM items_shopping
-      WHERE "listId" = $1 AND "isActive" = true;
+      SELECT 
+        shop_item_id AS "itemId",
+        list_id AS "listId",
+        user_id AS "userId",
+        item_name AS "itemName",
+        perm_category AS "permCategory",
+        temp_category AS "tempCategory",
+        is_checked AS "isChecked"
+      FROM items_shopping
+      WHERE list_id = $1
+      AND is_active = true;
       `,
         [listId]
       );
       items = rows;
     }
-    if (rows[0].type === AllListTypesEnum.todo) {
+    if (rows[0].listType === AllListTypesEnum.todo) {
       const { rows } = await db.query(
         `
-      SELECT * FROM items_todo, AGE("dueDate")
-      WHERE "listId" = $1;
+      SELECT
+        todo_item_id AS "itemId",
+        list_id AS "listId",
+        user_id AS "userId",
+        item_name AS "itemName",
+        item_category AS "itemCategory",
+        date_created AS "dateCreated",
+        date_due AS "dateDue",
+        date_completed AS "dateCompleted",
+        is_checked AS "isChecked"
+      FROM items_todo, AGE(date_due)
+      WHERE list_id = $1;
       `,
         [listId]
       );
       items = rows;
     }
-    res.json({ ...rows[0], items });
+
+    // response
+    const data = { ...rows[0], items };
+    res.json(data);
   } catch (error) {
     console.log(error);
     res.status(500);

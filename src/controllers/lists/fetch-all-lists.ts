@@ -11,8 +11,14 @@ const fetchAllLists: RequestHandler = async (req, res, next) => {
     // db query
     const { rows }: { rows: NewListResInt[] } = await db.query(
       `
-    SELECT * FROM lists
-    WHERE "userId" = $1
+    SELECT 
+      list_id AS "listId",
+      user_id AS "userId",
+      list_name AS "listName",
+      list_slug AS "listSlug",
+      list_type AS "listType"   
+    FROM lists
+    WHERE user_id = $1
     `,
       [userId]
     );

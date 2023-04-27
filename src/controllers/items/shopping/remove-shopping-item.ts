@@ -8,7 +8,7 @@ import db from "../../../db";
 
 const removeShoppingItem: RequestHandler = async (req, res, next) => {
   const { userId } = req.user;
-  const reqBody = <RemoveShopItemReqInt>req.body;
+
   const reqError = new RequestErrors();
   try {
     // validation errors
@@ -18,20 +18,24 @@ const removeShoppingItem: RequestHandler = async (req, res, next) => {
     }
 
     // check request body
-    if (!checkRequestBody(reqBody, RemoveShopItemReqEnum)) {
+    if (!checkRequestBody(req.body, RemoveShopItemReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }
+
+    const { listId, itemId } = <RemoveShopItemReqInt>req.body;
 
     // db query
     const { rows }: { rows: { id: number }[] } = await db.query(
       `
     UPDATE items_shopping
-    SET "isActive" = NOT "isActive"
-    WHERE id = $1 AND "listId" = $2 AND "userId" = $3
-    RETURNING id;
+    SET is_active = NOT is_active
+    WHERE shop_item_id = $1
+    AND list_id = $2
+    AND user_id = $3
+    RETURNING shop_item_id;
     `,
-      [reqBody.itemId, reqBody.listId, userId]
+      [itemId, listId, userId]
     );
 
     // null result error

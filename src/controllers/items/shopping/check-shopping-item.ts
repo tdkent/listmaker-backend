@@ -8,7 +8,7 @@ import db from "../../../db";
 
 const checkShoppingItem: RequestHandler = async (req, res, next) => {
   const { userId } = req.user;
-  const reqBody = <CheckShoppingItemReqInt>req.body;
+  const { itemId, listId } = <CheckShoppingItemReqInt>req.body;
   try {
     const reqError = new RequestErrors();
     // validation errors
@@ -18,7 +18,7 @@ const checkShoppingItem: RequestHandler = async (req, res, next) => {
     }
 
     // check request body
-    if (!checkRequestBody(reqBody, CheckShoppingItemReqEnum)) {
+    if (!checkRequestBody(req.body, CheckShoppingItemReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }
@@ -26,10 +26,13 @@ const checkShoppingItem: RequestHandler = async (req, res, next) => {
     // check auth & isChecked
     const { rows: isChecked }: { rows: { isChecked: boolean }[] } = await db.query(
       `
-    SELECT "isChecked" FROM items_shopping
-    WHERE id = $1 AND "listId" = $2 AND "userId" = $3;
+    SELECT is_checked AS "isChecked"
+    FROM items_shopping
+    WHERE shop_item_id = $1
+    AND list_id = $2
+    AND user_id = $3;
     `,
-      [reqBody.itemId, reqBody.listId, userId]
+      [itemId, listId, userId]
     );
 
     // null result error
@@ -43,21 +46,19 @@ const checkShoppingItem: RequestHandler = async (req, res, next) => {
       await db.query(
         `
       UPDATE items_shopping
-      SET "isChecked" = false, temp_category = perm_category
-      WHERE id = $1 AND "listId" = $2 AND "userId" = $3
-      RETURNING id;
+      SET is_checked = false, temp_category = perm_category
+      WHERE shop_item_id = $1 AND list_id = $2 AND user_id = $3;
       `,
-        [reqBody.itemId, reqBody.listId, userId]
+        [itemId, listId, userId]
       );
     } else {
       await db.query(
         `
       UPDATE items_shopping
-      SET "isChecked" = true, temp_category = '__checked'
-      WHERE id = $1 AND "listId" = $2 AND "userId" = $3
-      RETURNING id;
+      SET is_checked = true, temp_category = '_checked'
+      WHERE shop_item_id = $1 AND list_id = $2 AND user_id = $3;
       `,
-        [reqBody.itemId, reqBody.listId, userId]
+        [itemId, listId, userId]
       );
     }
 
@@ -67,7 +68,7 @@ const checkShoppingItem: RequestHandler = async (req, res, next) => {
     console.log(error);
     res.status(500);
     return next({
-      message: `An error occurred while attempting to edit item (id ${reqBody.itemId})`,
+      message: `An error occurred while attempting to edit item (id ${itemId})`,
     });
   }
 };
