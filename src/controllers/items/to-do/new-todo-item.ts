@@ -42,39 +42,22 @@ const newTodoItem: RequestHandler<{ listId: string }> = async (req, res, next) =
       return next({ message: reqError.nullResult() });
     }
 
-    // has user previously created this item
-    const { rows }: { rows: { itemId: number; itemCategory: string }[] } = await db.query(
+    await db.query(
       `
-      SELECT item_category AS "itemCategory"
-      FROM items_todo
-      WHERE item_name = $1
-      AND user_id = $2;
+    INSERT INTO items_todo (list_id, user_id, item_name, item_category)
+    VALUES (
+      $1,
+      $2,
+      $3::VARCHAR,
+      COALESCE((SELECT item_category
+          FROM items_todo
+          WHERE LOWER(item_name) = LOWER($3) AND user_id = $2
+          ORDER BY date_updated DESC LIMIT 1
+        ), 'Home')
+      );
     `,
-      [itemName, userId]
+      [Number(listId), userId, itemName]
     );
-
-    // new item: create new row
-    if (!rows.length) {
-      await db.query(
-        `
-        INSERT INTO items_todo (list_id, user_id, item_name)
-        VALUES ($1, $2, $3);
-        `,
-        [Number(listId), userId, itemName]
-      );
-    }
-
-    // duplicate item: create new row, copy fields from old item
-    // TODO: if multiple duplicates exist, fields should be copied from the most recently created
-    else {
-      await db.query(
-        `
-        INSERT INTO items_todo (list_id, user_id, item_name, item_category)
-        VALUES ($1, $2, $3, $4)
-        `,
-        [Number(listId), userId, itemName, rows[0].itemCategory]
-      );
-    }
 
     // response
     res.json({ message: "OK" });

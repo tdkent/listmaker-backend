@@ -43,11 +43,12 @@ const buildDbTables = async () => {
       list_id SMALLINT REFERENCES lists(list_id),
       user_id SMALLINT REFERENCES users(user_id),
       item_name VARCHAR(255) NOT NULL,
-      item_category VARCHAR(12) NOT NULL DEFAULT 'Home',
-      date_created DATE NOT NULL DEFAULT CURRENT_DATE,
+      item_category VARCHAR(12) NOT NULL,
+      date_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       date_due DATE NOT NULL DEFAULT CURRENT_DATE,
       date_completed DATE,
-      is_checked BOOLEAN NOT NULL DEFAULT false
+      is_checked BOOLEAN NOT NULL DEFAULT false,
+      is_active BOOLEAN NOT NULL DEFAULT true
     )
     `);
         console.log("Finished rebuilding tables!");

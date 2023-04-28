@@ -38,7 +38,7 @@ const newList: RequestHandler = async (req, res, next) => {
     if (check.length) {
       res.status(422);
       return next({
-        message: reqError.duplicateList(newList.name),
+        message: reqError.duplicateList(listName),
       });
     }
 
@@ -52,7 +52,7 @@ const newList: RequestHandler = async (req, res, next) => {
     `,
       [userId, listName, slug, listType]
     );
-    res.json({ list: rows[0] });
+    res.json(rows[0]);
   } catch (error) {
     console.log(error);
     res.status(500);

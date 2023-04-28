@@ -62,12 +62,13 @@ const fetchList = async (req, res, next) => {
         user_id AS "userId",
         item_name AS "itemName",
         item_category AS "itemCategory",
-        date_created AS "dateCreated",
-        date_due AS "dateDue",
+        date_updated AS "dateUpdated",
+        to_char(date_due, 'YYYY-MM-DD') AS "dateDue",
         date_completed AS "dateCompleted",
         is_checked AS "isChecked"
       FROM items_todo, AGE(date_due)
-      WHERE list_id = $1;
+      WHERE list_id = $1
+      AND is_active = true;
       `, [listId]);
             items = rows;
         }

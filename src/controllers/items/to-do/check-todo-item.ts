@@ -24,14 +24,15 @@ const checkTodoItem: RequestHandler = async (req, res, next) => {
 
     const { itemId, listId } = <CheckTodoReqInt>req.body;
 
-    // TODO: using CASE check if "isChecked" = false
-    // TODO: if false, set "isChecked" = NOT "isChecked" (true)
-    // TODO: if true, set "isChecked" = NOT "isChecked" (false), set "dueDate" to CURRENT_DATE
-
     const { rows }: { rows: { itemId: number }[] } = await db.query(
       `
       UPDATE items_todo
-      SET is_checked = CASE WHEN (is_checked = false) THEN true ELSE false END
+      SET
+        is_checked = NOT is_checked,
+        date_completed = CASE
+          WHEN is_checked = false THEN CURRENT_DATE
+          ELSE NULL
+          END
       WHERE todo_item_id = $1
       AND list_id = $2
       AND user_id = $3

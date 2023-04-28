@@ -3,12 +3,11 @@ import { body, param } from "express-validator";
 
 import checkToken from "../controllers/auth/check-token";
 import { ValidatorErrors } from "../models/error";
+import { TodoCatsEnum } from "../models/todo";
 import newTodoItem from "../controllers/items/to-do/new-todo-item";
 import checkTodoItem from "../controllers/items/to-do/check-todo-item";
-import newShoppingItem from "../controllers/items/shopping/new-shopping-item";
-import checkShoppingItem from "../controllers/items/shopping/check-shopping-item";
-import editShoppingItem from "../controllers/items/shopping/edit-shopping-item";
-import removeShoppingItem from "../controllers/items/shopping/remove-shopping-item";
+import removeTodoItem from "../controllers/items/to-do/remove-todo-item";
+import editTodoItem from "../controllers/items/to-do/edit-todo-item";
 
 const router = Router();
 const errors = new ValidatorErrors();
@@ -38,28 +37,34 @@ router.patch(
   checkTodoItem
 );
 
-// EDIT ITEM: PATCH /shopping/edit
+// EDIT ITEM: PATCH /todo/edit
 router.patch(
   "/edit",
   body("listId", errors.badRequest()).isNumeric(),
   body("itemId", errors.badRequest()).isNumeric(),
-  body("name")
+  body("itemName")
     .isString()
     .withMessage(errors.invalidField())
     .not()
     .isEmpty()
     .withMessage(errors.nullField("name"))
     .trim(),
-  body("category", errors.invalidField()).isString().trim(),
-  editShoppingItem
+  body("itemCategory", errors.invalidField()).isIn(Object.values(TodoCatsEnum)),
+  body("itemDate")
+    .isString()
+    .withMessage(errors.invalidField())
+    .not()
+    .isEmpty()
+    .withMessage(errors.nullField("name")),
+  editTodoItem
 );
 
-// REMOVE ITEM: PATCH /shopping/remove
+// REMOVE ITEM: PATCH /todo/remove
 router.patch(
   "/remove",
   body("listId", errors.badRequest()).isNumeric(),
   body("itemId", errors.badRequest()).isNumeric(),
-  removeShoppingItem
+  removeTodoItem
 );
 
 export default router;
