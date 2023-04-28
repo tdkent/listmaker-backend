@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const _1 = __importDefault(require("."));
 const buildDbTables = async () => {
     try {
-        console.log("Tearing down old tables...");
+        console.log("Dropping old tables...");
         await _1.default.query(`
     DROP TABLE IF EXISTS items_todo;
     DROP TABLE IF EXISTS items_shopping;

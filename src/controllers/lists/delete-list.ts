@@ -16,46 +16,21 @@ const deleteList: RequestHandler<{ listId: string }> = async (req, res, next) =>
       return res.status(401).json({ errors: errors.array() });
     }
 
-    // detemine list type
-    const { rows }: { rows: { listType: string }[] } = await db.query(
-      `
-    SELECT list_type AS "listType" FROM lists
-    WHERE list_id = $1 
-    AND user_id = $2 
-    `,
+    // db function
+    const { rows }: { rows: { deleteTable: boolean }[] } = await db.query(
+      `SELECT "deleteTable"($1, $2)`,
       [listId, userId]
     );
 
     // null result error
-    if (!rows.length) {
+    if (!rows[0].deleteTable) {
       res.status(401);
       return next({
         message: reqError.nullResult(),
       });
     }
 
-    // filter by list type
-    //? put each filter type into a separate file?
-    if (rows[0].listType === AllListTypesEnum.shop) {
-      // delete items
-      await db.query(
-        `
-      DELETE FROM items_shopping
-      WHERE list_id = $1;
-      `,
-        [listId]
-      );
-
-      // delete list
-      await db.query(
-        `
-      DELETE FROM lists
-      WHERE list_id = $1;
-      `,
-        [listId]
-      );
-    }
-
+    // response
     res.json({ message: "OK" });
   } catch (error) {
     console.log(error);

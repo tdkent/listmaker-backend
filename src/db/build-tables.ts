@@ -2,7 +2,7 @@ import db from ".";
 
 const buildDbTables = async () => {
   try {
-    console.log("Tearing down old tables...");
+    console.log("Dropping old tables...");
     await db.query(`
     DROP TABLE IF EXISTS items_todo;
     DROP TABLE IF EXISTS items_shopping;
