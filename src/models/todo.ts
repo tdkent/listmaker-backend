@@ -25,8 +25,7 @@ export enum CheckTodoReqEnum {
 export enum TodoCatsEnum {
   home = "Home",
   work = "Work",
-  family = "Family",
-  leisure = "Leisure",
+  appoint = "Appointment",
   errand = "Errand",
 }
 
