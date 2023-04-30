@@ -71,9 +71,11 @@ const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => 
         user_id AS "userId",
         item_name AS "itemName",
         item_category AS "itemCategory",
+        item_location AS "itemLocation",
         date_updated AS "dateUpdated",
         to_char(date_due, 'YYYY-MM-DD') AS "dateDue",
         date_completed AS "dateCompleted",
+        time_due AS "timeDue",
         is_checked AS "isChecked"
       FROM items_todo, AGE(date_due)
       WHERE list_id = $1

@@ -34,15 +34,19 @@ export interface EditTodoReqInt {
   itemId: number;
   itemName: string;
   itemCategory: string;
+  itemLocation: string;
   itemDate: string;
+  itemTime: string;
 }
 
 export enum EditTodoReqEnum {
   listId = "listId",
   itemId = "itemId",
   name = "itemName",
+  location = "itemLocation",
   category = "itemCategory",
-  date = "dueDate",
+  date = "itemDate",
+  time = "itemTime",
 }
 
 // Remove Todo

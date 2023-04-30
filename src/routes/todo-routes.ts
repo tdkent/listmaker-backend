@@ -50,12 +50,10 @@ router.patch(
     .withMessage(errors.nullField("name"))
     .trim(),
   body("itemCategory", errors.invalidField()).isIn(Object.values(TodoCatsEnum)),
-  body("itemDate")
-    .isString()
-    .withMessage(errors.invalidField())
-    .not()
-    .isEmpty()
-    .withMessage(errors.nullField("name")),
+  body("itemLocation", errors.invalidField()).isString().trim(),
+  body("itemDate").isISO8601().withMessage(errors.invalidField()),
+  // TODO: fix time format errors
+  body("itemTime", errors.invalidField()).isTime({ hourFormat: "hour24", mode: "default" }),
   editTodoItem
 );
 

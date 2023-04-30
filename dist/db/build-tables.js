@@ -44,9 +44,11 @@ const buildDbTables = async () => {
       user_id SMALLINT REFERENCES users(user_id),
       item_name VARCHAR(255) NOT NULL,
       item_category VARCHAR(12) NOT NULL,
+      item_location VARCHAR(255),
       date_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
       date_due DATE NOT NULL DEFAULT CURRENT_DATE,
       date_completed DATE,
+      time_due TIME,
       is_checked BOOLEAN NOT NULL DEFAULT false,
       is_active BOOLEAN NOT NULL DEFAULT true
     )
