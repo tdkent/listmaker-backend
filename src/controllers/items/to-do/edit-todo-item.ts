@@ -22,48 +22,23 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
       return next({ message: reqError.badRequest() });
     }
 
-    const { itemCategory } = <EditTodoReqInt>req.body;
+    const {
+      listId,
+      itemId,
+      itemName,
+      itemCategory,
+      itemLocation,
+      itemDate,
+      itemTime,
+    }: EditTodoReqInt = req.body;
 
-    // sanitize request body
-    let body: EditTodoReqInt;
-    if (itemCategory === TodoCatsEnum.home) {
-      body = { ...req.body, itemLocation: null, itemTime: null };
-    } else if (itemCategory === TodoCatsEnum.work) {
-      body = { ...req.body, itemLocation: null };
-    } else if (itemCategory === TodoCatsEnum.errand) {
-      body = { ...req.body, itemTime: null };
-    } else body = { ...req.body };
-
-    // query
-    const { rows }: { rows: { id: number }[] } = await db.query(
-      `
-    UPDATE items_todo
-    SET
-      item_name = $1,
-      item_category = $2, 
-      item_location = $3,
-      date_due = $4,
-      date_updated = CURRENT_TIMESTAMP,
-      time_due = $5
-    WHERE todo_item_id = $6
-    AND list_id = $7
-    AND user_id = $8
-    RETURNING todo_item_id AS "id";
-    `,
-      [
-        body.itemName,
-        body.itemCategory,
-        body.itemLocation,
-        body.itemDate,
-        body.itemTime,
-        body.itemId,
-        body.listId,
-        userId,
-      ]
+    const { rows }: { rows: { editTodo: boolean }[] } = await db.query(
+      `SELECT "editTodo" ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [itemId, listId, userId, itemName, itemCategory, itemLocation, itemDate, itemTime]
     );
 
     // null result error
-    if (!rows.length) {
+    if (!rows[0].editTodo) {
       res.status(401);
       return next({ message: reqError.nullResult() });
     }

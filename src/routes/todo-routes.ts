@@ -52,8 +52,10 @@ router.patch(
   body("itemCategory", errors.invalidField()).isIn(Object.values(TodoCatsEnum)),
   body("itemLocation", errors.invalidField()).isString().trim(),
   body("itemDate").isISO8601().withMessage(errors.invalidField()),
-  // TODO: fix time format errors
-  body("itemTime", errors.invalidField()).isTime({ hourFormat: "hour24", mode: "default" }),
+  body("itemTime", errors.invalidField())
+    .isTime({ hourFormat: "hour24", mode: "withSeconds" })
+    // this field may be an empty string
+    .optional({ checkFalsy: true }),
   editTodoItem
 );
 
