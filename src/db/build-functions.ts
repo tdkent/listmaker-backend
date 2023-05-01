@@ -1,4 +1,5 @@
 import db from ".";
+import newShoppingSql from "./functions/new-shopping-sql";
 import newTodoSql from "./functions/new-todo-sql";
 import editTodoSql from "./functions/edit-todo-sql";
 import deleteTableSQl from "./functions/delete-table-sql";
@@ -8,6 +9,7 @@ const buildDbFunctions = async () => {
     // drop functions
     console.log("Dropping SQL functions...");
     await db.query(`
+    DROP FUNCTION IF EXISTS "newShopping";
     DROP FUNCTION IF EXISTS "newTodo";
     DROP FUNCTION IF EXISTS "editTodo";
     DROP FUNCTION IF EXISTS "deleteTable";
@@ -15,7 +17,7 @@ const buildDbFunctions = async () => {
 
     // build functions
     console.log("Building SQL functions...");
-    await db.query(newTodoSql() + editTodoSql() + deleteTableSQl());
+    await db.query(newShoppingSql() + newTodoSql() + editTodoSql() + deleteTableSQl());
 
     console.log("Finished building SQL functions!");
   } catch (error) {
