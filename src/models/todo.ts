@@ -1,4 +1,4 @@
-// New Todo
+// New Item
 
 export interface NewTodoReqInt {
   itemName: string;
@@ -8,7 +8,7 @@ export enum NewTodoReqEnum {
   name = "itemName",
 }
 
-// Check Todo
+// Check Item
 
 export interface CheckTodoReqInt {
   listId: number;
@@ -20,7 +20,7 @@ export enum CheckTodoReqEnum {
   itemId = "itemId",
 }
 
-// Edit Todo
+// Edit Item
 
 export enum TodoCatsEnum {
   home = "Home",
@@ -49,7 +49,7 @@ export enum EditTodoReqEnum {
   time = "itemTime",
 }
 
-// Remove Todo
+// Remove Item
 
 export interface RemoveTodoReqInt {
   listId: number;
@@ -59,4 +59,16 @@ export interface RemoveTodoReqInt {
 export enum RemoveTodoReqEnum {
   listId = "listId",
   itemId = "itemId",
+}
+
+// Fetch Item
+
+export interface TodoItemInt {
+  id: number;
+  listId: number;
+  userId: number;
+  name: string;
+  category: string;
+  dueDate: Date;
+  isChecked: boolean;
 }

@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
-import { RemoveShopItemReqInt, RemoveShopItemReqEnum } from "../../../models/item";
+import { RemoveShopItemReqInt, RemoveShopItemReqEnum } from "../../../models/shopping";
 import { RequestErrors } from "../../../models/error";
 import checkRequestBody from "../../../utils/check-req-body";
 import db from "../../../db";

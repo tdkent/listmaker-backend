@@ -23,11 +23,3 @@ export enum UserLoginReqEnum {
 export interface UserDataInt extends UserLoginInt {
   userId: number;
 }
-
-export class UserData {
-  constructor(
-    public readonly userId: number,
-    public readonly userEmail: string,
-    public readonly token: string
-  ) {}
-}

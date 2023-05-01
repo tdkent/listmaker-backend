@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
-import { EditShopItemReqInt, EditShopItemReqEnum } from "../../../models/item";
+import { EditShopItemReqInt, EditShopItemReqEnum } from "../../../models/shopping";
 import checkRequestBody from "../../../utils/check-req-body";
 import { RequestErrors } from "../../../models/error";
 import db from "../../../db";

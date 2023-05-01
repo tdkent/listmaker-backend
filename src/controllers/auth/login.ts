@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 import db from "../../db";
 import { jwtKey } from "../../config/config";
-import { UserLoginInt, UserDataInt, UserData, UserLoginReqEnum } from "../../models/auth";
+import { UserLoginInt, UserDataInt, UserLoginReqEnum } from "../../models/auth";
 import checkRequestBody from "../../utils/check-req-body";
 import { RequestErrors } from "../../models/error";
 

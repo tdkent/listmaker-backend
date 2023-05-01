@@ -3,12 +3,12 @@ import { validationResult } from "express-validator";
 
 import { RequestErrors } from "../../../models/error";
 import checkRequestBody from "../../../utils/check-req-body";
-import { CheckShoppingItemReqInt, CheckShoppingItemReqEnum } from "../../../models/item";
+import { CheckShopItemReqInt, CheckShopItemReqEnum } from "../../../models/shopping";
 import db from "../../../db";
 
 const checkShoppingItem: RequestHandler = async (req, res, next) => {
   const { userId } = req.user;
-  const { itemId, listId } = <CheckShoppingItemReqInt>req.body;
+  const { itemId, listId } = <CheckShopItemReqInt>req.body;
   try {
     const reqError = new RequestErrors();
     // validation errors
@@ -18,7 +18,7 @@ const checkShoppingItem: RequestHandler = async (req, res, next) => {
     }
 
     // check request body
-    if (!checkRequestBody(req.body, CheckShoppingItemReqEnum)) {
+    if (!checkRequestBody(req.body, CheckShopItemReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }

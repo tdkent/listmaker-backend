@@ -2,8 +2,7 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
 import db from "../../../db";
-import { NewItemReqEnum, NewItemReqInt } from "../../../models/item";
-import { NewTodoReqInt } from "../../../models/todo";
+import { NewTodoReqInt, NewTodoReqEnum } from "../../../models/todo";
 import { RequestErrors } from "../../../models/error";
 import checkRequestBody from "../../../utils/check-req-body";
 
@@ -19,7 +18,7 @@ const newTodoItem: RequestHandler<{ listId: string }> = async (req, res, next) =
     }
 
     // check request body
-    if (!checkRequestBody(req.body, NewItemReqEnum)) {
+    if (!checkRequestBody(req.body, NewTodoReqEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }
