@@ -19,7 +19,7 @@ const fetchList = async (req, res, next) => {
         }
         // db query
         const { rows } = await db_1.default.query(`
-    SELECT 
+    SELECT
       list_id AS "listId",
       user_id AS "userId",
       list_name AS "listName",
@@ -40,13 +40,13 @@ const fetchList = async (req, res, next) => {
         let items = [];
         if (rows[0].listType === list_1.AllListTypesEnum.shop) {
             const { rows } = await db_1.default.query(`
-      SELECT 
+      SELECT
         shop_item_id AS "itemId",
         list_id AS "listId",
         user_id AS "userId",
         item_name AS "itemName",
-        reference_category AS "permCategory",
-        display_category AS "tempCategory",
+        reference_category AS "refCategory",
+        display_category AS "dispCategory",
         is_checked AS "isChecked"
       FROM items_shopping
       WHERE list_id = $1

@@ -26,8 +26,12 @@ const login = async (req, res, next) => {
             return next({ message: reqError.badRequest() });
         }
         // db query
-        const { rows } = await db_1.default.query(`SELECT user_id AS "userId", user_email AS "userEmail", user_password AS "userPassword"
-      FROM users WHERE user_email = $1`, [userLogin.userEmail]);
+        const { rows } = await db_1.default.query(`SELECT
+        user_id AS "userId",
+        user_email AS "userEmail",
+        user_password AS "userPassword"
+      FROM users
+      WHERE user_email = $1`, [userLogin.userEmail]);
         // null result error
         if (!rows.length) {
             res.status(422);

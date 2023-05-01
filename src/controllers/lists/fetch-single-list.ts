@@ -20,7 +20,7 @@ const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => 
     // db query
     const { rows }: { rows: NewListResInt[] } = await db.query(
       `
-    SELECT 
+    SELECT
       list_id AS "listId",
       user_id AS "userId",
       list_name AS "listName",
@@ -46,13 +46,13 @@ const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => 
     if (rows[0].listType === AllListTypesEnum.shop) {
       const { rows } = await db.query(
         `
-      SELECT 
+      SELECT
         shop_item_id AS "itemId",
         list_id AS "listId",
         user_id AS "userId",
         item_name AS "itemName",
-        reference_category AS "permCategory",
-        display_category AS "tempCategory",
+        reference_category AS "refCategory",
+        display_category AS "dispCategory",
         is_checked AS "isChecked"
       FROM items_shopping
       WHERE list_id = $1

@@ -27,8 +27,12 @@ const login: RequestHandler = async (req, res, next) => {
 
     // db query
     const { rows }: { rows: UserDataInt[] } = await db.query(
-      `SELECT user_id AS "userId", user_email AS "userEmail", user_password AS "userPassword"
-      FROM users WHERE user_email = $1`,
+      `SELECT
+        user_id AS "userId",
+        user_email AS "userEmail",
+        user_password AS "userPassword"
+      FROM users
+      WHERE user_email = $1`,
       [userLogin.userEmail]
     );
 

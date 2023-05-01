@@ -1,3 +1,8 @@
+export enum RequestErrorsEnum {
+  null = "ERR_NOT_FOUND",
+  dup = "ERR_DUPLICATE_ITEM",
+}
+
 export class RequestErrors {
   badRequest() {
     return "Client error: malformed request syntax";
@@ -23,8 +28,12 @@ export class RequestErrors {
     return "Unable to access the requested resource. The resource either does not exist, or you are not authorized.";
   }
 
-  duplicateList(name: string) {
-    return `You already have a list called ${name}. Please enter a new name, or delete the old list.`;
+  duplicateList(type: string, name: string) {
+    return `You already have a ${type} list called ${name}. Please enter a new name.`;
+  }
+
+  duplicateShopItem(itemName: string) {
+    return `You already added ${itemName} to this list. Please enter a new name.`;
   }
 }
 

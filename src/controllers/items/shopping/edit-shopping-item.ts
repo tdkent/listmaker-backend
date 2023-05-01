@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 
 import { EditShopItemReqInt, EditShopItemReqEnum } from "../../../models/shopping";
 import checkRequestBody from "../../../utils/check-req-body";
-import { RequestErrors } from "../../../models/error";
+import { RequestErrors, RequestErrorsEnum } from "../../../models/error";
 import db from "../../../db";
 
 const editShoppingItem: RequestHandler = async (req, res, next) => {
@@ -23,52 +23,24 @@ const editShoppingItem: RequestHandler = async (req, res, next) => {
       return next({ message: reqError.badRequest() });
     }
 
-    // check auth & isChecked
-    const { rows: isChecked }: { rows: { isChecked: boolean }[] } = await db.query(
-      `
-    SELECT is_checked
-    FROM items_shopping
-    WHERE shop_item_id = $1
-    AND list_id = $2
-    AND user_id = $3;
-    `,
-      [itemId, listId, userId]
+    // db query
+    const { rows }: { rows: { editShopping: string }[] } = await db.query(
+      `SELECT "editShopping" ($1, $2, $3, $4, $5)`,
+      [itemId, listId, userId, itemName, itemCategory]
     );
 
-    // null result error
-    if (!isChecked.length) {
+    // errors
+    const { editShopping: err } = rows[0];
+
+    if (err === RequestErrorsEnum.null) {
       res.status(401);
       return next({ message: reqError.nullResult() });
     }
 
-    // db query
-    if (!isChecked[0].isChecked) {
-      await db.query(
-        `
-      UPDATE items_shopping
-      SET
-        item_name = $1,
-        reference_category = $2,
-        display_category = $2
-      WHERE shop_item_id = $3
-      AND list_id = $4
-      AND user_id = $5;
-      `,
-        [itemName, itemCategory, itemId, listId, userId]
-      );
-    } else {
-      await db.query(
-        `
-      UPDATE items_shopping
-      SET
-        item_name = $1,
-        reference_category = $2
-      WHERE shop_item_id = $3
-      AND list_id = $4
-      AND user_id = $5;
-      `,
-        [itemName, itemCategory, itemId, listId, userId]
-      );
+    if (err.includes(RequestErrorsEnum.dup)) {
+      res.status(422);
+      const dupName = err.split(": ")[1];
+      return next({ message: reqError.duplicateShopItem(dupName) });
     }
 
     // response

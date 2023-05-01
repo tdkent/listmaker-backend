@@ -30,15 +30,16 @@ const newList: RequestHandler = async (req, res, next) => {
       `
     SELECT list_id FROM lists
     WHERE list_name = $1
-    AND user_id = $2
+    AND list_type = $2
+    AND user_id = $3
     `,
-      [listName, userId]
+      [listName, listType, userId]
     );
 
     if (check.length) {
       res.status(422);
       return next({
-        message: reqError.duplicateList(listName),
+        message: reqError.duplicateList(listType, listName),
       });
     }
 
@@ -46,9 +47,16 @@ const newList: RequestHandler = async (req, res, next) => {
     const slug = slugify(listName.toLowerCase());
     const { rows }: { rows: NewListResInt[] } = await db.query(
       `
-    INSERT INTO lists(user_id, list_name, list_slug, list_type)
+    INSERT INTO lists (
+      user_id,
+      list_name,
+      list_slug,
+      list_type
+    )
     VALUES ($1, $2, $3, $4)
-    RETURNING list_id AS "listId", list_slug AS "listSlug";
+    RETURNING
+      list_id AS "listId",
+      list_slug AS "listSlug";
     `,
       [userId, listName, slug, listType]
     );
