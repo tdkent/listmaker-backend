@@ -29,8 +29,8 @@ const buildDbTables = async () => {
       list_id SMALLINT REFERENCES lists(list_id),
       user_id SMALLINT REFERENCES users(user_id),
       item_name VARCHAR(255) NOT NULL,
-      perm_category VARCHAR(255) NOT NULL DEFAULT 'Uncategorized',
-      temp_category VARCHAR(255) NOT NULL DEFAULT 'Uncategorized',
+      reference_category VARCHAR(255) NOT NULL DEFAULT 'Uncategorized',
+      display_category VARCHAR(255) NOT NULL DEFAULT 'Uncategorized',
       is_checked BOOLEAN NOT NULL DEFAULT false,
       is_active BOOLEAN NOT NULL DEFAULT true
     );

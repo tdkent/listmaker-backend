@@ -52,7 +52,7 @@ const newShoppingSql = () => {
             UPDATE items_shopping
             SET
               is_checked = false,
-              temp_category = perm_category
+              display_category = reference_category
             WHERE shop_item_id = itemid;
             RETURN true;
           ELSE

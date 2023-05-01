@@ -45,8 +45,8 @@ const fetchList = async (req, res, next) => {
         list_id AS "listId",
         user_id AS "userId",
         item_name AS "itemName",
-        perm_category AS "permCategory",
-        temp_category AS "tempCategory",
+        reference_category AS "permCategory",
+        display_category AS "tempCategory",
         is_checked AS "isChecked"
       FROM items_shopping
       WHERE list_id = $1

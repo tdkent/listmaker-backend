@@ -55,8 +55,8 @@ export interface ShoppingItemInt {
   listId: number;
   userId: number;
   name: string;
-  perm_category: string;
-  temp_category: string;
+  reference_category: string;
+  display_category: string;
   isChecked: boolean;
   isActive: boolean;
 }

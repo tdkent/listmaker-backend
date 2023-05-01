@@ -46,7 +46,7 @@ const checkShoppingItem: RequestHandler = async (req, res, next) => {
       await db.query(
         `
       UPDATE items_shopping
-      SET is_checked = false, temp_category = perm_category
+      SET is_checked = false, display_category = reference_category
       WHERE shop_item_id = $1 AND list_id = $2 AND user_id = $3;
       `,
         [itemId, listId, userId]
@@ -55,7 +55,7 @@ const checkShoppingItem: RequestHandler = async (req, res, next) => {
       await db.query(
         `
       UPDATE items_shopping
-      SET is_checked = true, temp_category = '_checked'
+      SET is_checked = true, display_category = '_checked'
       WHERE shop_item_id = $1 AND list_id = $2 AND user_id = $3;
       `,
         [itemId, listId, userId]

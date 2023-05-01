@@ -48,8 +48,8 @@ const editShoppingItem: RequestHandler = async (req, res, next) => {
       UPDATE items_shopping
       SET
         item_name = $1,
-        perm_category = $2,
-        temp_category = $2
+        reference_category = $2,
+        display_category = $2
       WHERE shop_item_id = $3
       AND list_id = $4
       AND user_id = $5;
@@ -62,7 +62,7 @@ const editShoppingItem: RequestHandler = async (req, res, next) => {
       UPDATE items_shopping
       SET
         item_name = $1,
-        perm_category = $2
+        reference_category = $2
       WHERE shop_item_id = $3
       AND list_id = $4
       AND user_id = $5;
