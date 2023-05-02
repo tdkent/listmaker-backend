@@ -47,7 +47,14 @@ const buildDbTables = async () => {
       time_due TIME,
       is_checked BOOLEAN NOT NULL DEFAULT false,
       is_active BOOLEAN NOT NULL DEFAULT true
-    )
+    );
+    CREATE TABLE todo_subtasks (
+      task_id SERIAL PRIMARY KEY,
+      todo_item_id SMALLINT REFERENCES items_todo(todo_item_id),
+      list_id SMALLINT REFERENCES lists(list_id),
+      task_name VARCHAR (255) NOT NULL,
+      is_checked BOOLEAN NOT NULL DEFAULT false
+    );
     `);
     console.log("Finished rebuilding tables!");
   } catch (error) {

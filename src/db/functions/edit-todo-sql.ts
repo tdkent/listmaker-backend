@@ -31,7 +31,8 @@ const editTodoSql = () => {
             item_category = i_cat,
             item_location = NULL,
             date_due = i_date,
-            time_due = NULL
+            time_due = NULL,
+            date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id
           AND user_id = u_id;
@@ -42,7 +43,8 @@ const editTodoSql = () => {
             item_category = i_cat,
             item_location = NULL,
             date_due = i_date,
-            time_due = i_time
+            time_due = i_time,
+            date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id
           AND user_id = u_id;
@@ -53,7 +55,8 @@ const editTodoSql = () => {
             item_category = i_cat,
             item_location = i_loc,
             date_due = i_date,
-            time_due = NULL
+            time_due = NULL,
+            date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id
           AND user_id = u_id;
@@ -64,7 +67,8 @@ const editTodoSql = () => {
             item_category = i_cat,
             item_location = i_loc,
             date_due = i_date,
-            time_due = i_time
+            time_due = i_time,
+            date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id
           AND user_id = u_id;
