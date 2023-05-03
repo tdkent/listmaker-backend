@@ -55,7 +55,7 @@ const fetchList = async (req, res, next) => {
             items = rows;
         }
         if (rows[0].listType === list_1.AllListTypesEnum.todo) {
-            const { rows } = await db_1.default.query(`
+            const { rows: todos } = await db_1.default.query(`
       SELECT
         todo_item_id AS "itemId",
         list_id AS "listId",
@@ -72,7 +72,20 @@ const fetchList = async (req, res, next) => {
       WHERE list_id = $1
       AND is_active = true;
       `, [listId]);
-            items = rows;
+            const { rows: tasks } = await db_1.default.query(`
+      SELECT
+        subtask_id AS "taskId",
+        todo_item_id AS "itemId",
+        task_name AS "taskName",
+        is_checked AS "isChecked"
+      FROM todo_subtasks
+      WHERE list_id = $1;
+      `, [listId]);
+            const todosWithTasks = todos.map((todo) => {
+                const itemTasks = tasks.filter((task) => task.itemId === todo.itemId);
+                return { ...todo, itemTasks };
+            });
+            items = todosWithTasks;
         }
         // response
         const data = { ...rows[0], items };

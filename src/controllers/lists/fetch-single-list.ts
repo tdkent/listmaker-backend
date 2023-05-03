@@ -4,6 +4,7 @@ import { validationResult } from "express-validator";
 import db from "../../db";
 import { NewListResInt, AllListTypesEnum } from "../../models/list";
 import { SingleListItemTypes } from "../../models/item";
+import { SubtaskInt } from "../../models/todo";
 import { RequestErrors } from "../../models/error";
 
 const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => {
@@ -63,7 +64,7 @@ const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => 
       items = rows;
     }
     if (rows[0].listType === AllListTypesEnum.todo) {
-      const { rows } = await db.query(
+      const { rows: todos } = await db.query(
         `
       SELECT
         todo_item_id AS "itemId",
@@ -83,7 +84,26 @@ const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => 
       `,
         [listId]
       );
-      items = rows;
+
+      const { rows: tasks }: { rows: SubtaskInt[] } = await db.query(
+        `
+      SELECT
+        subtask_id AS "taskId",
+        todo_item_id AS "itemId",
+        task_name AS "taskName",
+        is_checked AS "isChecked"
+      FROM todo_subtasks
+      WHERE list_id = $1;
+      `,
+        [listId]
+      );
+
+      const todosWithTasks = todos.map((todo) => {
+        const itemTasks = tasks.filter((task) => task.itemId === todo.itemId);
+        return { ...todo, itemTasks };
+      });
+
+      items = todosWithTasks;
     }
 
     // response

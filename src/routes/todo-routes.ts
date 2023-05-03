@@ -8,6 +8,7 @@ import newTodoItem from "../controllers/items/to-do/new-todo-item";
 import checkTodoItem from "../controllers/items/to-do/check-todo-item";
 import removeTodoItem from "../controllers/items/to-do/remove-todo-item";
 import editTodoItem from "../controllers/items/to-do/edit-todo-item";
+import newTodoSubtask from "../controllers/items/to-do/new-todo-subtask";
 
 const router = Router();
 const errors = new ValidatorErrors();
@@ -65,6 +66,21 @@ router.patch(
   body("listId", errors.badRequest()).isNumeric(),
   body("itemId", errors.badRequest()).isNumeric(),
   removeTodoItem
+);
+
+// NEW SUBTASK: POST /todo/:listId/subtask
+router.post(
+  "/:listId/subtask",
+  param("listId", errors.badRequest()).isNumeric(),
+  body("itemId", errors.badRequest()).isNumeric(),
+  body("taskName")
+    .isString()
+    .withMessage(errors.invalidField())
+    .not()
+    .isEmpty()
+    .withMessage(errors.nullField("name"))
+    .trim(),
+  newTodoSubtask
 );
 
 export default router;

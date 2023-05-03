@@ -6,7 +6,6 @@ import { port } from "./config/config";
 import userRoutes from "./routes/user-routes";
 import authRoutes from "./routes/auth-routes";
 import listRoutes from "./routes/list-routes";
-// import itemRoutes from "./routes/item-routes";
 import shoppingRoutes from "./routes/shopping-routes";
 import todoRoutes from "./routes/todo-routes";
 
@@ -26,9 +25,6 @@ app.use("/user", userRoutes);
 
 // list routes
 app.use("/list", listRoutes);
-
-// item routes
-// app.use("/item", itemRoutes);
 
 // shopping routes
 app.use("/shopping", shoppingRoutes);

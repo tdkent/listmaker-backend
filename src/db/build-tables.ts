@@ -4,6 +4,7 @@ const buildDbTables = async () => {
   try {
     console.log("Dropping old tables...");
     await db.query(`
+    DROP TABLE IF EXISTS todo_subtasks;
     DROP TABLE IF EXISTS items_todo;
     DROP TABLE IF EXISTS items_shopping;
     DROP TABLE IF EXISTS lists;
@@ -49,7 +50,7 @@ const buildDbTables = async () => {
       is_active BOOLEAN NOT NULL DEFAULT true
     );
     CREATE TABLE todo_subtasks (
-      task_id SERIAL PRIMARY KEY,
+      subtask_id SERIAL PRIMARY KEY,
       todo_item_id SMALLINT REFERENCES items_todo(todo_item_id),
       list_id SMALLINT REFERENCES lists(list_id),
       task_name VARCHAR (255) NOT NULL,

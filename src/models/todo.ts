@@ -61,6 +61,15 @@ export enum RemoveTodoReqEnum {
   itemId = "itemId",
 }
 
+// Subtasks
+
+export interface SubtaskInt {
+  taskId: number;
+  itemId: number;
+  taskName: string;
+  isChecked: boolean;
+}
+
 // Fetch Item
 
 export interface TodoItemInt {
@@ -71,4 +80,5 @@ export interface TodoItemInt {
   category: string;
   dueDate: Date;
   isChecked: boolean;
+  itemTasks: SubtaskInt[];
 }
