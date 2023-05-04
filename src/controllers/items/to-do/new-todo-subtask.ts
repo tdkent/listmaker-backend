@@ -6,7 +6,7 @@ import { NewSubtaskReqInt, NewSubtaskReqEnum } from "../../../models/todo";
 import checkRequestBody from "../../../utils/check-req-body";
 import db from "../../../db";
 
-const newTodoSubtask: RequestHandler<{ listId: string }> = async (req, res, next) => {
+const newSubtask: RequestHandler<{ listId: string }> = async (req, res, next) => {
   const { userId } = req.user;
   const { listId } = req.params;
   const reqError = new RequestErrors();
@@ -50,4 +50,4 @@ const newTodoSubtask: RequestHandler<{ listId: string }> = async (req, res, next
   }
 };
 
-export default newTodoSubtask;
+export default newSubtask;

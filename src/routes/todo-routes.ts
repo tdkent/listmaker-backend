@@ -8,7 +8,8 @@ import newTodoItem from "../controllers/items/to-do/new-todo-item";
 import checkTodoItem from "../controllers/items/to-do/check-todo-item";
 import removeTodoItem from "../controllers/items/to-do/remove-todo-item";
 import editTodoItem from "../controllers/items/to-do/edit-todo-item";
-import newTodoSubtask from "../controllers/items/to-do/new-todo-subtask";
+import newSubtask from "../controllers/items/to-do/new-todo-subtask";
+import deleteSubtask from "../controllers/items/to-do/delete-todo-subtask";
 
 const router = Router();
 const errors = new ValidatorErrors();
@@ -80,7 +81,10 @@ router.post(
     .isEmpty()
     .withMessage(errors.nullField("name"))
     .trim(),
-  newTodoSubtask
+  newSubtask
 );
+
+// DELETE SUBTASK: DELETE /todo/:listId/subtask
+router.delete("/:taskId/subtask", param("taskId", errors.badRequest()).isNumeric(), deleteSubtask);
 
 export default router;
