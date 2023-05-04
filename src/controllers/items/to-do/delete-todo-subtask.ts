@@ -2,7 +2,6 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
 import { RequestErrors } from "../../../models/error";
-import checkRequestBody from "../../../utils/check-req-body";
 import db from "../../../db";
 
 const deleteSubtask: RequestHandler<{ taskId: string; itemId: string }> = async (

@@ -73,6 +73,16 @@ export enum NewSubtaskReqEnum {
   name = "taskName",
 }
 
+export interface EditSubtaskReqInt {
+  taskId: number;
+  newName: string;
+}
+
+export enum EditSubtaskReqEnum {
+  id = "taskId",
+  name = "newName",
+}
+
 export interface DeleteSubtaskReqInt {
   taskId: number;
 }

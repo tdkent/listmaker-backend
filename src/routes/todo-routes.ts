@@ -9,6 +9,7 @@ import checkTodoItem from "../controllers/items/to-do/check-todo-item";
 import removeTodoItem from "../controllers/items/to-do/remove-todo-item";
 import editTodoItem from "../controllers/items/to-do/edit-todo-item";
 import newSubtask from "../controllers/items/to-do/new-todo-subtask";
+import editSubtask from "../controllers/items/to-do/edit-todo-subtask";
 import deleteSubtask from "../controllers/items/to-do/delete-todo-subtask";
 
 const router = Router();
@@ -82,6 +83,21 @@ router.post(
     .withMessage(errors.nullField("name"))
     .trim(),
   newSubtask
+);
+
+// EDIT SUBTASK: PATCH /todo/:itemId/subtask
+router.patch(
+  "/:itemId/subtask",
+  param("itemId", errors.badRequest()).isNumeric(),
+  body("taskId", errors.badRequest()).isNumeric(),
+  body("newName")
+    .isString()
+    .withMessage(errors.invalidField())
+    .not()
+    .isEmpty()
+    .withMessage(errors.nullField("name"))
+    .trim(),
+  editSubtask
 );
 
 // DELETE SUBTASK: DELETE /todo/:listId/subtask
