@@ -53,6 +53,7 @@ const buildDbTables = async () => {
       subtask_id SERIAL PRIMARY KEY,
       todo_item_id SMALLINT REFERENCES items_todo(todo_item_id),
       list_id SMALLINT REFERENCES lists(list_id),
+      user_id SMALLINT REFERENCES users(user_id),
       task_name VARCHAR (255) NOT NULL,
       is_checked BOOLEAN NOT NULL DEFAULT false
     );

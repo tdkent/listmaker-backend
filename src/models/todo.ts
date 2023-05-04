@@ -63,6 +63,16 @@ export enum RemoveTodoReqEnum {
 
 // Subtasks
 
+export interface NewSubtaskReqInt {
+  itemId: number;
+  taskName: string;
+}
+
+export enum NewSubtaskReqEnum {
+  id = "itemId",
+  name = "taskName",
+}
+
 export interface SubtaskInt {
   taskId: number;
   itemId: number;
