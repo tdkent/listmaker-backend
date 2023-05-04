@@ -85,6 +85,11 @@ router.post(
 );
 
 // DELETE SUBTASK: DELETE /todo/:listId/subtask
-router.delete("/:taskId/subtask", param("taskId", errors.badRequest()).isNumeric(), deleteSubtask);
+router.delete(
+  "/:itemId/subtask/:taskId",
+  param("itemId", errors.badRequest()).isNumeric(),
+  param("taskId", errors.badRequest()).isNumeric(),
+  deleteSubtask
+);
 
 export default router;

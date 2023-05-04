@@ -49,6 +49,18 @@ export enum EditTodoReqEnum {
   time = "itemTime",
 }
 
+// Remove Item
+
+export interface RemoveTodoReqInt {
+  listId: number;
+  itemId: number;
+}
+
+export enum RemoveTodoReqEnum {
+  list = "listId",
+  item = "itemId",
+}
+
 // Subtasks
 
 export interface NewSubtaskReqInt {

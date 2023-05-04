@@ -4,6 +4,7 @@ import checkShoppingSql from "./functions/check-shopping-sql";
 import editShoppingSql from "./functions/edit-shopping-sql";
 import newTodoSql from "./functions/new-todo-sql";
 import newSubtaskSql from "./functions/new-subtask-sql";
+import deleteSubtaskSql from "./functions/delete-subtask-sql";
 import editTodoSql from "./functions/edit-todo-sql";
 import deleteTableSQl from "./functions/delete-table-sql";
 
@@ -18,6 +19,7 @@ const buildDbFunctions = async () => {
     DROP FUNCTION IF EXISTS "newTodo";
     DROP FUNCTION IF EXISTS "editTodo";
     DROP FUNCTION IF EXISTS "newSubtask";
+    DROP FUNCTION IF EXISTS "deleteSubtask";
     DROP FUNCTION IF EXISTS "deleteTable";
     `);
 
@@ -30,6 +32,7 @@ const buildDbFunctions = async () => {
         newTodoSql() +
         editTodoSql() +
         newSubtaskSql() +
+        deleteSubtaskSql() +
         deleteTableSQl()
     );
 
