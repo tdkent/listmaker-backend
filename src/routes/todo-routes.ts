@@ -9,6 +9,7 @@ import checkTodoItem from "../controllers/items/to-do/check-todo-item";
 import removeTodoItem from "../controllers/items/to-do/remove-todo-item";
 import editTodoItem from "../controllers/items/to-do/edit-todo-item";
 import newSubtask from "../controllers/items/to-do/new-todo-subtask";
+import checkSubtask from "../controllers/items/to-do/check-todo-subtask";
 import editSubtask from "../controllers/items/to-do/edit-todo-subtask";
 import deleteSubtask from "../controllers/items/to-do/delete-todo-subtask";
 
@@ -83,6 +84,14 @@ router.post(
     .withMessage(errors.nullField("name"))
     .trim(),
   newSubtask
+);
+
+// CHECK SUBTASK: PATCH /todo/:itemId/subtask/check
+router.patch(
+  "/subtask/check",
+  body("itemId", errors.badRequest()).isNumeric(),
+  body("taskId", errors.badRequest()).isNumeric(),
+  checkSubtask
 );
 
 // EDIT SUBTASK: PATCH /todo/:itemId/subtask
