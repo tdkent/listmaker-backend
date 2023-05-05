@@ -17,9 +17,9 @@ const deleteList = async (req, res, next) => {
             return res.status(401).json({ errors: errors.array() });
         }
         // db function
-        const { rows } = await db_1.default.query(`SELECT "deleteTable"($1, $2)`, [listId, userId]);
+        const { rows } = await db_1.default.query(`SELECT "deleteList"($1, $2)`, [listId, userId]);
         // null result error
-        if (!rows[0].deleteTable) {
+        if (!rows[0].deleteList) {
             res.status(401);
             return next({
                 message: reqError.nullResult(),

@@ -7,7 +7,9 @@ import newSubtaskSql from "./functions/new-subtask-sql";
 import editSubtaskSql from "./functions/edit-subtask-sql";
 import deleteSubtaskSql from "./functions/delete-subtask-sql";
 import editTodoSql from "./functions/edit-todo-sql";
-import deleteTableSQl from "./functions/delete-table-sql";
+import checkTodoSql from "./functions/check-todo-sql";
+import removeTodoSql from "./functions/remove-todo-sql";
+import deleteListSql from "./functions/delete-list-sql";
 
 const buildDbFunctions = async () => {
   try {
@@ -19,10 +21,13 @@ const buildDbFunctions = async () => {
     DROP FUNCTION IF EXISTS "editShopping";
     DROP FUNCTION IF EXISTS "newTodo";
     DROP FUNCTION IF EXISTS "editTodo";
+    DROP FUNCTION IF EXISTS "checkTodo";
+    DROP FUNCTION IF EXISTS "removeTodo";
     DROP FUNCTION IF EXISTS "newSubtask";
     DROP FUNCTION IF EXISTS "editSubtask";
     DROP FUNCTION IF EXISTS "deleteSubtask";
     DROP FUNCTION IF EXISTS "deleteTable";
+    DROP FUNCTION IF EXISTS "deleteList";
     `);
 
     // build functions
@@ -33,10 +38,12 @@ const buildDbFunctions = async () => {
         editShoppingSql() +
         newTodoSql() +
         editTodoSql() +
+        checkTodoSql() +
+        removeTodoSql() +
         newSubtaskSql() +
         editSubtaskSql() +
         deleteSubtaskSql() +
-        deleteTableSQl()
+        deleteListSql()
     );
 
     console.log("Finished building SQL functions!");

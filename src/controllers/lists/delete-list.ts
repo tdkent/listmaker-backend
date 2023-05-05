@@ -17,13 +17,13 @@ const deleteList: RequestHandler<{ listId: string }> = async (req, res, next) =>
     }
 
     // db function
-    const { rows }: { rows: { deleteTable: boolean }[] } = await db.query(
-      `SELECT "deleteTable"($1, $2)`,
+    const { rows }: { rows: { deleteList: boolean }[] } = await db.query(
+      `SELECT "deleteList"($1, $2)`,
       [listId, userId]
     );
 
     // null result error
-    if (!rows[0].deleteTable) {
+    if (!rows[0].deleteList) {
       res.status(401);
       return next({
         message: reqError.nullResult(),

@@ -25,20 +25,13 @@ const removeTodoItem: RequestHandler = async (req, res, next) => {
     const { listId, itemId } = <RemoveTodoReqInt>req.body;
 
     // db query
-    const { rows }: { rows: { id: number }[] } = await db.query(
-      `
-    UPDATE items_todo
-    SET is_active = NOT is_active
-    WHERE todo_item_id = $1
-    AND list_id = $2
-    AND user_id = $3
-    RETURNING todo_item_id;
-    `,
+    const { rows }: { rows: { removeTodo: boolean }[] } = await db.query(
+      `SELECT "removeTodo" ($1, $2, $3)`,
       [itemId, listId, userId]
     );
 
     // null result error
-    if (!rows.length) {
+    if (!rows[0].removeTodo) {
       res.status(401);
       return next({ message: reqError.nullResult() });
     }
