@@ -10,7 +10,8 @@ const editTodoSql = () => {
         i_date date,
         i_time time,
         b_recur bool,
-        i_recur text
+        i_recur text,
+        r_date date
       )
     RETURNS bool LANGUAGE plpgsql
     AS $$
@@ -37,6 +38,8 @@ const editTodoSql = () => {
             is_recurring = b_recur,
             recurrence_value = CASE
               b_recur WHEN true THEN i_recur ELSE NULL END,
+            date_recurrence = CASE
+              b_recur WHEN true THEN r_date ELSE NULL END,
             date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id
@@ -52,6 +55,8 @@ const editTodoSql = () => {
             is_recurring = b_recur,
             recurrence_value = CASE
               b_recur WHEN true THEN i_recur ELSE NULL END,
+            date_recurrence = CASE
+              b_recur WHEN true THEN r_date ELSE NULL END,
             date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id
@@ -67,6 +72,8 @@ const editTodoSql = () => {
             is_recurring = b_recur,
             recurrence_value = CASE
               b_recur WHEN true THEN i_recur ELSE NULL END,
+            date_recurrence = CASE
+              b_recur WHEN true THEN r_date ELSE NULL END,
             date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id
@@ -82,6 +89,8 @@ const editTodoSql = () => {
             is_recurring = b_recur,
             recurrence_value = CASE
               b_recur WHEN true THEN i_recur ELSE NULL END,
+            date_recurrence = CASE
+              b_recur WHEN true THEN r_date ELSE NULL END,
             date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id
