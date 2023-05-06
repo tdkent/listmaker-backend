@@ -47,6 +47,8 @@ const buildDbTables = async () => {
       date_completed DATE,
       time_due TIME,
       is_checked BOOLEAN NOT NULL DEFAULT false,
+      is_recurring BOOLEAN NOT NULL DEFAULT false,
+      recurrence_value VARCHAR(12),
       is_active BOOLEAN NOT NULL DEFAULT true
     );
     CREATE TABLE todo_subtasks (

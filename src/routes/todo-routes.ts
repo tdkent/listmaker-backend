@@ -3,7 +3,7 @@ import { body, param } from "express-validator";
 
 import checkToken from "../controllers/auth/check-token";
 import { ValidatorErrors } from "../models/error";
-import { TodoCatsEnum } from "../models/todo";
+import { TodoCatsEnum, RecurReqEnum } from "../models/todo";
 import newTodoItem from "../controllers/items/to-do/new-todo-item";
 import checkTodoItem from "../controllers/items/to-do/check-todo-item";
 import removeTodoItem from "../controllers/items/to-do/remove-todo-item";
@@ -59,6 +59,10 @@ router.patch(
   body("itemTime", errors.invalidField())
     .isTime({ hourFormat: "hour24", mode: "withSeconds" })
     // this field may be an empty string
+    .optional({ checkFalsy: true }),
+  body("isRecurring", errors.invalidField()).isBoolean(),
+  body("recurVal", errors.invalidField())
+    .isIn(Object.values(RecurReqEnum))
     .optional({ checkFalsy: true }),
   editTodoItem
 );

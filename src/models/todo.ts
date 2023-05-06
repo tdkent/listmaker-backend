@@ -37,6 +37,8 @@ export interface EditTodoReqInt {
   itemLocation: string;
   itemDate: string;
   itemTime: string;
+  isRecurring: boolean;
+  recurVal: string;
 }
 
 export enum EditTodoReqEnum {
@@ -47,6 +49,15 @@ export enum EditTodoReqEnum {
   category = "itemCategory",
   date = "itemDate",
   time = "itemTime",
+  isRec = "isRecurring",
+  recur = "recurVal",
+}
+
+export enum RecurReqEnum {
+  d = "day",
+  w = "week",
+  m = "month",
+  y = "year",
 }
 
 // Remove Item

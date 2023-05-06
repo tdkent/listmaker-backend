@@ -8,7 +8,9 @@ const editTodoSql = () => {
         i_cat text,
         i_loc text,
         i_date date,
-        i_time time
+        i_time time,
+        b_recur bool,
+        i_recur text
       )
     RETURNS bool LANGUAGE plpgsql
     AS $$
@@ -32,6 +34,9 @@ const editTodoSql = () => {
             item_location = NULL,
             date_due = i_date,
             time_due = NULL,
+            is_recurring = b_recur,
+            recurrence_value = CASE
+              b_recur WHEN true THEN i_recur ELSE NULL END,
             date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id
@@ -44,6 +49,9 @@ const editTodoSql = () => {
             item_location = NULL,
             date_due = i_date,
             time_due = i_time,
+            is_recurring = b_recur,
+            recurrence_value = CASE
+              b_recur WHEN true THEN i_recur ELSE NULL END,
             date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id
@@ -56,6 +64,9 @@ const editTodoSql = () => {
             item_location = i_loc,
             date_due = i_date,
             time_due = NULL,
+            is_recurring = b_recur,
+            recurrence_value = CASE
+              b_recur WHEN true THEN i_recur ELSE NULL END,
             date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id
@@ -68,6 +79,9 @@ const editTodoSql = () => {
             item_location = i_loc,
             date_due = i_date,
             time_due = i_time,
+            is_recurring = b_recur,
+            recurrence_value = CASE
+              b_recur WHEN true THEN i_recur ELSE NULL END,
             date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id
@@ -80,44 +94,3 @@ const editTodoSql = () => {
 };
 
 export default editTodoSql;
-
-// ALTERNATE:
-// const { itemCategory } = <EditTodoReqInt>req.body;
-
-// // sanitize request body
-// let body: EditTodoReqInt;
-// if (itemCategory === TodoCatsEnum.home) {
-//   body = { ...req.body, itemLocation: null, itemTime: null };
-// } else if (itemCategory === TodoCatsEnum.work) {
-//   body = { ...req.body, itemLocation: null };
-// } else if (itemCategory === TodoCatsEnum.errand) {
-//   body = { ...req.body, itemTime: null };
-// } else body = { ...req.body };
-
-// // query
-// const { rows }: { rows: { id: number }[] } = await db.query(
-//   `
-// UPDATE items_todo
-// SET
-//   item_name = $1,
-//   item_category = $2,
-//   item_location = $3,
-//   date_due = $4,
-//   date_updated = CURRENT_TIMESTAMP,
-//   time_due = $5
-// WHERE todo_item_id = $6
-// AND list_id = $7
-// AND user_id = $8
-// RETURNING todo_item_id AS "id";
-// `,
-//   [
-//     body.itemName,
-//     body.itemCategory,
-//     body.itemLocation,
-//     body.itemDate,
-//     body.itemTime,
-//     body.itemId,
-//     body.listId,
-//     userId,
-//   ]
-// );

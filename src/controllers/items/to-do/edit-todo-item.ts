@@ -30,11 +30,24 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
       itemLocation,
       itemDate,
       itemTime,
+      isRecurring,
+      recurVal,
     }: EditTodoReqInt = req.body;
 
     const { rows }: { rows: { editTodo: boolean }[] } = await db.query(
-      `SELECT "editTodo" ($1, $2, $3, $4, $5, $6, $7, $8)`,
-      [itemId, listId, userId, itemName, itemCategory, itemLocation, itemDate, itemTime]
+      `SELECT "editTodo" ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      [
+        itemId,
+        listId,
+        userId,
+        itemName,
+        itemCategory,
+        itemLocation,
+        itemDate,
+        itemTime,
+        isRecurring,
+        recurVal,
+      ]
     );
 
     // null result error

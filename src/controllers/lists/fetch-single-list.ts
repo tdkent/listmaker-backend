@@ -77,7 +77,9 @@ const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => 
         to_char(date_due, 'YYYY-MM-DD') AS "dateDue",
         date_completed AS "dateCompleted",
         time_due AS "timeDue",
-        is_checked AS "isChecked"
+        is_checked AS "isChecked",
+        is_recurring AS "isRecurring",
+        recurrence_value AS "recurVal"
       FROM items_todo, AGE(date_due)
       WHERE list_id = $1
       AND is_active = true;
