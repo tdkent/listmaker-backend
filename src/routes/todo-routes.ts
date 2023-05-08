@@ -38,6 +38,10 @@ router.patch(
   "/check",
   body("listId", errors.badRequest()).isNumeric(),
   body("itemId", errors.badRequest()).isNumeric(),
+  body("recurDate", errors.invalidField()).isISO8601().optional({ checkFalsy: true }),
+  body("recurVal", errors.invalidField())
+    .isIn(Object.values(RecurReqEnum))
+    .optional({ checkFalsy: true }),
   checkTodoItem
 );
 

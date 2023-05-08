@@ -39,7 +39,7 @@ const editTodoSql = () => {
             recurrence_value = CASE
               b_recur WHEN true THEN i_recur ELSE NULL END,
             date_recurrence = CASE
-              b_recur WHEN true THEN r_date ELSE NULL END,
+              b_recur WHEN true THEN (SELECT CAST (i_date + ('1 week')::INTERVAL AS DATE)) ELSE NULL END,
             date_updated = CURRENT_TIMESTAMP
           WHERE todo_item_id = i_id
           AND list_id = l_id

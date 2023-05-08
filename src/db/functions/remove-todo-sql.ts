@@ -17,7 +17,8 @@ const removeTodoSql = () => {
   ELSE
     DELETE FROM todo_subtasks
     WHERE todo_item_id = i_id;
-    DELETE FROM items_todo
+    UPDATE items_todo
+    SET is_active = false
     WHERE todo_item_id = i_id;
     RETURN true;
   END IF;

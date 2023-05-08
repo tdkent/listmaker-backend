@@ -13,11 +13,15 @@ export enum NewTodoReqEnum {
 export interface CheckTodoReqInt {
   listId: number;
   itemId: number;
+  recurDate: string;
+  recurVal: string;
 }
 
 export enum CheckTodoReqEnum {
   listId = "listId",
   itemId = "itemId",
+  date = "recurDate",
+  val = "recurVal",
 }
 
 // Edit Item

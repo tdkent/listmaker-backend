@@ -1,7 +1,7 @@
 const checkTodoSql = () => {
   return `
   CREATE OR REPLACE FUNCTION "checkTodo" 
-  (i_id int, l_id int, u_id int)
+  (i_id int, l_id int, u_id int, d_recur date)
 RETURNS bool LANGUAGE plpgsql AS
 $func$
 DECLARE
@@ -43,9 +43,11 @@ ELSE
           item_name,
           item_category,
           item_location,
+          date_due,
           time_due,
           is_recurring,
-          recurrence_value
+          recurrence_value,
+          date_recurrence
         )
       SELECT
         l_id,
@@ -53,9 +55,11 @@ ELSE
         item_name,
         item_category,
         item_location,
+        date_recurrence,
         time_due,
         true,
-        recurrence_value
+        recurrence_value,
+        d_recur
       FROM items_todo
       WHERE todo_item_id = i_id;
     END IF;

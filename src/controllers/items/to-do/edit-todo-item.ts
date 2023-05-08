@@ -35,12 +35,6 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
       recurVal,
     }: EditTodoReqInt = req.body;
 
-    // calculate new tb col: recurrence_date
-    // use recurrence value string + due date to calculate the recurrence date
-    // when user 'checks' current todo, a new row is added to the db
-    // the due date is set to the recurrence date, with a new recurrence date calculated
-    // recurrence values should be put into a util function
-
     const recurDate = calculateRecurrence(itemDate, recurVal);
 
     const { rows }: { rows: { editTodo: boolean }[] } = await db.query(
