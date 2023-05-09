@@ -3,7 +3,6 @@ import { validationResult } from "express-validator";
 
 import { RequestErrors } from "../../../models/error";
 import checkRequestBody from "../../../utils/check-req-body";
-import calculateRecurrence from "../../../utils/calc-recurrence";
 import { CheckTodoReqEnum, CheckTodoReqInt } from "../../../models/todo";
 import db from "../../../db";
 
