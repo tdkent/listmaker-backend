@@ -3,7 +3,7 @@ import { body, param } from "express-validator";
 
 import checkToken from "../controllers/auth/check-token";
 import { ValidatorErrors } from "../models/error";
-import { TodoCatsEnum, RecurReqEnum } from "../models/todo";
+import { TodoCatsEnum, RecurReqEnum, recurValArr } from "../models/todo";
 import newTodoItem from "../controllers/items/to-do/new-todo-item";
 import checkTodoItem from "../controllers/items/to-do/check-todo-item";
 import removeTodoItem from "../controllers/items/to-do/remove-todo-item";
@@ -38,10 +38,6 @@ router.patch(
   "/check",
   body("listId", errors.badRequest()).isNumeric(),
   body("itemId", errors.badRequest()).isNumeric(),
-  body("recurDate", errors.invalidField()).isISO8601().optional({ checkFalsy: true }),
-  body("recurVal", errors.invalidField())
-    .isIn(Object.values(RecurReqEnum))
-    .optional({ checkFalsy: true }),
   checkTodoItem
 );
 
@@ -65,7 +61,8 @@ router.patch(
     // this field may be an empty string
     .optional({ checkFalsy: true }),
   body("isRecurring", errors.invalidField()).isBoolean(),
-  body("recurVal", errors.invalidField())
+  body("recurInteger", errors.invalidField()).isIn(recurValArr(10)).optional({ checkFalsy: true }),
+  body("recurInterval", errors.invalidField())
     .isIn(Object.values(RecurReqEnum))
     .optional({ checkFalsy: true }),
   editTodoItem

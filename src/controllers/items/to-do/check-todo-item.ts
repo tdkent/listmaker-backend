@@ -23,22 +23,12 @@ const checkTodoItem: RequestHandler = async (req, res, next) => {
       return next({ message: reqError.badRequest() });
     }
 
-    // need to add recurVal, recurDate to req.body
-    // if either value exists, add recurVal to recurDate to create a new recurDate
-    // add this value to checkTodo function args
-    // if is_recurring = true, add this date to the newly created row
-
-    const { itemId, listId, recurDate, recurVal } = <CheckTodoReqInt>req.body;
-
-    const newRecurDate = (date: string, val: string) => {
-      if (date && val) return calculateRecurrence(date, val);
-      else return null;
-    };
+    const { itemId, listId } = <CheckTodoReqInt>req.body;
 
     // db query
     const { rows }: { rows: { checkTodo: boolean }[] } = await db.query(
-      `SELECT "checkTodo" ($1, $2, $3, $4)`,
-      [itemId, listId, userId, newRecurDate(recurDate, recurVal)]
+      `SELECT "checkTodo" ($1, $2, $3)`,
+      [itemId, listId, userId]
     );
 
     // null result error

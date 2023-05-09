@@ -13,15 +13,11 @@ export enum NewTodoReqEnum {
 export interface CheckTodoReqInt {
   listId: number;
   itemId: number;
-  recurDate: string;
-  recurVal: string;
 }
 
 export enum CheckTodoReqEnum {
   listId = "listId",
   itemId = "itemId",
-  date = "recurDate",
-  val = "recurVal",
 }
 
 // Edit Item
@@ -42,7 +38,8 @@ export interface EditTodoReqInt {
   itemDate: string;
   itemTime: string;
   isRecurring: boolean;
-  recurVal: string;
+  recurInteger: string;
+  recurInterval: string;
 }
 
 export enum EditTodoReqEnum {
@@ -53,15 +50,28 @@ export enum EditTodoReqEnum {
   category = "itemCategory",
   date = "itemDate",
   time = "itemTime",
-  isRec = "isRecurring",
-  recur = "recurVal",
+  recur = "isRecurring",
+  integer = "recurInteger",
+  interval = "recurInterval",
 }
+
+export const recurValArr = (n: number) => {
+  let arr: string[] = [];
+  for (let i = 0; i <= n; i++) {
+    arr.push(i.toString());
+  }
+  return arr;
+};
 
 export enum RecurReqEnum {
   d = "day",
+  ds = "days",
   w = "week",
+  ws = "weeks",
   m = "month",
+  ms = "months",
   y = "year",
+  ys = "years",
 }
 
 // Remove Item

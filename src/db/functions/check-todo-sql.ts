@@ -1,12 +1,13 @@
 const checkTodoSql = () => {
   return `
   CREATE OR REPLACE FUNCTION "checkTodo" 
-  (i_id int, l_id int, u_id int, d_recur date)
+  (i_id int, l_id int, u_id int)
 RETURNS bool LANGUAGE plpgsql AS
 $func$
 DECLARE
 ischecked bool;
 isrecur bool;
+newitemid int;
 BEGIN
 ischecked := (
   SELECT is_checked
@@ -59,9 +60,23 @@ ELSE
         time_due,
         true,
         recurrence_value,
-        d_recur
+        (SELECT CAST (date_recurrence + (
+          SELECT recurrence_value
+          FROM items_todo
+          WHERE todo_item_id = i_id
+        )::INTERVAL AS DATE))
       FROM items_todo
-      WHERE todo_item_id = i_id;
+      WHERE todo_item_id = i_id
+      RETURNING todo_item_id INTO newitemid;
+      INSERT INTO todo_subtasks
+        (todo_item_id, list_id, user_id, task_name)
+      SELECT
+        newitemid,
+        l_id,
+        u_id,
+        task_name
+      FROM todo_subtasks
+      WHERE todo_item_id = i_id;  
     END IF;
   
   ELSE

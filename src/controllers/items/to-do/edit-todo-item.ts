@@ -32,13 +32,23 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
       itemDate,
       itemTime,
       isRecurring,
-      recurVal,
+      recurInteger,
+      recurInterval,
     }: EditTodoReqInt = req.body;
 
-    const recurDate = calculateRecurrence(itemDate, recurVal);
+    const newRecurStr = (recur: boolean, integer: string, interval: string) => {
+      if (recur) {
+        let newIntegerStr: string = integer;
+        let newIntervalStr: string = interval;
+        if (!integer) newIntegerStr = "1";
+        if (!interval) newIntervalStr = "day";
+        return newIntegerStr + " " + newIntervalStr;
+      }
+      return null;
+    };
 
     const { rows }: { rows: { editTodo: boolean }[] } = await db.query(
-      `SELECT "editTodo" ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+      `SELECT "editTodo" ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
       [
         itemId,
         listId,
@@ -49,8 +59,7 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
         itemDate,
         itemTime,
         isRecurring,
-        recurVal,
-        recurDate,
+        newRecurStr(isRecurring, recurInteger, recurInterval),
       ]
     );
 
