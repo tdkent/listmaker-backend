@@ -29,6 +29,7 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
       itemName,
       itemCategory,
       itemLocation,
+      itemCoords,
       itemDate,
       itemTime,
       isRecurring,
@@ -47,8 +48,10 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
       return null;
     };
 
+    //? TODO: if itemCoords === "" make it null instead?
+
     const { rows }: { rows: { editTodo: boolean }[] } = await db.query(
-      `SELECT "editTodo" ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      `SELECT "editTodo" ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
       [
         itemId,
         listId,
@@ -56,6 +59,7 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
         itemName,
         itemCategory,
         itemLocation,
+        itemCoords,
         itemDate,
         itemTime,
         isRecurring,

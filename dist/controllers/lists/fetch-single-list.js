@@ -63,6 +63,7 @@ const fetchList = async (req, res, next) => {
         item_name AS "itemName",
         item_category AS "itemCategory",
         item_location AS "itemLocation",
+        item_coordinates AS "itemCoords",
         date_updated AS "dateUpdated",
         to_char(date_due, 'YYYY-MM-DD') AS "dateDue",
         date_completed AS "dateCompleted",

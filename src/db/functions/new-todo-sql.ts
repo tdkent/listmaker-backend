@@ -39,6 +39,7 @@ const newTodoSql = () => {
       item_name,
       item_category,
       item_location,
+      item_coordinates,
       time_due,
       is_recurring,
       recurrence_value,
@@ -60,6 +61,14 @@ const newTodoSql = () => {
       COALESCE(
         (
           SELECT item_location
+          FROM items_todo
+          WHERE todo_item_id = dupid
+        ),
+        NULL
+      ),
+      COALESCE(
+        (
+          SELECT item_coordinates
           FROM items_todo
           WHERE todo_item_id = dupid
         ),

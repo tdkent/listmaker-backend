@@ -35,6 +35,10 @@ export interface EditTodoReqInt {
   itemName: string;
   itemCategory: string;
   itemLocation: string;
+  itemCoords: {
+    lat: number;
+    lng: number;
+  };
   itemDate: string;
   itemTime: string;
   isRecurring: boolean;
@@ -47,6 +51,7 @@ export enum EditTodoReqEnum {
   itemId = "itemId",
   name = "itemName",
   location = "itemLocation",
+  coords = "itemCoords",
   category = "itemCategory",
   date = "itemDate",
   time = "itemTime",
