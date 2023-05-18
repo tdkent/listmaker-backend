@@ -56,16 +56,6 @@ router.patch(
     .trim(),
   body("itemCategory", errors.invalidField()).isIn(Object.values(TodoCatsEnum)),
   body("itemLocation", errors.invalidField()).isString().trim().optional({ checkFalsy: true }),
-  body("itemCoords", errors.badRequest())
-    .isObject({ strict: true })
-    .custom((value) => {
-      const keys = Object.keys(value);
-      if (keys.length !== 2 || !keys.includes("lat") || !keys.includes("lng")) return false;
-      const checkValues = Object.values(value).filter((v) => typeof v !== "number");
-      if (checkValues.length) return false;
-      return true;
-    })
-    .optional({ checkFalsy: true }),
   body("itemDate").isISO8601().withMessage(errors.invalidField()),
   body("itemTime", errors.invalidField())
     .isTime({ hourFormat: "hour24", mode: "withSeconds" })

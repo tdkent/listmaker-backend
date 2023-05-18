@@ -1,11 +1,11 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
-import { EditTodoReqInt, EditTodoReqEnum, TodoCatsEnum } from "../../../models/todo";
+import { EditTodoReqInt, EditTodoReqEnum } from "../../../models/todo";
 import checkRequestBody from "../../../utils/check-req-body";
-import calculateRecurrence from "../../../utils/calc-recurrence";
 import { RequestErrors } from "../../../models/error";
 import db from "../../../db";
+import createCoordinates from "../../../utils/create-coordinates";
 
 const editTodoItem: RequestHandler = async (req, res, next) => {
   const { userId } = req.user;
@@ -29,13 +29,37 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
       itemName,
       itemCategory,
       itemLocation,
-      itemCoords,
       itemDate,
       itemTime,
       isRecurring,
       recurInteger,
       recurInterval,
     }: EditTodoReqInt = req.body;
+
+    let location: string | null = null;
+    let coords: { lat: number; lng: number } | null = null;
+
+    if (itemLocation) {
+      const {
+        rows: check,
+      }: { rows: { item_location: string; item_coordinates: { lat: number; lng: number } }[] } =
+        await db.query(
+          `
+        SELECT item_location, item_coordinates
+        FROM items_todo
+        WHERE list_id = $1
+        AND todo_item_id = $2
+        `,
+          [listId, itemId]
+        );
+
+      location = itemLocation;
+
+      if (itemLocation !== check[0].item_location) {
+        coords = await createCoordinates(itemLocation);
+        if (!coords) location = null;
+      } else coords = check[0].item_coordinates;
+    }
 
     const newRecurStr = (recur: boolean, integer: string, interval: string) => {
       if (recur) {
@@ -48,8 +72,6 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
       return null;
     };
 
-    //? TODO: if itemCoords === "" make it null instead?
-
     const { rows }: { rows: { editTodo: boolean }[] } = await db.query(
       `SELECT "editTodo" ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
       [
@@ -58,8 +80,8 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
         userId,
         itemName,
         itemCategory,
-        itemLocation,
-        itemCoords,
+        location,
+        coords,
         itemDate,
         itemTime,
         isRecurring,
