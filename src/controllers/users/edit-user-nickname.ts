@@ -2,11 +2,11 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
 import db from "../../db";
-import { EditUserProfileInt, EditUserProfileEnum, UserProfileResInt } from "../../models/user";
+import { EditNicknameInt, EditNicknameEnum, UserProfileResInt } from "../../models/user";
 import { RequestErrors } from "../../models/error";
 import checkRequestBody from "../../utils/check-req-body";
 
-const editUserProfile: RequestHandler = async (req, res, next) => {
+const editUserNickname: RequestHandler = async (req, res, next) => {
   const { userId } = req.user;
   const reqError = new RequestErrors();
   try {
@@ -17,12 +17,12 @@ const editUserProfile: RequestHandler = async (req, res, next) => {
     }
 
     // check request body
-    if (!checkRequestBody(req.body, EditUserProfileEnum)) {
+    if (!checkRequestBody(req.body, EditNicknameEnum)) {
       res.status(400);
       return next({ message: reqError.badRequest() });
     }
 
-    const { userNickname } = <EditUserProfileInt>req.body;
+    const { userNickname } = <EditNicknameInt>req.body;
 
     // db query
     await db.query(
@@ -43,4 +43,4 @@ const editUserProfile: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default editUserProfile;
+export default editUserNickname;

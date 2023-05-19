@@ -4,10 +4,10 @@ export interface UserProfileResInt {
   userNickname: string;
 }
 
-export interface EditUserProfileInt {
+export interface EditNicknameInt {
   userNickname: string;
 }
 
-export enum EditUserProfileEnum {
+export enum EditNicknameEnum {
   name = "userNickname",
 }

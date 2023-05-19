@@ -3,7 +3,7 @@ import { body } from "express-validator";
 
 import checkToken from "../controllers/auth/check-token";
 import fetchUserProfile from "../controllers/users/fetch-user-profile";
-import editUserProfile from "../controllers/users/edit-user-profile";
+import editUserNickname from "../controllers/users/edit-user-nickname";
 import { ValidatorErrors } from "../models/error";
 
 const router = Router();
@@ -15,18 +15,16 @@ router.use(checkToken);
 // fetch user profile
 router.get("/profile", fetchUserProfile);
 
-// edit user profile
+// EDIT NICKNAME: PATCH /user/nickname
 router.patch(
-  "/profile",
-  //! Note: Request body will eventually contain additional fields
+  "/nickname",
   body("userNickname")
     .isString()
     .withMessage(errors.invalidField())
     .isLength({ max: 24 })
     .withMessage(errors.maxLength("nickname", 24))
-    .trim()
-    .escape(),
-  editUserProfile
+    .trim(),
+  editUserNickname
 );
 
 export default router;

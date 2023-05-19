@@ -8,7 +8,7 @@ const db_1 = __importDefault(require("../../db"));
 const user_1 = require("../../models/user");
 const error_1 = require("../../models/error");
 const check_req_body_1 = __importDefault(require("../../utils/check-req-body"));
-const editUserProfile = async (req, res, next) => {
+const editUserNickname = async (req, res, next) => {
     const { userId } = req.user;
     const reqError = new error_1.RequestErrors();
     try {
@@ -18,7 +18,7 @@ const editUserProfile = async (req, res, next) => {
             return res.status(422).json({ errors: errors.array() });
         }
         // check request body
-        if (!(0, check_req_body_1.default)(req.body, user_1.EditUserProfileEnum)) {
+        if (!(0, check_req_body_1.default)(req.body, user_1.EditNicknameEnum)) {
             res.status(400);
             return next({ message: reqError.badRequest() });
         }
@@ -39,4 +39,4 @@ const editUserProfile = async (req, res, next) => {
         });
     }
 };
-exports.default = editUserProfile;
+exports.default = editUserNickname;
