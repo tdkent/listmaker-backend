@@ -11,3 +11,13 @@ export interface EditNicknameInt {
 export enum EditNicknameEnum {
   name = "userNickname",
 }
+
+export interface EditPasswordInt {
+  newPassword: string;
+  currentPassword: string;
+}
+
+export enum EditPasswordEnum {
+  new = "newPassword",
+  curr = "currentPassword",
+}

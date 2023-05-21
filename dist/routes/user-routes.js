@@ -8,6 +8,7 @@ const express_validator_1 = require("express-validator");
 const check_token_1 = __importDefault(require("../controllers/auth/check-token"));
 const fetch_user_profile_1 = __importDefault(require("../controllers/users/fetch-user-profile"));
 const edit_user_nickname_1 = __importDefault(require("../controllers/users/edit-user-nickname"));
+const edit_user_password_1 = __importDefault(require("../controllers/users/edit-user-password"));
 const error_1 = require("../models/error");
 const router = (0, express_1.Router)();
 const errors = new error_1.ValidatorErrors();
@@ -22,4 +23,14 @@ router.patch("/nickname", (0, express_validator_1.body)("userNickname")
     .isLength({ max: 24 })
     .withMessage(errors.maxLength("nickname", 24))
     .trim(), edit_user_nickname_1.default);
+// EDIT PASSWORD: PATCH /user/password
+router.patch("/password", (0, express_validator_1.body)("newPassword")
+    .isString()
+    .withMessage(errors.invalidField())
+    .isLength({ min: 8 })
+    .withMessage(errors.invalidPassword(8, "characters"))
+    .matches("[A-Z]")
+    .withMessage(errors.invalidPassword(1, "uppercase letter"))
+    .matches("[0-9]")
+    .withMessage(errors.invalidPassword(1, "number")), edit_user_password_1.default);
 exports.default = router;
