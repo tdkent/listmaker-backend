@@ -28,7 +28,7 @@ router.post(
     .withMessage(errors.invalidField())
     .not()
     .isEmpty()
-    .withMessage(errors.nullField("name"))
+    .withMessage(errors.nullField("Name"))
     .trim(),
   newTodoItem
 );
@@ -52,7 +52,7 @@ router.patch(
     .withMessage(errors.invalidField())
     .not()
     .isEmpty()
-    .withMessage(errors.nullField("name"))
+    .withMessage(errors.nullField("Name"))
     .trim(),
   body("itemCategory", errors.invalidField()).isIn(Object.values(TodoCatsEnum)),
   body("itemLocation", errors.invalidField()).isString().trim().optional({ checkFalsy: true }),
@@ -86,7 +86,7 @@ router.post(
     .withMessage(errors.invalidField())
     .not()
     .isEmpty()
-    .withMessage(errors.nullField("name"))
+    .withMessage(errors.nullField("Name"))
     .trim(),
   newSubtask
 );
@@ -109,7 +109,7 @@ router.patch(
     .withMessage(errors.invalidField())
     .not()
     .isEmpty()
-    .withMessage(errors.nullField("name"))
+    .withMessage(errors.nullField("Name"))
     .trim(),
   editSubtask
 );

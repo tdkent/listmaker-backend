@@ -35,11 +35,14 @@ router.patch(
     .isString()
     .withMessage(errors.invalidField())
     .isLength({ min: 8 })
-    .withMessage(errors.invalidPassword(8, "characters"))
+    .matches("[a-z]")
+    .withMessage("Password requires at least 1 lower case letter")
     .matches("[A-Z]")
-    .withMessage(errors.invalidPassword(1, "uppercase letter"))
+    .withMessage("Password requires at least 1 upper case letter")
     .matches("[0-9]")
-    .withMessage(errors.invalidPassword(1, "number")),
+    .withMessage("Password requires at least 1 number")
+    .matches("[*@#^&$!%]")
+    .withMessage("Password requires at least 1 symbol"),
   editUserPassword
 );
 

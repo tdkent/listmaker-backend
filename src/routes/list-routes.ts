@@ -30,9 +30,9 @@ router.post(
     .withMessage(errors.invalidField())
     .not()
     .isEmpty()
-    .withMessage(errors.nullField("name"))
+    .withMessage(errors.nullField("Name"))
     .isLength({ max: 24 })
-    .withMessage(errors.maxLength("name", 24))
+    .withMessage(errors.maxLength("Name", 24))
     .trim(),
   body("listType", errors.invalidField()).isIn(Object.values(AllListTypesEnum)),
   newList
@@ -46,10 +46,10 @@ router.patch(
     .isString()
     .withMessage(errors.invalidField())
     .isLength({ max: 24 })
-    .withMessage(errors.maxLength("name", 24))
+    .withMessage(errors.maxLength("Name", 24))
     .not()
     .isEmpty()
-    .withMessage(errors.nullField("name"))
+    .withMessage(errors.nullField("Name"))
     .trim(),
   editList
 );

@@ -28,9 +28,12 @@ router.patch("/password", (0, express_validator_1.body)("newPassword")
     .isString()
     .withMessage(errors.invalidField())
     .isLength({ min: 8 })
-    .withMessage(errors.invalidPassword(8, "characters"))
+    .matches("[a-z]")
+    .withMessage("Password requires at least 1 lower case letter")
     .matches("[A-Z]")
-    .withMessage(errors.invalidPassword(1, "uppercase letter"))
+    .withMessage("Password requires at least 1 upper case letter")
     .matches("[0-9]")
-    .withMessage(errors.invalidPassword(1, "number")), edit_user_password_1.default);
+    .withMessage("Password requires at least 1 number")
+    .matches("[*@#^&$!%]")
+    .withMessage("Password requires at least 1 symbol"), edit_user_password_1.default);
 exports.default = router;

@@ -23,7 +23,7 @@ router.post(
     .withMessage(errors.invalidField())
     .not()
     .isEmpty()
-    .withMessage(errors.nullField("name"))
+    .withMessage(errors.nullField("Name"))
     .trim(),
   newShoppingItem
 );
@@ -46,7 +46,7 @@ router.patch(
     .withMessage(errors.invalidField())
     .not()
     .isEmpty()
-    .withMessage(errors.nullField("name"))
+    .withMessage(errors.nullField("Name"))
     .trim(),
   body("itemCategory", errors.invalidField()).isString().trim(),
   editShoppingItem

@@ -27,19 +27,19 @@ router.post("/new", (0, express_validator_1.body)("listName")
     .withMessage(errors.invalidField())
     .not()
     .isEmpty()
-    .withMessage(errors.nullField("name"))
+    .withMessage(errors.nullField("Name"))
     .isLength({ max: 24 })
-    .withMessage(errors.maxLength("name", 24))
+    .withMessage(errors.maxLength("Name", 24))
     .trim(), (0, express_validator_1.body)("listType", errors.invalidField()).isIn(Object.values(list_1.AllListTypesEnum)), new_list_1.default);
 // EDIT LIST /list/edit/:listId
 router.patch("/edit/:listId", (0, express_validator_1.param)("listId", errors.badRequest()).isNumeric(), (0, express_validator_1.body)("listName")
     .isString()
     .withMessage(errors.invalidField())
     .isLength({ max: 24 })
-    .withMessage(errors.maxLength("name", 24))
+    .withMessage(errors.maxLength("Name", 24))
     .not()
     .isEmpty()
-    .withMessage(errors.nullField("name"))
+    .withMessage(errors.nullField("Name"))
     .trim(), edit_list_1.default);
 // DELETE LIST /list/delete/:listId
 router.delete("/delete/:listId", (0, express_validator_1.param)("listId", errors.badRequest()).isNumeric(), delete_list_1.default);

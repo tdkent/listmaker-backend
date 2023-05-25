@@ -17,19 +17,18 @@ router.post("/register", (0, express_validator_1.body)("userEmail", error.invali
     .isLength({ max: 24 })
     .withMessage(error.maxLength("nickname", 24))
     .trim()
-    .escape(), (0, express_validator_1.body)("userPassword")
+    .escape(), (0, express_validator_1.body)("userPassword", "Password does not meet requirements")
     .isString()
     .withMessage(error.invalidField())
     .isLength({ min: 8 })
-    .withMessage(error.invalidPassword(8, "characters"))
+    .matches("[a-z]")
+    .withMessage("Password requires at least 1 lower case letter")
     .matches("[A-Z]")
-    .withMessage(error.invalidPassword(1, "uppercase letter"))
+    .withMessage("Password requires at least 1 upper case letter")
     .matches("[0-9]")
-    .withMessage(error.invalidPassword(1, "number")), register_1.default);
+    .withMessage("Password requires at least 1 number")
+    .matches("[*@#^&$!%]")
+    .withMessage("Password requires at least 1 symbol: *@#^&$!%"), register_1.default);
 // login user
-router.post("/login", (0, express_validator_1.body)("userEmail", error.invalidField()).isEmail().trim().escape().normalizeEmail(), (0, express_validator_1.body)("userPassword")
-    .isString()
-    .withMessage(error.invalidField())
-    .isLength({ min: 8 })
-    .withMessage(error.invalidPassword(8, "characters")), login_1.default);
+router.post("/login", (0, express_validator_1.body)("userEmail", error.invalidField()).isEmail().trim().escape().normalizeEmail(), (0, express_validator_1.body)("userPassword", error.invalidField()).isString(), login_1.default);
 exports.default = router;

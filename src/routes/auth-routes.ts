@@ -19,15 +19,18 @@ router.post(
     .withMessage(error.maxLength("nickname", 24))
     .trim()
     .escape(),
-  body("userPassword")
+  body("userPassword", "Password does not meet requirements")
     .isString()
     .withMessage(error.invalidField())
     .isLength({ min: 8 })
-    .withMessage(error.invalidPassword(8, "characters"))
+    .matches("[a-z]")
+    .withMessage("Password requires at least 1 lower case letter")
     .matches("[A-Z]")
-    .withMessage(error.invalidPassword(1, "uppercase letter"))
+    .withMessage("Password requires at least 1 upper case letter")
     .matches("[0-9]")
-    .withMessage(error.invalidPassword(1, "number")),
+    .withMessage("Password requires at least 1 number")
+    .matches("[*@#^&$!%]")
+    .withMessage("Password requires at least 1 symbol: *@#^&$!%"),
   register
 );
 
@@ -35,11 +38,7 @@ router.post(
 router.post(
   "/login",
   body("userEmail", error.invalidField()).isEmail().trim().escape().normalizeEmail(),
-  body("userPassword")
-    .isString()
-    .withMessage(error.invalidField())
-    .isLength({ min: 8 })
-    .withMessage(error.invalidPassword(8, "characters")),
+  body("userPassword", error.invalidField()).isString(),
   login
 );
 

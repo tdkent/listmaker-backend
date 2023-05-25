@@ -5,56 +5,52 @@ export enum RequestErrorsEnum {
 
 export class RequestErrors {
   badRequest() {
-    return "Client error: malformed request syntax";
+    return "Invalid request.";
   }
 
   internalServer() {
-    return "An unexpected server error occurred, please try again.";
+    return "Unexpected server error. Please try again";
   }
 
   incorrectEmail(email: string) {
-    return `An account with email address ${email} does not exist. Create a new account?`;
+    return `Could not find account ${email}`;
   }
 
   duplicateEmail(email: string) {
-    return `An account with email address ${email} already exists. Do you want to log in?`;
+    return `Account ${email} already exists`;
   }
 
   incorrectPassword() {
-    return "The password you entered does not match our records. Please try again.";
+    return "Incorrect password. Please try again";
   }
 
   nullResult() {
-    return "Unable to access the requested resource. The resource either does not exist, or you are not authorized.";
+    return "Unable to access the requested resource";
   }
 
   duplicateList(type: string, name: string) {
-    return `You already have a ${type} list called ${name}. Please enter a new name.`;
+    return `${type} list ${name} already exists`;
   }
 
   duplicateShopItem(itemName: string) {
-    return `You already added ${itemName} to this list. Please enter a new name.`;
+    return `${itemName} already added`;
   }
 }
 
 export class ValidatorErrors {
   badRequest() {
-    return "Client error: malformed request syntax";
+    return "Invalid request";
   }
 
   invalidField() {
-    return "Client error: invalid field format or selection";
+    return "Invalid request";
   }
 
   nullField(fieldName: string) {
-    return `${fieldName} cannot be blank`;
+    return `"${fieldName}" cannot be blank`;
   }
 
   maxLength(fieldName: string, maxChar: number) {
-    return `${fieldName} exceeds max character limit (${maxChar})`;
-  }
-
-  invalidPassword(count: number, property: string) {
-    return `Password must contain at least ${count} ${property}`;
+    return `"${fieldName}" exceeds character limit (${maxChar})`;
   }
 }
