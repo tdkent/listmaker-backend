@@ -15,8 +15,8 @@ router.post(
   body("userNickname")
     .isString()
     .withMessage(error.invalidField())
-    .isLength({ max: 24 })
-    .withMessage(error.maxLength("nickname", 24))
+    .isLength({ max: 18 })
+    .withMessage(error.maxLength("nickname", 18))
     .trim()
     .escape(),
   body("userPassword", "Password does not meet requirements")

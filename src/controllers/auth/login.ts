@@ -30,6 +30,7 @@ const login: RequestHandler = async (req, res, next) => {
       `SELECT
         user_id AS "userId",
         user_email AS "userEmail",
+        user_nickname AS "userNickname",
         user_password AS "userPassword"
       FROM users
       WHERE user_email = $1`,
@@ -53,7 +54,7 @@ const login: RequestHandler = async (req, res, next) => {
       });
     }
 
-    const { userId, userEmail } = rows[0];
+    const { userId, userEmail, userNickname } = rows[0];
 
     // token
     //? TODO: how to make use of the token expiration
@@ -62,7 +63,7 @@ const login: RequestHandler = async (req, res, next) => {
     });
 
     // response
-    res.json({ userId, userEmail, token });
+    res.json({ userId, userEmail, userNickname, token });
   } catch (error) {
     console.log(error);
     res.status(500);

@@ -31,8 +31,8 @@ router.post(
     .not()
     .isEmpty()
     .withMessage(errors.nullField("Name"))
-    .isLength({ max: 24 })
-    .withMessage(errors.maxLength("Name", 24))
+    .isLength({ max: 18 })
+    .withMessage(errors.maxLength("Name", 18))
     .trim(),
   body("listType", errors.invalidField()).isIn(Object.values(AllListTypesEnum)),
   newList
@@ -45,8 +45,8 @@ router.patch(
   body("listName")
     .isString()
     .withMessage(errors.invalidField())
-    .isLength({ max: 24 })
-    .withMessage(errors.maxLength("Name", 24))
+    .isLength({ max: 18 })
+    .withMessage(errors.maxLength("Name", 18))
     .not()
     .isEmpty()
     .withMessage(errors.nullField("Name"))
