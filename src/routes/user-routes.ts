@@ -22,8 +22,8 @@ router.patch(
   body("userNickname")
     .isString()
     .withMessage(errors.invalidField())
-    .isLength({ max: 18 })
-    .withMessage(errors.maxLength("nickname", 18))
+    .isLength({ max: 16 })
+    .withMessage(errors.maxLength("nickname", 16))
     .trim(),
   editUserNickname
 );

@@ -20,8 +20,8 @@ router.get("/profile", fetch_user_profile_1.default);
 router.patch("/nickname", (0, express_validator_1.body)("userNickname")
     .isString()
     .withMessage(errors.invalidField())
-    .isLength({ max: 18 })
-    .withMessage(errors.maxLength("nickname", 18))
+    .isLength({ max: 16 })
+    .withMessage(errors.maxLength("nickname", 16))
     .trim(), edit_user_nickname_1.default);
 // EDIT PASSWORD: PATCH /user/password
 router.patch("/password", (0, express_validator_1.body)("newPassword")
