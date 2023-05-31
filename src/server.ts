@@ -18,13 +18,6 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-// app.use(
-//   cors({
-//     origin: [frontendUrl, backendUrl],
-//     credentials:true,
-//     optionsSuccessStatus:200
-//   })
-// );
 
 // body parser
 app.use(json());
