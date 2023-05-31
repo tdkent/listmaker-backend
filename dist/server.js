@@ -22,7 +22,7 @@ app.use((0, body_parser_1.json)());
 //   })
 // );
 app.use((0, cors_1.default)(), function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "https://deft-torte-c93e9a.netlify.app/");
+    res.header("Access-Control-Allow-Origin", "https://deft-torte-c93e9a.netlify.app");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
     next();
