@@ -13,10 +13,12 @@ const list_routes_1 = __importDefault(require("./routes/list-routes"));
 const shopping_routes_1 = __importDefault(require("./routes/shopping-routes"));
 const todo_routes_1 = __importDefault(require("./routes/todo-routes"));
 const app = (0, express_1.default)();
-//cors
-app.use((0, cors_1.default)());
 // body parser
 app.use((0, body_parser_1.json)());
+//cors
+app.use((0, cors_1.default)({
+    origin: "https://deft-torte-c93e9a.netlify.app/",
+}));
 // auth routes
 app.use("/auth", auth_routes_1.default);
 // user routes

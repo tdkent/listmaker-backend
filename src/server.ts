@@ -15,32 +15,11 @@ const app = express();
 app.use(json());
 
 //cors
-// const corsOptions = {
-//   origin: "*",
-//   credentials: true,
-//   optionSuccessStatus: 200,
-// };
-// app.use(cors(corsOptions));
-
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*"); // allows requests from only this domain ('*' would allow from any domain)
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-//   ); // set which headers are allowed to be sent
-//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE"); // set which methods are allowed
-//   next();
-// });
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
-  next();
-});
+app.use(
+  cors({
+    origin: "https://deft-torte-c93e9a.netlify.app/",
+  })
+);
 
 // auth routes
 app.use("/auth", authRoutes);
