@@ -2,7 +2,7 @@
   "name": "todo-backend",
   "version": "1.0.0",
   "description": "listmaking app backend made with node and express",
-  "main": "index.js",
+  "main": "server.js",
   "engines": {
     "node": "16.17.1"
   },
