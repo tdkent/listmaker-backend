@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import { json } from "body-parser";
 
-import { port } from "./config/config";
+import { port, frontendUrl, backendUrl } from "./config/config";
 import userRoutes from "./routes/user-routes";
 import authRoutes from "./routes/auth-routes";
 import listRoutes from "./routes/list-routes";
@@ -12,7 +12,11 @@ import todoRoutes from "./routes/todo-routes";
 const app = express();
 
 //cors
-app.use(cors());
+app.use(
+  cors({
+    origin: [frontendUrl, backendUrl],
+  })
+);
 
 // body parser
 app.use(json());
