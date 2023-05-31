@@ -22,13 +22,23 @@ app.use(json());
 // };
 // app.use(cors(corsOptions));
 
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*"); // allows requests from only this domain ('*' would allow from any domain)
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+//   ); // set which headers are allowed to be sent
+//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE"); // set which methods are allowed
+//   next();
+// });
+
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // allows requests from only this domain ('*' would allow from any domain)
-  res.setHeader(
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  ); // set which headers are allowed to be sent
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE"); // set which methods are allowed
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
   next();
 });
 
