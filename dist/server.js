@@ -27,6 +27,9 @@ app.use((0, cors_1.default)(), function (req, res, next) {
     res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
     next();
 });
+app.get("/health", (req, res) => {
+    res.send("Hello world");
+});
 // auth routes
 app.use("/auth", auth_routes_1.default);
 // user routes

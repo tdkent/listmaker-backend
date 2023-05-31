@@ -31,6 +31,10 @@ app.use(cors(), function (req, res, next) {
   next();
 });
 
+app.get("/health", (req, res) => {
+  res.send("Hello world");
+});
+
 // auth routes
 app.use("/auth", authRoutes);
 
