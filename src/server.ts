@@ -22,7 +22,7 @@ app.use(json());
 // );
 
 app.use(cors(), function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://deft-torte-c93e9a.netlify.app");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
