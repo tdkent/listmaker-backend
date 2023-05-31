@@ -11,6 +11,9 @@ import todoRoutes from "./routes/todo-routes";
 
 const app = express();
 
+// body parser
+app.use(json());
+
 //cors
 // const corsOptions = {
 //   origin: "*",
@@ -28,9 +31,6 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE"); // set which methods are allowed
   next();
 });
-
-// body parser
-app.use(json());
 
 // auth routes
 app.use("/auth", authRoutes);
