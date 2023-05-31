@@ -12,13 +12,19 @@ import todoRoutes from "./routes/todo-routes";
 const app = express();
 
 //cors
-app.use(
-  cors({
-    origin: [frontendUrl, backendUrl],
-  })
-);
-
-app.options("*", cors());
+const corsOptions = {
+  origin: "*",
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+// app.use(
+//   cors({
+//     origin: [frontendUrl, backendUrl],
+//     credentials:true,
+//     optionsSuccessStatus:200
+//   })
+// );
 
 // body parser
 app.use(json());
