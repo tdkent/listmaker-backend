@@ -15,11 +15,21 @@ const app = express();
 app.use(json());
 
 //cors
-app.use(
-  cors({
-    origin: "https://deft-torte-c93e9a.netlify.app/",
-  })
-);
+// app.use(
+//   cors({
+//     origin: frontendUrl,
+//   })
+// );
+
+app.use(cors(), function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://deft-torte-c93e9a.netlify.app/");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  next();
+});
 
 // auth routes
 app.use("/auth", authRoutes);
