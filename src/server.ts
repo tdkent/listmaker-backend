@@ -14,26 +14,8 @@ const app = express();
 // body parser
 app.use(json());
 
-//cors
-// app.use(
-//   cors({
-//     origin: frontendUrl,
-//   })
-// );
-
-app.use(cors(), function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
-  next();
-});
-
-app.get("/health", (req, res) => {
-  res.send("Hello world");
-});
+// cors
+app.use(cors());
 
 // auth routes
 app.use("/auth", authRoutes);
