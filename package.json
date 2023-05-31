@@ -29,7 +29,8 @@
     "jsonwebtoken": "^9.0.0",
     "luxon": "^3.3.0",
     "pg": "^8.10.0",
-    "slugify": "^1.6.5"
+    "slugify": "^1.6.5",
+    "typescript": "^5.0.4"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
