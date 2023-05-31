@@ -18,6 +18,8 @@ app.use(
   })
 );
 
+app.options("*", cors());
+
 // body parser
 app.use(json());
 
