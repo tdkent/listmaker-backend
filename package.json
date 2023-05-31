@@ -10,7 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon dist/server.js",
     "start": "node dist/server.js",
-    "postinstall": "tsc",
+    "build": "tsc",
+    "postinstall": "npm run build",
     "db:dev": "nodemon dist/db/build-database.js",
     "db": "node dist/db/build-database.js"
   },
