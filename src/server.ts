@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import { json } from "body-parser";
 
-import { port, frontendUrl } from "./config/config";
+import { port, frontendUrl, devUrl } from "./config/config";
 import userRoutes from "./routes/user-routes";
 import authRoutes from "./routes/auth-routes";
 import listRoutes from "./routes/list-routes";
@@ -17,7 +17,7 @@ app.use(json());
 // cors
 app.use(
   cors({
-    origin: frontendUrl,
+    origin: [frontendUrl, devUrl],
     optionsSuccessStatus: 200,
     methods: ["GET", "POST", "PATCH", "DELETE"],
   })
