@@ -18,8 +18,6 @@ declare module "express-serve-static-core" {
 }
 
 const checkToken = (req: Request, res: Response, next: NextFunction) => {
-  // CORS check
-  //? TODO: Upgrade this method?
   if (req.method === "OPTIONS") return next();
   try {
     if (!req.headers.authorization || req.headers.authorization.split(" ")[0] !== "Bearer") {

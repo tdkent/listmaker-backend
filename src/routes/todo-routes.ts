@@ -41,7 +41,6 @@ router.patch(
   checkTodoItem
 );
 
-// TODO: item coords validation
 // EDIT ITEM: PATCH /todo/edit
 router.patch(
   "/edit",

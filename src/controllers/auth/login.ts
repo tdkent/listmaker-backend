@@ -57,7 +57,6 @@ const login: RequestHandler = async (req, res, next) => {
     const { userId, userEmail, userNickname } = rows[0];
 
     // token
-    //? TODO: how to make use of the token expiration
     const token = jwt.sign({ userId, userEmail }, jwtKey, {
       expiresIn: "30d",
     });

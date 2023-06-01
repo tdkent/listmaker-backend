@@ -49,8 +49,7 @@ const editUserPassword: RequestHandler = async (req, res, next) => {
       return next({ message: reqError.incorrectPassword() });
     }
 
-    //! TODO: increase # of salt rounds
-    const newHash = await bcrypt.hash(newPassword, 2);
+    const newHash = await bcrypt.hash(newPassword, 10);
 
     await db.query(
       `

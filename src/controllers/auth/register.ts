@@ -39,8 +39,7 @@ const register: RequestHandler = async (req, res, next) => {
     }
 
     // db query
-    //! TODO: increase # of salt rounds
-    const hashedPassword = await bcrypt.hash(newUser.userPassword, 2);
+    const hashedPassword = await bcrypt.hash(newUser.userPassword, 10);
     await db.query(
       `
     INSERT INTO users(user_email, user_nickname, user_password)
