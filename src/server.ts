@@ -2,7 +2,6 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import { json } from "body-parser";
 
-import { frontendUrl, devUrl } from "./config/config";
 import userRoutes from "./routes/user-routes";
 import authRoutes from "./routes/auth-routes";
 import listRoutes from "./routes/list-routes";
@@ -49,8 +48,6 @@ app.use((error: { message: string }, req: Request, res: Response, next: NextFunc
 });
 
 // initialize server
-app.listen(process.env.PORT || 3001, () =>
-  console.log(
-    `ListMaker express development server is listening on port ${process.env.PORT || 3001}.`
-  )
+app.listen(process.env.PORT, () =>
+  console.log(`ListMaker express development server is listening on port ${process.env.PORT}.`)
 );
