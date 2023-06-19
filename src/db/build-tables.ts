@@ -23,7 +23,7 @@ const buildDbTables = async () => {
       user_id SMALLINT REFERENCES users(user_id),
       list_name VARCHAR(255) NOT NULL,
       list_slug VARCHAR(255) NOT NULL,
-      list_type VARCHAR(12) NOT NULL
+      list_type VARCHAR(255) NOT NULL
     );
     CREATE TABLE items_shopping (
       shop_item_id SERIAL PRIMARY KEY,
@@ -40,7 +40,7 @@ const buildDbTables = async () => {
       list_id SMALLINT REFERENCES lists(list_id),
       user_id SMALLINT REFERENCES users(user_id),
       item_name VARCHAR(255) NOT NULL,
-      item_category VARCHAR(12) NOT NULL,
+      item_category VARCHAR(255) NOT NULL,
       item_location VARCHAR(255),
       item_coordinates JSON,
       date_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -49,7 +49,7 @@ const buildDbTables = async () => {
       time_due TIME,
       is_checked BOOLEAN NOT NULL DEFAULT false,
       is_recurring BOOLEAN NOT NULL,
-      recurrence_value VARCHAR(12),
+      recurrence_value VARCHAR(255),
       date_recurrence DATE,
       is_active BOOLEAN NOT NULL DEFAULT true
     );
@@ -59,7 +59,7 @@ const buildDbTables = async () => {
       list_id SMALLINT REFERENCES lists(list_id),
       user_id SMALLINT REFERENCES users(user_id),
       task_name VARCHAR (255) NOT NULL,
-      is_checked BOOLEAN NOT NULL DEFAULT false
+      is_checked BOOLEAN NOT NULL
     );
     `);
     console.log("Finished rebuilding tables!");

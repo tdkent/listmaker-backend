@@ -6,8 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../../config/config");
 const checkToken = (req, res, next) => {
-    // CORS check
-    //? TODO: Upgrade this method?
     if (req.method === "OPTIONS")
         return next();
     try {

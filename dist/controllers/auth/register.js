@@ -35,8 +35,7 @@ const register = async (req, res, next) => {
             });
         }
         // db query
-        //! TODO: increase # of salt rounds
-        const hashedPassword = await bcrypt_1.default.hash(newUser.userPassword, 2);
+        const hashedPassword = await bcrypt_1.default.hash(newUser.userPassword, 10);
         await db_1.default.query(`
     INSERT INTO users(user_email, user_nickname, user_password)
     VALUES ($1, $2, $3);

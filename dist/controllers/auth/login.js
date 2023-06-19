@@ -50,7 +50,6 @@ const login = async (req, res, next) => {
         }
         const { userId, userEmail, userNickname } = rows[0];
         // token
-        //? TODO: how to make use of the token expiration
         const token = jsonwebtoken_1.default.sign({ userId, userEmail }, config_1.jwtKey, {
             expiresIn: "30d",
         });

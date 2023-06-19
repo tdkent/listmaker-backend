@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = require("body-parser");
-const config_1 = require("./config/config");
 const user_routes_1 = __importDefault(require("./routes/user-routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth-routes"));
 const list_routes_1 = __importDefault(require("./routes/list-routes"));
@@ -16,7 +15,11 @@ const app = (0, express_1.default)();
 // body parser
 app.use((0, body_parser_1.json)());
 // cors
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: process.env.FRONTEND_URL,
+    optionsSuccessStatus: 200,
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+}));
 // auth routes
 app.use("/auth", auth_routes_1.default);
 // user routes
@@ -36,4 +39,4 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message });
 });
 // initialize server
-app.listen(process.env.PORT || config_1.port, () => console.log(`ListMaker express development server is listening on port ${process.env.PORT || config_1.port}.`));
+app.listen(process.env.PORT, () => console.log(`ListMaker express development server is listening on port ${process.env.PORT}.`));
