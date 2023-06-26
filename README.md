@@ -1,261 +1,65 @@
-# ListMaker Backend
+# ListMaker
 
-## Codebase
+## About
 
-#### Languages
+Welcome to the backend codebase of ListMaker, a list-making application begun in February and
+launched in June of 2023. ListMaker is in ongoing development, with improvements and new features
+planned. Read on for details!
 
-- TypeScript
-- Node
+[Visit ListMaker](https://mylistmaker.netlify.com)
 
-#### NPM Packages and Libraries Used
+## Run
 
-- Express
-- Express Validator
-- Slugify
-- Bcrypt
-- Jsonwebtoken
-- PG
-- Body-parser
+### Environment Variables
 
-#### TypeScript Extensions
-
-- Node
-- Express
-- Bcrypt
-- Jsonwebtoken
-
-## Routes
-
-- Note: unless otherwise specified, successful requests will receive a generic response:
+The following variables are required in `.env` or `.env.local` to run backend server locally:
 
 ```
-{ "message": "OK" }
+PORT = 3001    // or another port aside from 3000
+FRONTEND_URL = "http://localhost:3000"    // default CRA port
+DEV_DB = "http://localhost:5432/<database-name>"    // use local Postgres database name
+JWT_SECRET = "<secret-string>"    // use a custom secret string
+GEOCODING_API_KEY = "<api-key>"    // requires a Google Geocoding API key
 ```
 
-### <b>AUTH</b>
+### Scripts
 
-#### Register
+Production
 
-<b>Request</b>
+- `npm run start`: start production server
+- `build`: run TypeScript compiler
+- `db`: tear down and build database
 
-- Path: `.../auth/register`
-- Method: `POST`
-- Body:
+Heroku
 
-```
-{
-  "userEmail": string,
-  "userNickname": string,
-  "userPassword": string,
-}
-```
+- `postinstall`: executes `npm run build` (see above) when updating remote server with
+  `git push heroku main`
 
-#### Login
+Testing
 
-<b>Request</b>
+- `npm run start:dev`: start testing server with nodemon
+- `npm run db:dev`: tear down and build database with nodemon
+- `tsc -w`: run TypeScript compiler in watch mode
 
-- Path: `.../auth/login`
-- Method: `POST`
-- Body:
+## Stack
 
-```
-{
-  "userEmail": string,
-  "userPassword": string,
-}
-```
+### Languages:
 
-<b>Response</b>
+- `TypeScript`
 
-```
-{
-"message": "OK",
-"user":
-  {
-    "userId": number,
-    "userEmail": string,
-    "token": string
-  }
-}
-```
+### Libraries &amp; Frameworks
 
-### <b>USER</b>
+- `Node`
+- `Express`
 
-#### Fetch Profile
+### Node Packages
 
-<b>Request</b>
-
-- Path: `.../user/profile`
-- Method: `GET`
-- Authorization: `Bearer Token`
-
-<b>Response</b>
-
-```
-{
-  "message": "OK",
-  "user":
-  {
-    "id": number,
-    "userEmail": string,
-    "userNickname": string
-  }
-}
-```
-
-#### Edit Profile
-
-<b>Request</b>
-
-- Path: `.../user/profile`
-- Method: `PATCH`
-- Authorization: `Bearer Token`
-
-### <b>LIST</b>
-
-#### Fetch All Lists
-
-<b>Request<b>
-
-- Path: `.../list/fetch`
-- Method: `GET`
-- Authorization: `Bearer Token`
-
-<b>Response</b>
-
-```
-{
-  "message": "OK",
-  "lists": [
-    {
-      "id": number,
-      "userId": number,
-      "name": string,
-      "slug": string,
-      "type": string
-    }
-  ]
-}
-```
-
-#### Fetch Single List
-
-<b>Request<b>
-
-- Path: `.../list/fetch/:listId`
-- Method: `GET`
-- Authorization: `Bearer Token`
-
-<b>Response</b>
-
-```
-{
-  "message": "OK",
-  "list":
-    {
-      "id": number,
-      "userId": number,
-      "name": string,
-      "slug": string,
-      "type": string
-    }
-}
-```
-
-#### New List
-
-<b>Request</b>
-
-- Path: `.../list/new`
-- Method: `POST`
-- Authorization: `Bearer Token`
-- Body:
-
-```
-{
-  name: string,
-  type: string
-}
-```
-
-#### Edit List
-
-<b>Request</b>
-
-- Path: `.../list/edit/:listId`
-- Method: `PATCH`
-- Authorization: `Bearer Token`
-- Body:
-
-```
-{
-  name: string,
-}
-```
-
-#### Delete List
-
-<b>Request</b>
-
-- Path: `.../list/delete/:listId`
-- Method: `DELETE`
-- Authorization: `Bearer Token`
-
-### <b>ITEM</b>
-
-#### New Item
-
-<b>Request</b>
-
-- Path: `.../item/new/:listId`
-- Method: `POST`
-- Authorization: `Bearer Token`
-- Body:
-
-  - Type: SHOP
-
-    ```
-    {
-      "name": string
-    }
-    ```
-
-    Note: "isChecked" boolean (default `FALSE`) is automatically applied
-
-#### Edit Item
-
-<b>Request</b>
-
-- Path: `.../item/:listId/:listType/:itemId`
-- Method: `PATCH`
-- Authorization: `Bearer Token`
-- Body:
-
-  - Type: SHOP
-
-    ```
-    {
-      "name": string
-    }
-    ```
-
-#### Check Item
-
-"Check" or "uncheck" items in allowed list types
-
-<b>Allowed List Types</b>
-
-- shop
-- todo
-
-<b>Request</b>
-
-- Path: `.../item/check/:listId/:listType/:itemId`
-- Method: `PATCH`
-- Authorization: `Bearer Token`
-
-#### Delete Item
-
-- Path: `.../item/:listId/:listType/:itemId`
-- Method: `DELETE`
-- Authorization: `Bearer Token`
+- `Axios`
+- `bcrypt`
+- `body-parser`
+- `cors`
+- `dotenv`
+- `express-validator`
+- `jsonwebtoken`
+- `node-postgres`
+- `slugify`
