@@ -7,7 +7,11 @@ import { SingleListItemTypes } from "../../models/item";
 import { SubtaskInt } from "../../models/todo";
 import { RequestErrors } from "../../models/error";
 
-const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => {
+const fetchList: RequestHandler<{ listId: string }> = async (
+  req,
+  res,
+  next
+) => {
   const { userId } = req.user;
   const { listId } = req.params;
   const reqError = new RequestErrors();
@@ -114,7 +118,7 @@ const fetchList: RequestHandler<{ listId: string }> = async (req, res, next) => 
     const data = { ...rows[0], items };
     res.json(data);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({
       message: reqError.internalServer(),

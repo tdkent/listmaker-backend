@@ -48,7 +48,7 @@ const buildDbFunctions = async () => {
 
     console.log("Finished building SQL functions!");
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new Error("An error occurred while building SQL functions.");
   }
 };

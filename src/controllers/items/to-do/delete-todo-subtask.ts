@@ -4,11 +4,10 @@ import { validationResult } from "express-validator";
 import { RequestErrors } from "../../../models/error";
 import db from "../../../db";
 
-const deleteSubtask: RequestHandler<{ taskId: string; itemId: string }> = async (
-  req,
-  res,
-  next
-) => {
+const deleteSubtask: RequestHandler<{
+  taskId: string;
+  itemId: string;
+}> = async (req, res, next) => {
   const { userId } = req.user;
   const { taskId, itemId } = req.params;
   const reqError = new RequestErrors();
@@ -36,7 +35,7 @@ const deleteSubtask: RequestHandler<{ taskId: string; itemId: string }> = async 
     // response
     res.json(rows[0].deleteSubtask);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({
       message: reqError.internalServer(),

@@ -64,7 +64,7 @@ const buildDbTables = async () => {
     `);
     console.log("Finished rebuilding tables!");
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new Error("An error occurred while building db tables.");
   }
 };

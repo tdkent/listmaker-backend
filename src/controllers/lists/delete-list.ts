@@ -5,7 +5,11 @@ import db from "../../db";
 import { RequestErrors } from "../../models/error";
 import { AllListTypesEnum } from "../../models/list";
 
-const deleteList: RequestHandler<{ listId: string }> = async (req, res, next) => {
+const deleteList: RequestHandler<{ listId: string }> = async (
+  req,
+  res,
+  next
+) => {
   const { userId } = req.user;
   const { listId } = req.params;
   const reqError = new RequestErrors();
@@ -33,7 +37,7 @@ const deleteList: RequestHandler<{ listId: string }> = async (req, res, next) =>
     // response
     res.json({ message: "OK" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({
       message: reqError.internalServer(),

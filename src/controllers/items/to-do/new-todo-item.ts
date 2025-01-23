@@ -6,7 +6,11 @@ import { NewTodoReqInt, NewTodoReqEnum } from "../../../models/todo";
 import { RequestErrors } from "../../../models/error";
 import checkRequestBody from "../../../utils/check-req-body";
 
-const newTodoItem: RequestHandler<{ listId: string }> = async (req, res, next) => {
+const newTodoItem: RequestHandler<{ listId: string }> = async (
+  req,
+  res,
+  next
+) => {
   const { userId } = req.user;
   const { listId } = req.params;
   const reqError = new RequestErrors();
@@ -42,7 +46,7 @@ const newTodoItem: RequestHandler<{ listId: string }> = async (req, res, next) =
     // response
     res.json({ message: "OK" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({
       message: reqError.internalServer(),

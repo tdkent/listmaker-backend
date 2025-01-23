@@ -21,7 +21,7 @@ const fetchUserProfile: RequestHandler = async (req, res, next) => {
     );
     res.json({ user: rows[0] });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     return next({
       message: reqError.internalServer(),

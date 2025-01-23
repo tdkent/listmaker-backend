@@ -6,7 +6,11 @@ import checkRequestBody from "../../../utils/check-req-body";
 import { EditSubtaskReqInt, EditSubtaskReqEnum } from "../../../models/todo";
 import db from "../../../db";
 
-const editSubtask: RequestHandler<{ itemId: string }> = async (req, res, next) => {
+const editSubtask: RequestHandler<{ itemId: string }> = async (
+  req,
+  res,
+  next
+) => {
   const { userId } = req.user;
   const { itemId } = req.params;
   const reqError = new RequestErrors();
@@ -42,7 +46,7 @@ const editSubtask: RequestHandler<{ itemId: string }> = async (req, res, next) =
     // response
     res.json(rows[0].editSubtask);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({
       message: reqError.internalServer(),

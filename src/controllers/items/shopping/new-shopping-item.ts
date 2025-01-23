@@ -2,11 +2,18 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
 import db from "../../../db";
-import { NewShopItemReqInt, NewShopItemReqEnum } from "../../../models/shopping";
+import {
+  NewShopItemReqInt,
+  NewShopItemReqEnum,
+} from "../../../models/shopping";
 import { RequestErrors } from "../../../models/error";
 import checkRequestBody from "../../../utils/check-req-body";
 
-const newShoppingItem: RequestHandler<{ listId: string }> = async (req, res, next) => {
+const newShoppingItem: RequestHandler<{ listId: string }> = async (
+  req,
+  res,
+  next
+) => {
   const { userId } = req.user;
   const { listId } = req.params;
   const reqError = new RequestErrors();
@@ -40,7 +47,7 @@ const newShoppingItem: RequestHandler<{ listId: string }> = async (req, res, nex
     // response
     res.json({ message: "OK" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({
       message: reqError.internalServer(),
