@@ -6,7 +6,11 @@ import { NewSubtaskReqInt, NewSubtaskReqEnum } from "../../../models/todo";
 import checkRequestBody from "../../../utils/check-req-body";
 import db from "../../../db";
 
-const newSubtask: RequestHandler<{ listId: string }> = async (req, res, next) => {
+const newSubtask: RequestHandler<{ listId: string }> = async (
+  req,
+  res,
+  next
+) => {
   const { userId } = req.user;
   const { listId } = req.params;
   const reqError = new RequestErrors();
@@ -42,7 +46,7 @@ const newSubtask: RequestHandler<{ listId: string }> = async (req, res, next) =>
     // response
     res.json(rows[0].newSubtask);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({
       message: reqError.internalServer(),

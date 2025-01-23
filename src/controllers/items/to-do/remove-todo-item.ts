@@ -39,7 +39,7 @@ const removeTodoItem: RequestHandler = async (req, res, next) => {
     // response
     res.json({ message: "OK" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({ message: reqError.internalServer() });
   }

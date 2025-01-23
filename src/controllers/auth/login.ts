@@ -46,7 +46,10 @@ const login: RequestHandler = async (req, res, next) => {
     }
 
     // check password
-    const comparePw = await bcrypt.compare(userLogin.userPassword, rows[0].userPassword);
+    const comparePw = await bcrypt.compare(
+      userLogin.userPassword,
+      rows[0].userPassword
+    );
     if (!comparePw) {
       res.status(401);
       return next({
@@ -64,7 +67,7 @@ const login: RequestHandler = async (req, res, next) => {
     // response
     res.json({ userId, userEmail, userNickname, token });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({
       message: reqError.internalServer(),

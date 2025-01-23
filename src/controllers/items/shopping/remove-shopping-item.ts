@@ -1,7 +1,10 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
-import { RemoveShopItemReqInt, RemoveShopItemReqEnum } from "../../../models/shopping";
+import {
+  RemoveShopItemReqInt,
+  RemoveShopItemReqEnum,
+} from "../../../models/shopping";
 import { RequestErrors } from "../../../models/error";
 import checkRequestBody from "../../../utils/check-req-body";
 import db from "../../../db";
@@ -47,7 +50,7 @@ const removeShoppingItem: RequestHandler = async (req, res, next) => {
     // response
     res.json({ message: "OK" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({ message: reqError.internalServer() });
   }

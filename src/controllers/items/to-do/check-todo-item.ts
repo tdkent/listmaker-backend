@@ -41,7 +41,7 @@ const checkTodoItem: RequestHandler = async (req, res, next) => {
     // response
     res.json({ message: "OK" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     return next({
       message: reqError.internalServer(),

@@ -3,7 +3,10 @@ import { validationResult } from "express-validator";
 
 import { RequestErrors } from "../../../models/error";
 import checkRequestBody from "../../../utils/check-req-body";
-import { CheckShopItemReqInt, CheckShopItemReqEnum } from "../../../models/shopping";
+import {
+  CheckShopItemReqInt,
+  CheckShopItemReqEnum,
+} from "../../../models/shopping";
 import db from "../../../db";
 
 const checkShoppingItem: RequestHandler = async (req, res, next) => {
@@ -39,7 +42,7 @@ const checkShoppingItem: RequestHandler = async (req, res, next) => {
     // response
     res.json({ message: "OK" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     return next({
       message: reqError.internalServer(),

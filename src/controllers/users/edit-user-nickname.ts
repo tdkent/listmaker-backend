@@ -2,7 +2,11 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
 import db from "../../db";
-import { EditNicknameInt, EditNicknameEnum, UserProfileResInt } from "../../models/user";
+import {
+  EditNicknameInt,
+  EditNicknameEnum,
+  UserProfileResInt,
+} from "../../models/user";
 import { RequestErrors } from "../../models/error";
 import checkRequestBody from "../../utils/check-req-body";
 
@@ -35,7 +39,7 @@ const editUserNickname: RequestHandler = async (req, res, next) => {
     );
     res.json({ message: "OK" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({
       message: reqError.internalServer(),

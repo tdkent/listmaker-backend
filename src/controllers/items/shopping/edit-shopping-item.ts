@@ -1,14 +1,19 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 
-import { EditShopItemReqInt, EditShopItemReqEnum } from "../../../models/shopping";
+import {
+  EditShopItemReqInt,
+  EditShopItemReqEnum,
+} from "../../../models/shopping";
 import checkRequestBody from "../../../utils/check-req-body";
 import { RequestErrors, RequestErrorsEnum } from "../../../models/error";
 import db from "../../../db";
 
 const editShoppingItem: RequestHandler = async (req, res, next) => {
   const { userId } = req.user;
-  const { listId, itemId, itemName, itemCategory } = <EditShopItemReqInt>req.body;
+  const { listId, itemId, itemName, itemCategory } = <EditShopItemReqInt>(
+    req.body
+  );
   const reqError = new RequestErrors();
   try {
     // validation errors
@@ -46,7 +51,7 @@ const editShoppingItem: RequestHandler = async (req, res, next) => {
     // response
     res.json({ message: "OK" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({ message: reqError.internalServer() });
   }

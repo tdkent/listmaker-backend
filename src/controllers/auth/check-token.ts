@@ -20,10 +20,14 @@ declare module "express-serve-static-core" {
 const checkToken = (req: Request, res: Response, next: NextFunction) => {
   if (req.method === "OPTIONS") return next();
   try {
-    if (!req.headers.authorization || req.headers.authorization.split(" ")[0] !== "Bearer") {
+    if (
+      !req.headers.authorization ||
+      req.headers.authorization.split(" ")[0] !== "Bearer"
+    ) {
       res.status(401);
       return next({
-        message: "Authentication failed! Please make sure you are logged in and try again.",
+        message:
+          "Authentication failed! Please make sure you are logged in and try again.",
       });
     }
     const token = req.headers.authorization.split(" ")[1];
@@ -38,7 +42,7 @@ const checkToken = (req: Request, res: Response, next: NextFunction) => {
     req.user = { userId: verify.userId };
     next();
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(401);
     next({
       message: "Authentication failed!",

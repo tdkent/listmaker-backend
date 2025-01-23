@@ -49,7 +49,7 @@ const register: RequestHandler = async (req, res, next) => {
     );
     res.json({ message: "OK" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({
       message: reqError.internalServer(),

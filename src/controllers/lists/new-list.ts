@@ -3,7 +3,11 @@ import { validationResult } from "express-validator";
 import slugify from "slugify";
 
 import db from "../../db";
-import { NewListReqInt, NewListResInt, NewListReqEnum } from "../../models/list";
+import {
+  NewListReqInt,
+  NewListResInt,
+  NewListReqEnum,
+} from "../../models/list";
 import { RequestErrors } from "../../models/error";
 import checkRequestBody from "../../utils/check-req-body";
 
@@ -62,7 +66,7 @@ const newList: RequestHandler = async (req, res, next) => {
     );
     res.json(rows[0]);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({
       message: reqError.internalServer(),

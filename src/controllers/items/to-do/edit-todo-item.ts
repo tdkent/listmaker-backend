@@ -42,16 +42,20 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
     if (itemLocation) {
       const {
         rows: check,
-      }: { rows: { item_location: string; item_coordinates: { lat: number; lng: number } }[] } =
-        await db.query(
-          `
+      }: {
+        rows: {
+          item_location: string;
+          item_coordinates: { lat: number; lng: number };
+        }[];
+      } = await db.query(
+        `
         SELECT item_location, item_coordinates
         FROM items_todo
         WHERE list_id = $1
         AND todo_item_id = $2
         `,
-          [listId, itemId]
-        );
+        [listId, itemId]
+      );
 
       location = itemLocation;
 
@@ -98,7 +102,7 @@ const editTodoItem: RequestHandler = async (req, res, next) => {
     // response
     res.json({ message: "OK" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
     next({ message: reqError.internalServer() });
   }

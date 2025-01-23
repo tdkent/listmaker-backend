@@ -7,7 +7,7 @@ const buildDevDb = async () => {
     await buildDbTables();
     await buildDbFunctions();
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new Error("An error occurred while rebuilding the database.");
   }
 };
