@@ -1,65 +1,102 @@
-# ListMaker
+# ListMaker REST API
 
-## About
+## Description
 
-Welcome to the backend codebase of ListMaker, a list-making application begun in February and
-launched in June of 2023. ListMaker is in ongoing development, with improvements and new features
-planned. Read on for details!
+[ListMaker](https://mylistmaker.netlify.com) is a free-to-use web application for creating lists to stay organized and productive. After creating a free account, users can add lists to their private account. ListMaker features two list types: Shopping and To-Do.
 
-[Visit ListMaker](https://mylistmaker.netlify.com)
+This repository contains the codebase for the application's REST API. The API handles requests made over `HTTP`, including user authentication and CRUD actions, as well as managing the application's database.
 
-## Run
+---
 
-### Environment Variables
+## Features
 
-The following variables are required in `.env` or `.env.local` to run backend server locally:
+- Token-based authentication
+- Handles all `GET`, `POST`, `PATCH`, and `DELETE` requests made over `HTTP`
+- Validates all incoming requests with `express-validator`
+- Robust error handling
+- Geocodes incoming location data with the `Google Geocode API`
+- Handles complex database actions with `PostgreSQL` functions
 
+<details>
+<summary>View example function</summary>
+
+```sql
+  CREATE OR REPLACE FUNCTION "newShopping"
+      (l_id int, u_id int, i_name text)
+    RETURNS bool LANGUAGE plpgsql AS
+    $func$
+    DECLARE
+    itemid int;
+    isactive bool;
+    ischecked bool;
+    BEGIN
+      IF NOT EXISTS
+        (
+          SELECT list_id
+          FROM lists
+          WHERE user_id = u_id
+          AND list_id = l_id
+          AND list_type = 'Shopping'
+        )
+      THEN
+        RETURN false;
+      ELSE
+        itemid := (
+          SELECT shop_item_id
+          FROM items_shopping
+          WHERE list_id = l_id
+          AND item_name = i_name
+        );
+        IF itemid IS NULL THEN
+          INSERT INTO items_shopping
+            (list_id, user_id, item_name)
+          VALUES (l_id, u_id, i_name);
+          RETURN true;
+        ELSE
+          isactive := (
+            SELECT is_active
+            FROM items_shopping
+            WHERE shop_item_id = itemid
+          );
+          ischecked := (
+            SELECT is_checked
+            FROM items_shopping
+            WHERE shop_item_id = itemid
+          );
+          IF (isactive = false) THEN
+            UPDATE items_shopping
+            SET is_active = true
+            WHERE shop_item_id = itemid;
+            RETURN true;
+          ELSEIF (isactive = true AND ischecked = true)
+          THEN
+            UPDATE items_shopping
+            SET
+              is_checked = false,
+              display_category = reference_category
+            WHERE shop_item_id = itemid;
+            RETURN true;
+          ELSE
+            RETURN true;
+          END IF;
+        END IF;
+      END IF;
+    END
+    $func$;
 ```
-PORT = 3001    // or another port aside from 3000
-FRONTEND_URL = "http://localhost:3000"    // default CRA port
-DEV_DB = "http://localhost:5432/<database-name>"    // use local Postgres database name
-JWT_SECRET = "<secret-string>"    // use a custom secret string
-GEOCODING_API_KEY = "<api-key>"    // requires a Google Geocoding API key
-```
 
-### Scripts
+</details>
 
-Production
+---
 
-- `npm run start`: start production server
-- `build`: run TypeScript compiler
-- `db`: tear down and build database
+## Built with
 
-Heroku
+- TypeScript
+- Node.js
+- Express.js
+- PostgreSQL
+- Axios
+- express-validator
+- node-postgres
 
-- `postinstall`: executes `npm run build` (see above) when updating remote server with
-  `git push heroku main`
-
-Testing
-
-- `npm run start:dev`: start testing server with nodemon
-- `npm run db:dev`: tear down and build database with nodemon
-- `tsc -w`: run TypeScript compiler in watch mode
-
-## Stack
-
-### Languages:
-
-- `TypeScript`
-
-### Libraries &amp; Frameworks
-
-- `Node`
-- `Express`
-
-### Node Packages
-
-- `Axios`
-- `bcrypt`
-- `body-parser`
-- `cors`
-- `dotenv`
-- `express-validator`
-- `jsonwebtoken`
-- `node-postgres`
-- `slugify`
+---
