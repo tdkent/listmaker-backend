@@ -2,9 +2,13 @@
 
 ## Description
 
-[ListMaker](https://mylistmaker.netlify.com) is a free-to-use web application for creating lists to stay organized and productive. After creating a free account, users can add lists to their private account. ListMaker features two list types: Shopping and To-Do.
+ListMaker is a free-to-use web application for creating lists to stay organized and productive. After creating a free account, users can add lists to their private account. ListMaker features two list types: Shopping and To-Do.
 
 This repository contains the codebase for the application's REST API. The API handles requests made over `HTTP`, including user authentication and CRUD actions, as well as managing the application's database.
+
+[Visit ListMaker](https://mylistmaker.netlify.com)
+
+[View Frontend Repo](https://github.com/tdkent/listmaker-frontend)
 
 ---
 
